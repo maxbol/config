@@ -143,6 +143,13 @@
           ];
           environment.PATH = PATH;
         };
+        clearDirenv = {
+          serviceConfig = {
+            Program = "/bin/bash";
+            ProgramArguments = ["-c" ''rm -rf /private/tmp/direnv/''${UID}/layouts/*''];
+            RunAtLoad = true;
+          };
+        };
       };
     };
   in {
