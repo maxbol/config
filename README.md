@@ -71,8 +71,8 @@ Currently migrating to this repository from my old dotfiles repo, `nix-dotfiles`
     - [ ] Neovim
     - [ ] Obsidian
     - [ ] Swim
-   - [ ] Zathura
- - [ ] Secrets management (SOPS)
+    - [ ] Zathura
+  - [ ] Secrets management (SOPS)
   - [ ] Copper File (easy out of store linking to config files)
 - [ ] Home manager feature modules
   - [ ] Common - Common settings for all users
