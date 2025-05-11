@@ -1,4 +1,5 @@
 packageArgs @ {pkgs, ...}: {
+  aerospace-swipe = pkgs.callPackage ./aerospace-swipe packageArgs;
   clockify-cli = pkgs.callPackage ./clockify-cli packageArgs;
   clockify-tmux = pkgs.callPackage ./clockify-tmux packageArgs;
   dynachrome = pkgs.callPackage ./dynachrome packageArgs;

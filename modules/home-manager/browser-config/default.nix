@@ -3,21 +3,22 @@
   lib,
   ...
 }: let
-  cfg = config.features.gc;
+  cfg = config.features.browser-config;
 in {
   options = with lib; {
-    features.gc = {
+    features.browser-config = {
       enable = mkOption {
         type = types.bool;
         default = false;
       };
     };
   };
+
+  imports = [
+    ./firefox
+  ];
+
   config = lib.mkIf (cfg.enable) {
-    nix.gc = {
-      automatic = true;
-      interval.Hour = 0;
-      options = "--delete-older-than 1d";
-    };
+    features.browser-config.firefox.enable = true;
   };
 }

@@ -1,13 +1,12 @@
 {pkgs, ...}: {
   imports = [
-    ../../../modules/darwin/aerospace.nix
-    ../../../modules/darwin/gc.nix
-    ../../../modules/darwin/jankyborders.nix
-    ../../../modules/darwin/registry.nix
-    ../../../modules/darwin/sketchybar.nix
     ./nix-settings.nix
     ./system.nix
   ];
+
+  features.gc.enable = true;
+  features.nix-registry.enable = true;
+  features.darwin-desktop.enable = true;
 
   environment.systemPackages = [
     pkgs.nodejs

@@ -57,14 +57,14 @@ Currently migrating to this repository from my old dotfiles repo, `nix-dotfiles`
       - [ ] Wezterm
       - [ ] Yazi
       - [ ] Zathura
-  - [ ] Terminal environmnent (shell, bat, starship, kitty, yazi, misc terminal packages)
-    - [ ] Nix services (direnv, nix-index, comma-with-db, etc)
+  - [x] Terminal environmnent (shell, bat, starship, kitty, yazi, misc terminal packages)
+    - [x] Nix services (direnv, nix-index, comma-with-db, etc)
     - [ ] Calendar services (khal, khard, vdirsyncer, tmux integration?)
-    - [ ] Git settings
-    - [ ] Tmux
-  - [ ] Desktop MacOS - Sketchybar
+    - [x] Git settings
+    - [x] Tmux
+  - [x] Desktop MacOS - Sketchybar
   - [ ] Destkop Linux - Hyprland/Niri, Dunst, Rofi, Waybar, Wlogout, Swim, etc...
-  - [ ] Browser - Firefox customizations
+  - [x] Browser - Firefox customizations
   - [ ] Linux user level services
     - [ ] GPG Agent
   - [ ] Applications that require more configuration
@@ -72,15 +72,15 @@ Currently migrating to this repository from my old dotfiles repo, `nix-dotfiles`
     - [ ] Obsidian
     - [ ] Swim
     - [ ] Zathura
-  - [ ] Secrets management (SOPS)
-  - [ ] Copper File (easy out of store linking to config files)
+  - [x] Secrets management (SOPS)
+  - [x] Copper File (easy out of store linking to config files)
 - [ ] Home manager feature modules
   - [ ] Common - Common settings for all users
   - [ ] Parcel semi-advanced features into modules 
   - [ ] Move other misc packages/options to inline module in each user module
 - [ ] Darwin modules
-  - [ ] Desktop services (aerospace, jankyborders, sketchybar)
-  - [ ] Nix services (garbage collection, registry)
+  - [x] Desktop services (aerospace, jankyborders, sketchybar)
+  - [x] Nix services (garbage collection, registry)
   - [ ] Home manager management
 - [ ] NixOS modules
   - [ ] Hardware configuration (filesystems, initrd, disko?, impermanence?)
