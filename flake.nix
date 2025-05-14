@@ -81,6 +81,7 @@
           pkgs,
           self',
           system,
+          lib,
           ...
         } @ perSystemArgs: let
           packageArgs = {
@@ -93,7 +94,10 @@
           };
 
           packages = pkgs.callPackage ./packages packageArgs;
-          themes = import ./themes (perSystemArgs // packageArgs);
+          themes = import ./themes ({
+              inherit pkgs lib;
+            }
+            // packageArgs);
         };
 
         flake = let

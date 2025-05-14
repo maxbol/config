@@ -20,43 +20,43 @@ Currently migrating to this repository from my old dotfiles repo, `nix-dotfiles`
   - [x] synp
   - [x] zathura-darwin
   - [x] zathura-darwin-app
-- [ ] Themes
-  - [ ] Ayu
-  - [ ] Blue Nightmare
-  - [ ] Bluloco
+- [x] Themes
+  - [x] Ayu
+  - [x] Blue Nightmare
+  - [x] Bluloco
   - [x] Catppuccin
-  - [ ] Gruvbox
-  - [ ] Newpaper
-  - [ ] Oh Lucy
-  - [ ] Rosepine
+  - [x] Gruvbox
+  - [x] Newpaper
+  - [x] Oh Lucy
+  - [x] Rosepine
   - [x] Tsoding-Mode
 - [ ] Home manager modules
-  - [ ] Themeing
-    - [ ] App integrations
-      - [ ] Bat
-      - [ ] Dunst
-      - [ ] Dynawall
-      - [ ] Firefox
-      - [ ] Fish
-      - [ ] GTK
-      - [ ] Hyprland
-      - [ ] Jankyborders
-      - [ ] Kitty
-      - [ ] Linux Destkop Misc
-      - [ ] Macos-wallpaper
-      - [ ] Neovim
-      - [ ] Obsidian
-      - [ ] Palette.json
-      - [ ] QT
-      - [ ] Rofi
-      - [ ] Sketchybar
-      - [ ] Starship
-      - [ ] Tmux
-      - [ ] VSCode
-      - [ ] Waybar
-      - [ ] Wezterm
-      - [ ] Yazi
-      - [ ] Zathura
+  - [x] Themeing
+    - [x] App integrations
+      - [x] Bat
+      - [x] Dunst
+      - [x] Dynawall
+      - [x] Firefox
+      - [x] Fish
+      - [x] GTK
+      - [x] Hyprland
+      - [x] Jankyborders
+      - [x] Kitty
+      - [x] Linux Destkop Misc
+      - [x] Macos-wallpaper
+      - [x] Neovim
+      - [x] Obsidian
+      - [x] Palette.json
+      - [x] QT
+      - [x] Rofi
+      - [x] Sketchybar
+      - [x] Starship
+      - [x] Tmux
+      - [x] VSCode
+      - [x] Waybar
+      - [x] Wezterm
+      - [x] Yazi
+      - [x] Zathura
   - [x] Terminal environmnent (shell, bat, starship, kitty, yazi, misc terminal packages)
     - [x] Nix services (direnv, nix-index, comma-with-db, etc)
     - [ ] Calendar services (khal, khard, vdirsyncer, tmux integration?)

@@ -1,5 +1,49 @@
 {pkgs, ...} @ themeArgs: {
-  Catppuccin-Latte = pkgs.callPackage ./catppuccin.nix (themeArgs
+  Ayu-Dark = import ./ayu (themeArgs
+    // {
+      neovimOverrides = palette: {
+        colorscheme = "ayu-dark";
+        background = "dark";
+        hlGroupsFg = {
+          HLChunk1 = "#" + palette.semantic.accent2;
+          HLLineNum1 = "#" + palette.semantic.accent2;
+          LineNr = "#" + palette.semantic.text2;
+          IncSearch = "#" + palette.semantic.background;
+          Function = "#" + palette.semantic.text;
+          BlinkCmpGhostText = "#" + palette.semantic.text1;
+        };
+        hlGroupsBg = {
+          Visual = "#" + palette.semantic.text2;
+          IncSearch = "#" + palette.accents.peach;
+        };
+      };
+    });
+
+  Ayu-Mirage = import ./ayu (themeArgs
+    // {
+      variant = "mirage";
+      wallpaper = ./ayu/wallpapers/ayu-mirage-default.png;
+
+      neovimOverrides = palette: {
+        colorscheme = "ayu-mirage";
+        background = "dark";
+        hlGroupsFg = {
+          HLChunk1 = "#" + palette.semantic.accent1;
+          HLLineNum1 = "#" + palette.semantic.accent1;
+          Function = "#" + palette.accents.mauve;
+          BlinkCmpGhostText = "#" + palette.semantic.text1;
+        };
+        hlGroupsBg = {
+          Visual = "#" + palette.semantic.text2;
+        };
+      };
+    });
+
+  Blue-Nightmare = import ./blue-nightmare themeArgs;
+
+  Bluloco-Dark = import ./bluloco themeArgs;
+
+  Catppuccin-Latte = import ./catppuccin (themeArgs
     // {
       variant = "latte";
       accent = "rosewater";
@@ -19,12 +63,6 @@
         highlight-text = palette.all.base;
       };
 
-      waybarOverrides = palette: {
-        # active-text = palette.all.crust;
-        # hover-highlight = palette.accents.rosewater;
-        # hover-text = palette.all.crust;
-      };
-
       neovimOverrides = palette: {
         colorscheme = "catppuccin-latte";
         background = "light";
@@ -38,12 +76,11 @@
       };
     });
 
-  Catppuccin-Mocha = pkgs.callPackage ./catppuccin.nix (themeArgs
+  Catppuccin-Mocha = import ./catppuccin (themeArgs
     // {
       variant = "mocha";
 
       hyprlandOverrides = palette: {
-        # This isn't the same as upstream Hyprdots. It actually uses colors from the Frappe palette.
         active1 = palette.accents.mauve;
         active2 = palette.accents.rosewater;
         inactive1 = palette.accents.lavender;
@@ -59,13 +96,7 @@
       };
 
       waybarOverrides = palette: {
-        # main-background = palette.all.crust;
         overlay = palette.all.base;
-        # text = "cddt6f4";
-        # active-highlight = "a6adc8";
-        # active-text = "313244";
-        # hover-highlight = palette.accents.pink;
-        # hover-text = "313244";
       };
 
       neovimOverrides = palette: {
@@ -83,24 +114,82 @@
       };
     });
 
-  Tsoding-Mode = pkgs.callPackage ./tsoding-mode.nix (themeArgs
+  Gruvbox-Dark = import ./gruvbox themeArgs;
+
+  Newpaper-Light = import ./newpaper themeArgs;
+
+  Oh-Lucy = import ./oh-lucy (themeArgs
     // {
       neovimOverrides = palette: {
-        colorscheme = "gruber-darker";
+        colorscheme = "oh-lucy";
+      };
+    });
+
+  Oh-Lucy-Evening = import ./oh-lucy (themeArgs
+    // {
+      variant = "evening";
+      neovimOverrides = palette: {
+        colorscheme = "oh-lucy-evening";
+      };
+    });
+
+  Rose-Pine = import ./rose-pine (themeArgs
+    // {
+      variant = "pine";
+      neovimOverrides = palette: {
+        colorscheme = "rose-pine-main";
         background = "dark";
         hlGroupsFg = {
-          HLChunk1 = "#ffdd33";
-          HLLineNum1 = "#ffdd33";
-          "@property" = "#" + palette.semantic.text;
-          BlinkCmpGhostText = "#949494";
+          HLChunk1 = "#c4a7e7";
+          HLLineNum1 = "#c4a7e7";
         };
         hlGroupsBg = {
-          FoldColumn = "#181818";
+          CursorLine = "#44415a";
+          Cursor = "#6e6a86";
+          Folded = "#44415a";
+        };
+      };
+    });
+
+  Rose-Pine-Eclipse = import ./rose-pine (themeArgs
+    // {
+      variant = "eclipse";
+      neovimOverrides = palette: {
+        colorscheme = "rose-pine-moon";
+        background = "dark";
+        hlGroupsFg = {
+          HLChunk1 = "#c4a7e7";
+          HLLineNum1 = "#c4a7e7";
+        };
+        hlGroupsBg = {
+          CursorLine = "#44415a";
+          Cursor = "#6e6a86";
+          Folded = "#44415a";
         };
       };
 
-      tmuxOverrides = palette: {
-        status_session_fg = palette.accents.yellow;
-      };
+      wallpaper = ./rose-pine/wallpapers/eclipse.png;
+      kittyOverrides.file."theme.conf".source = ./rose-pine/eclipse-kitty.conf;
     });
+
+  Rose-Pine-Moon = import ./rose-pine (themeArgs
+    // {
+      variant = "moon";
+      neovimOverrides = palette: {
+        colorscheme = "rose-pine-moon";
+        background = "dark";
+        hlGroupsFg = {
+          HLChunk1 = "#c4a7e7";
+          HLLineNum1 = "#c4a7e7";
+        };
+        hlGroupsBg = {
+          CursorLine = "#44415a";
+          Cursor = "#6e6a86";
+          Folded = "#44415a";
+        };
+      };
+      wallpaper = ./rose-pine/wallpapers/moon.png;
+    });
+
+  Tsoding-Mode = import ./tsoding-mode themeArgs;
 }
