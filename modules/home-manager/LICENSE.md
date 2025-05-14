@@ -1,0 +1,1 @@
+The `impure-config-management` and `replace-dependencies` are from [Cu3PO42's dotfiles](https://github.com/Cu3PO42/gleaming-glacier), where they're called `chroma.file` and `home.replaceDependencies` respectively.

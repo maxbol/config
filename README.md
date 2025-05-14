@@ -11,6 +11,10 @@ This nix config repository is designed with the ambition to be as clear, simple 
 * Locality of behavior - Don't spread code that has to do with one system behavior (like themeing, boot, or whatever) across a bunch of modules in different places. Organize the repo based on what behavior is being controlled, rather than weird nix-like taxonomies (like "regular" modules vs feature modules).
 * No namespacing. These are my config files, for whose benefit would I be namespacing them? Opt for legibility instead, flatten everything as much as possible.
 
+## Licensing
+
+I owe a lot of what's in this repo to [Cu3PO42's dotfiles](https://github.com/Cu3PO42/gleaming-glacier). Wherever some segment of his dotfiles has been used I have put a LICENSE.md file acknowledging this.
+
 ---
 
 # Migration from nix-dotfiles
