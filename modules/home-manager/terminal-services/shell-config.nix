@@ -1,13 +1,11 @@
 {
-  config,
+  lib-mine,
+  # config,
   lib,
   pkgs,
-  self,
   origin,
   ...
 }: let
-  cfg = config.features;
-
   zig-bleeding-edge = origin.inputs.zig-overlay.packages.${pkgs.system}.master;
   # zig-bleeding-edge = "";
 
@@ -77,23 +75,18 @@
       zvm_bindkey vicmd  'P' my_zvm_vi_put_before
     }
   '';
-in {
-  options = with lib; {
-    features.terminal-services.shell-config = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-
+in
+  lib-mine.mkFeature "features.terminal-services.shell-config" ({config, ...}: let
+    initExtra = config.features.terminal-services.shell-config.initExtra;
+  in {
+    options = with lib; {
       initExtra = mkOption {
         type = types.listOf types.str;
         default = [];
       };
     };
-  };
 
-  imports = [
-    (lib.mkIf (cfg.terminal-services.shell-config.enable) {
+    config = {
       programs.zsh = {
         enable = true;
         autosuggestion.enable = true;
@@ -112,56 +105,61 @@ in {
           share = true;
         };
 
-        profileExtra = ''
-          if command -v systemctl &> /dev/null; then
-            systemctl --user import-environment PATH
-          fi
-        '';
+        profileExtra =
+          #bash
+          ''
+            if command -v systemctl &> /dev/null; then
+              systemctl --user import-environment PATH
+                fi
+          '';
 
-        initExtra = lib.concatStringsSep "\n" ([
+        initExtra = lib.concatStringsSep "\n" (
+          [
+            # bash
             ''
-              export EDITOR=nvim
+                      export EDITOR=nvim
 
               # case insensitive tab completion in a menu
-              zstyle ':completion:*' completer _complete _ignored _approximate
-              zstyle ':completion:*' list-colors
-              zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
-              zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-              zstyle ':completion:*' menu select
-              zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
-              zstyle ':completion:*' verbose true
-              _comp_options+=(globdots)
+                      zstyle ':completion:*' completer _complete _ignored _approximate
+                      zstyle ':completion:*' list-colors
+                      zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+                      zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+                      zstyle ':completion:*' menu select
+                      zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+                      zstyle ':completion:*' verbose true
+                      _comp_options+=(globdots)
 
-              token_file="${config.xdg.configHome}/.github_packages_token"
-              if [ -f "$token_file" ]; then
-                export NPM_TOKEN=$(cat "$token_file");
-                export GOTOKEN=$(cat "$token_file");
-                export NIX_CONFIG="access-tokens = github.com=$(cat "$token_file")"
-              fi
+              # token_file="''${config.xdg.configHome}/.github_packages_token"
+              # if [ -f "$token_file" ]; then
+              #   export NPM_TOKEN=$(cat "$token_file");
+              #   export GOTOKEN=$(cat "$token_file");
+              #   export NIX_CONFIG="access-tokens = github.com=$(cat "$token_file")"
+              # fi
 
-              ZVM_INIT_MODE=sourcing
+                      ZVM_INIT_MODE=sourcing
 
-              source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-              source ${zsh-vi-clipboard-fix}/bin/zsh-vi-clipboard-fix.sh
-              source ${pkgs.zsh-fzf-history-search}/share/zsh-fzf-history-search/zsh-fzf-history-search.zsh
+                      source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+                      source ${zsh-vi-clipboard-fix}/bin/zsh-vi-clipboard-fix.sh
+                      source ${pkgs.zsh-fzf-history-search}/share/zsh-fzf-history-search/zsh-fzf-history-search.zsh
 
-              export PATH="$PATH:$HOME/bin:$HOME/go/bin:/opt/homebrew/bin:$HOME/.local/bin"
+                      export PATH="$PATH:$HOME/bin:$HOME/go/bin:/opt/homebrew/bin:$HOME/.local/bin"
 
-              export LLDB_USE_NATIVE_PDB_READER="yes"
-              if [[ $(uname -s) == "Darwin" ]]; then
-                export LLDB_DEBUGSERVER_PATH="/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
-              fi
+                      export LLDB_USE_NATIVE_PDB_READER="yes"
+                      if [[ $(uname -s) == "Darwin" ]]; then
+                        export LLDB_DEBUGSERVER_PATH="/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
+                          fi
 
-              export ZIG_BLEEDING_EDGE_BIN="${zig-bleeding-edge}/bin/zig"
+                          export ZIG_BLEEDING_EDGE_BIN="${zig-bleeding-edge}/bin/zig"
 
-              export MANPAGER='nvim +Man!'
+                          export MANPAGER='nvim +Man!'
 
-              setopt PUSHDSILENT
+                          setopt PUSHDSILENT
 
-              alias time="/usr/bin/time"
+                          alias time="/usr/bin/time"
             ''
           ]
-          ++ cfg.terminal-services.shell-config.initExtra);
+          ++ initExtra
+        );
 
         plugins = [
           {
@@ -176,6 +174,5 @@ in {
           }
         ];
       };
-    })
-  ];
-}
+    };
+  })

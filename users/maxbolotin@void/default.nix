@@ -6,6 +6,7 @@
   impure-config-management.symlink.enable = true;
   impure-config-management.symlink.base = "${home.homeDirectory}/dotfiles";
 
+  features.application-support.enable = true;
   features.browser-config.enable = true;
   features.darwin-desktop.enable = true;
   features.terminal-services.enable = true;
@@ -13,6 +14,7 @@
   features.tmux-config.enable = true;
   features.git-config.enable = true;
   features.secrets-management.enable = true;
+  features.theme-defaults.enable = true;
 
   programs.git = {
     userName = "Max Bolotin";

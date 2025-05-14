@@ -68,26 +68,23 @@ Currently migrating to this repository from my old dotfiles repo, `nix-dotfiles`
   - [ ] Linux user level services
     - [ ] GPG Agent
   - [ ] Applications that require more configuration
-    - [ ] Neovim
-    - [ ] Obsidian
+    - [x] Neovim
+    - [x] Obsidian
     - [ ] Swim
-    - [ ] Zathura
+    - [x] Zathura
   - [x] Secrets management (SOPS)
   - [x] Copper File (easy out of store linking to config files)
-- [ ] Home manager feature modules
-  - [ ] Common - Common settings for all users
-  - [ ] Parcel semi-advanced features into modules 
-  - [ ] Move other misc packages/options to inline module in each user module
 - [ ] Darwin modules
   - [x] Desktop services (aerospace, jankyborders, sketchybar)
   - [x] Nix services (garbage collection, registry)
   - [ ] Home manager management
 - [ ] NixOS modules
   - [ ] Hardware configuration (filesystems, initrd, disko?, impermanence?)
-  - [ ] System start (plymouth, quiet boot, greetd, bootloader, console font)
-  - [ ] Core services (pulseaudio, pipewire, bluetooth/blueman, seahorse, openssh, custom udev rules)
-  - [ ] Destkop services (xdg-portal, dconf, PAM services, i2c, gvfs, devmon, udisks2, upower, power-profiles-daemon, accounts-daemon, glib-networking, opentabletdriver, etc)
-  - [ ] VPN (tailscale)
+  - [x] System start (plymouth, quiet boot, greetd, bootloader, console font)
+  - [x] Core services (pulseaudio, pipewire, bluetooth/blueman, seahorse, openssh, custom udev rules)
+  - [x] Destkop services (xdg-portal, dconf, PAM services, i2c, gvfs, devmon, udisks2, upower, power-profiles-daemon, accounts-daemon, glib-networking, opentabletdriver, etc)
+  - [x] Secrets management (sops-nix)
+  - [x] VPN (tailscale)
   - [ ] Backup (syncthing)
   - [ ] Nix services (nh, garbage collection, registry)
   - [ ] Home manager management

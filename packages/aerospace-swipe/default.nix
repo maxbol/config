@@ -1,4 +1,8 @@
-{pkgs, ...}: let
+{
+  pkgs,
+  lib,
+  ...
+}: let
   pname = "aerosopace-swipe";
   version = "git";
 in
@@ -9,6 +13,17 @@ in
       repo = "aerospace-swipe";
       rev = "f5abb13ccb665bbb66ee704566d7d3c069e0e92e";
       hash = "sha256-mwpK7w+VCy0ilV+hDwa7rsve/Om3yEy8E9bRHFLVvro=";
+    };
+
+    patches = [
+      ./remove-codesign.patch
+    ];
+
+    env = {
+      MACOSX_DEPLOYMENT_TARGET = "15.0";
+      NIX_CFLAGS_COMPILE = toString [
+        "-fcommon"
+      ];
     };
 
     buildInputs = with pkgs; [
@@ -22,7 +37,11 @@ in
 
     installPhase = ''
       mkdir -p $out/{Applications,share/plist}
-      cp AerospaceSwipe.app $out/Applications
+      cp -r AerospaceSwipe.app $out/Applications
       cp plist/com.acsandmann.swipe.plist $out/share/plist
     '';
+
+    meta = {
+      platforms = lib.platforms.darwin;
+    };
   }

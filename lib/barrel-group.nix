@@ -1,28 +1,24 @@
-{lib}: ({
+{lib, ...} @ args: {
   path,
   here,
   submodules,
-  config,
 }: let
+  mkFeature = (import ./mk-feature.nix) args;
   pathComponents = lib.strings.splitString "." path;
-  cfg = lib.attrByPath pathComponents {enable = false;} config;
-in {
-  options = lib.attrsets.setAttrByPath pathComponents {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-    };
-  };
-
-  imports = map (name: here + "/${name}.nix") submodules;
-
-  config = lib.mkIf cfg.enable (
-    lib.attrsets.setAttrByPath pathComponents (
+  submodulesToImports = map (name: (let
+    p = here + "/${name}";
+  in
+    if builtins.pathExists p
+    then p
+    else (p + ".nix")));
+in
+  mkFeature path {
+    imports = submodulesToImports submodules;
+    config = lib.attrsets.setAttrByPath pathComponents (
       builtins.listToAttrs (map (name: {
           name = name;
           value = {enable = true;};
         })
         submodules)
-    )
-  );
-})
+    );
+  }

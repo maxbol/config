@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  self,
   lib,
   ...
 }: let
@@ -18,10 +19,17 @@ in {
   config = lib.mkIf (cfg.enable) {
     environment.systemPackages = [
       pkgs.aerospace
+      self.aerospace-swipe
     ];
 
     launchd.user.agents.aerospace = {
       environment.PATH = PATH;
+    };
+
+    environment.launchAgents.aerospace-swipe = {
+      enable = true;
+      source = "${self.aerospace-swipe}/share/plist/com.acsandmann.swipe.plist";
+      target = "com.acsandmann.swipe.plist";
     };
 
     # Reasonable system settings to make Aerospace look and behave correctly

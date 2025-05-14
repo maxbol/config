@@ -3,10 +3,9 @@
   origin,
   pkgs,
   lib,
+  lib-mine,
   ...
 }: let
-  cfg = config.features.browser-config.firefox;
-
   unstable-pkgs = origin.inputs.nixpkgs-unstable.legacyPackages.${pkgs.system};
   extensions = config.nur.repos.rycee.firefox-addons;
 
@@ -56,97 +55,89 @@
 
   autoReloadCssUCJS = ./autoReloadCss.uc.js;
   userChromeJS = ./userChrome.js;
-in {
-  imports = [
-    origin.inputs.nur.modules.homeManager.default
-    origin.inputs.textfox.homeManagerModules.default
-  ];
-
-  options = with lib; {
-    features.browser-config.firefox = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-    };
-  };
-
-  config = lib.mkIf (cfg.enable) {
-    programs.firefox = {
-      enable = true;
-      package = firefox;
-      profiles = {
-        ${profileName} = {
-          isDefault = true;
-          settings = {
-            "svg.context-properties.content.enabled" = true;
-            "shyfox.enable.ext.mono.toolbar.icons" = true;
-            "shyfox.enable.ext.mono.context.icons" = true;
-            "shyfox.enable.context.menu.icons" = true;
-            "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-            "general.config.filename" = "mozilla.cfg";
-            "general.config.obscure_value" = 0;
-          };
-          extensions = with extensions; [
-            vimium
-            ublock-origin
-            brotab
-            darkreader
-          ];
-        };
-      };
-    };
-
-    textfox = {
-      enable = true;
-      profile = profileName;
-      flattenCss = true;
-      copyOnActivation = true;
-      config = {
-        displayNavButtons = true;
-        displaySidebarTools = true;
-        displayTitles = false;
-        font = {
-          family = "Iosevka";
-          size = "18px";
-        };
-      };
-    };
-
-    home.packages = with pkgs; [
-      brotab
-      firefox
-      # TODO(2025-05-10, Max Bolotin): Reactivate iosevka again once nodejs_20 builds on mac os
-      # iosevka
-      (lib.mkIf
-        (pkgs.stdenv.hostPlatform.isDarwin == true)
-        firefoxMacOSCmd)
+in
+  lib-mine.mkFeature "features.browser-config.firefox" {
+    imports = [
+      origin.inputs.nur.modules.homeManager.default
+      origin.inputs.textfox.homeManagerModules.default
     ];
 
-    home.sessionVariables.BROWSER = "firefox";
+    config = {
+      programs.firefox = {
+        enable = true;
+        package = firefox;
+        profiles = {
+          ${profileName} = {
+            isDefault = true;
+            settings = {
+              "svg.context-properties.content.enabled" = true;
+              "shyfox.enable.ext.mono.toolbar.icons" = true;
+              "shyfox.enable.ext.mono.context.icons" = true;
+              "shyfox.enable.context.menu.icons" = true;
+              "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+              "general.config.filename" = "mozilla.cfg";
+              "general.config.obscure_value" = 0;
+            };
+            extensions = with extensions; [
+              vimium
+              ublock-origin
+              brotab
+              darkreader
+            ];
+          };
+        };
+      };
 
-    home.activation.installFirefoxJSLoader =
-      lib.hm.dag.entryAfter ["linkGeneration"]
-      /*
-      bash
-      */
-      ''
-        CHROME_DIR="${config.home.homeDirectory}/${configDir}/${profileName}/chrome"
-        cp -R ${customJsForFx}/script_loader/profile/userChrome "$CHROME_DIR"
-        chmod -R u+w "$CHROME_DIR/userChrome"
-        cp ${autoReloadCssUCJS} "$CHROME_DIR/userChrome/autoReloadCss.uc.js"
-        chmod u+w "$CHROME_DIR/userChrome/autoReloadCss.uc.js"
-        cp ${userChromeJS} "$CHROME_DIR/userChrome.js"
-        chmod u+w "$CHROME_DIR/userChrome.js"
-      '';
+      textfox = {
+        enable = true;
+        profile = profileName;
+        flattenCss = true;
+        copyOnActivation = true;
+        config = {
+          displayNavButtons = true;
+          displaySidebarTools = true;
+          displayTitles = false;
+          font = {
+            family = "Iosevka";
+            size = "18px";
+          };
+        };
+      };
 
-    home.activation.clearFirefoxStartupCache =
-      lib.hm.dag.entryAfter ["linkGeneration"]
-      /*
-      bash
-      */
-      ''
-        rm -Rf "${startupCachePath}"
-      '';
-  };
-}
+      home.packages = with pkgs; [
+        brotab
+        firefox
+        # TODO(2025-05-10, Max Bolotin): Reactivate iosevka again once nodejs_20 builds on mac os
+        # iosevka
+        (lib.mkIf
+          (pkgs.stdenv.hostPlatform.isDarwin == true)
+          firefoxMacOSCmd)
+      ];
+
+      home.sessionVariables.BROWSER = "firefox";
+
+      home.activation.installFirefoxJSLoader =
+        lib.hm.dag.entryAfter ["linkGeneration"]
+        /*
+        bash
+        */
+        ''
+          CHROME_DIR="${config.home.homeDirectory}/${configDir}/${profileName}/chrome"
+          cp -R ${customJsForFx}/script_loader/profile/userChrome "$CHROME_DIR"
+          chmod -R u+w "$CHROME_DIR/userChrome"
+          cp ${autoReloadCssUCJS} "$CHROME_DIR/userChrome/autoReloadCss.uc.js"
+          chmod u+w "$CHROME_DIR/userChrome/autoReloadCss.uc.js"
+          cp ${userChromeJS} "$CHROME_DIR/userChrome.js"
+          chmod u+w "$CHROME_DIR/userChrome.js"
+        '';
+
+      home.activation.clearFirefoxStartupCache =
+        lib.hm.dag.entryAfter ["linkGeneration"]
+        /*
+        bash
+        */
+        ''
+          rm -Rf "${startupCachePath}"
+        '';
+    };
+  }

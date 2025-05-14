@@ -13,6 +13,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    flake-parts.url = "github:hercules-ci/flake-parts";
+
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,10 +30,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     nur.url = "github:nix-community/NUR";
     textfox.url = "github:maxbol/textfox/copy-on-activation-mode@allow-custom-css@flatten-css";
 
-    flake-parts.url = "github:hercules-ci/flake-parts";
     zig-overlay.url = "github:mitchellh/zig-overlay";
 
     clockifyd.url = "github:maxbol/clockifyd";
@@ -56,8 +58,10 @@
         ...
       } @ flake-args: let
         hmModuleRoot = import ./modules/home-manager;
+        themeConfigModule = import ./modules/home-manager/theme-config;
         darwinModuleRoot = import ./modules/darwin;
         overlays = (import ./overlays) flake-args;
+        lib-mine = (import ./lib) {inherit (nixpkgs) lib;};
         moduleArgs = self // {inherit config options;};
         systems = [
           "aarch64-darwin"
@@ -70,19 +74,7 @@
 
         imports = [
           ./meta.nix
-          ({lib, ...}: (
-            flake-parts.lib.mkTransposedPerSystemModule {
-              name = "themes";
-              file = ./flake.nix;
-              option = lib.mkOption {
-                type = lib.types.attrs;
-                default = {};
-                description = ''
-                  A set of themes for the themeing system to use.
-                '';
-              };
-            }
-          ))
+          (import ./transpose-themes.nix {inherit flake-parts self;})
         ];
 
         perSystem = {
@@ -90,7 +82,7 @@
           self',
           system,
           ...
-        }: let
+        } @ perSystemArgs: let
           packageArgs = {
             self = self'.packages;
             inputs = inputs;
@@ -101,22 +93,22 @@
           };
 
           packages = pkgs.callPackage ./packages packageArgs;
-          themes = pkgs.callPackage ./themes packageArgs;
+          themes = import ./themes (perSystemArgs // packageArgs);
         };
 
         flake = let
-          mkLib = pkgs: ((import ./lib) {inherit (pkgs) lib;});
           mkPackages = system:
             import nixpkgs {
               inherit system overlays;
+              config.allowUnfree = true;
             };
 
           mkSpecialArgs = system: let
             pkgs = mkPackages system;
           in {
+            inherit lib-mine;
             origin = moduleArgs;
             self = self.packages.${system};
-            lib-mine = mkLib pkgs;
             vendor = pkgs.lib.foldlAttrs (inputPackages: inputName: input:
               inputPackages
               // (
@@ -160,6 +152,15 @@
             system = "aarch64-darwin";
             username = "maxbolotin";
             host = "void";
+          };
+
+          darwinModules = {
+            all = darwinModuleRoot;
+          };
+
+          homeManagerModules = {
+            all = hmModuleRoot;
+            themeConfig = themeConfigModule;
           };
         };
 

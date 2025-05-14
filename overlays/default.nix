@@ -1,9 +1,4 @@
-{...}: [
-  # (import ./extend-lib.nix)
-  (final: prev: {
-    nodejs = prev.nodejs_22;
-    nodejs-slim = prev.nodejs-slim_22;
-    nodejs_20 = prev.nodejs_22;
-    nodejs-slim_20 = prev.nodejs-slim_22;
-  })
+{...} @ overlayArgs: [
+  (import ./azuredatastudio-fix.nix overlayArgs)
+  (import ./nodejs-build-issue.nix overlayArgs)
 ]

@@ -1,24 +1,14 @@
 {
+  lib-mine,
   pkgs,
-  lib,
-  config,
   ...
 }: let
-  cfg = config.features;
   tmpDir =
     if pkgs.stdenv.hostPlatform.isDarwin
     then "/private/tmp/"
     else "/run/user/";
-in {
-  options = with lib; {
-    features.nix-services.direnv-config = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-    };
-  };
-  config = lib.mkIf (cfg.nix-services.direnv-config.enable) {
+in
+  lib-mine.mkFeature "features.nix-services.direnv-config" {
     programs.direnv.enable = true;
     programs.direnv.enableZshIntegration = true;
     programs.direnv.nix-direnv.enable = true;
@@ -49,5 +39,4 @@ in {
         RunAtLoad = true;
       };
     };
-  };
-}
+  }

@@ -1,0 +1,12 @@
+diff --git a/makefile b/makefile
+index d885671..1eebc2c 100644
+--- a/makefile
++++ b/makefile
+@@ -52,7 +52,6 @@ bundle: $(BINARY)
+ 	@echo '</dict>' >> $(INFO_PLIST)
+ 	@echo '</plist>' >> $(INFO_PLIST)
+ 	@echo "APPL????" > $(APP_CONTENTS)/PkgInfo
+-	codesign --entitlements accessibility.entitlements --sign - $(APP_BUNDLE)
+ 
+ all: $(TARGET)
+ 
