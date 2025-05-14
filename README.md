@@ -86,7 +86,7 @@ Currently migrating to this repository from my old dotfiles repo, `nix-dotfiles`
     - [ ] Swim
     - [x] Zathura
   - [x] Secrets management (SOPS)
-  - [x] Copper File (easy out of store linking to config files)
+  - [x] Impure config management (easy out of store linking to config files)
 - [ ] Darwin modules
   - [x] Desktop services (aerospace, jankyborders, sketchybar)
   - [x] Nix services (garbage collection, registry)
