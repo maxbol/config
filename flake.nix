@@ -83,7 +83,7 @@
           system,
           lib,
           ...
-        } @ perSystemArgs: let
+        }: let
           packageArgs = {
             self = self'.packages;
             inputs = inputs;
