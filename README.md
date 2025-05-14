@@ -2,6 +2,15 @@
 
 These are my config files. Unless otherwise specified, they are shared with you under the terms of GPLv3.
 
+## Goals
+
+This nix config repository is designed with the ambition to be as clear, simple and understandable as possible (and thus easy to maintain/modify without breaking things).
+
+* No autoloading - Opt for barelling instead of maintaining inscrutable autoloading code
+* Design for 1 use case - my own. No extendability/inheritability by default. If you want to use something, copy it to your own repository and tweak it. You don't want to hold an upstream dependency to someone's dotfiles anyways.
+* Locality of behavior - Don't spread code that has to do with one system behavior (like themeing, boot, or whatever) across a bunch of modules in different places. Organize the repo based on what behavior is being controlled, rather than weird nix-like taxonomies (like "regular" modules vs feature modules).
+* No namespacing. These are my config files, for whose benefit would I be namespacing them? Opt for legibility instead, flatten everything as much as possible.
+
 ---
 
 # Migration from nix-dotfiles
