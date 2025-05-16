@@ -5,6 +5,7 @@
   lib-mine,
   options,
   vendor,
+  self,
   ...
 }:
 lib-mine.mkFeature "features.linux-desktop.hyprland" {
