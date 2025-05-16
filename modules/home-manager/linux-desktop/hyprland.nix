@@ -15,7 +15,7 @@ lib-mine.mkFeature "features.linux-desktop.hyprland" {
     "hypr/animations.conf"
     "hypr/entry.conf"
     "hypr/keybindings.conf"
-    "hypr/nvidia.conf"
+    # "hypr/nvidia.conf"
     "hypr/plugins.conf"
     "hypr/windowrules.conf"
   ] (n: "config/${n}");
