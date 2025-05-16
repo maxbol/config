@@ -275,9 +275,9 @@ with lib; let
       '';
     };
 in {
-  # imports = [
-  #   ./application-integrations
-  # ];
+  imports = [
+    ./application-integrations
+  ];
 
   options = {
     theme-config = {
