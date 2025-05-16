@@ -88,6 +88,8 @@ lib-mine.mkFeature "features.core-services" {
 
   programs.seahorse.enable = true;
 
+  programs.git.enable = true;
+
   programs.zsh.enable = true;
 
   environment.systemPackages = with pkgs; [
