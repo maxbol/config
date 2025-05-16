@@ -19,6 +19,9 @@
   features.desktop-config.enable = true;
   features.localisation.enable = true;
   features.secrets-management.enable = true;
-  features.system-start.enable = true;
+  features.system-start = {
+    enable = true;
+    defaultUser = "max";
+  };
   features.vpn-config.enable = true;
 }
