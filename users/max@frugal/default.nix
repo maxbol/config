@@ -7,7 +7,8 @@
   impure-config-management.symlink.base = "${home.homeDirectory}/src/config";
 
   features.application-support.enable = true;
-  features.browser-config.enable = true;
+  features.application-support.obsidian.enable = false;
+  # features.browser-config.enable = true;
   features.terminal-services.enable = true;
   features.nix-services.enable = true;
   features.tmux-config.enable = true;

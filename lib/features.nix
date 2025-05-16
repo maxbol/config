@@ -20,7 +20,7 @@
       config = lib.attrsets.setAttrByPath pathComponents (
         builtins.listToAttrs (map (name: {
             name = name;
-            value = {enable = true;};
+            value = {enable = lib.mkDefault true;};
           })
           submodules)
       );
