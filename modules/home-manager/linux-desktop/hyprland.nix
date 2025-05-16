@@ -80,7 +80,7 @@ lib-mine.mkFeature "features.linux-desktop.hyprland" {
     Service = {
       Type = "oneshot";
       ExecStart = "${config.theme-config.themeDirectory}/active/activate";
-      Restart = "always";
+      Restart = "no";
     };
 
     Install.WantedBy = ["hyprland-session.target"];
