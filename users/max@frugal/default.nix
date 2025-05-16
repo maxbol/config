@@ -14,6 +14,7 @@
   features.linux-desktop.enable = true;
   features.nix-services.enable = true;
   features.terminal-services.enable = true;
+  features.terminal-services.terminal-config.enable = true;
   features.theme-defaults.enable = true;
   features.tmux-config.enable = true;
 
