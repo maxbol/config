@@ -11,10 +11,12 @@
 
   profileName = "default";
 
-  firefox-unmodified =
-    if pkgs.stdenv.hostPlatform.isDarwin == true
-    then unstable-pkgs.firefox-unwrapped
-    else pkgs.firefox;
+  # firefox-unmodified =
+  #   if pkgs.stdenv.hostPlatform.isDarwin == true
+  #   then unstable-pkgs.firefox-unwrapped
+  #   else pkgs.firefox;
+
+  firefox-unmodified = unstable-pkgs.firefox-unwrapped;
 
   customJsForFx = pkgs.fetchFromGitHub {
     owner = "Aris-t2";
