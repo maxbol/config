@@ -8,7 +8,7 @@
   ...
 }:
 with lib; let
-  inherit (lib-mine) colorType;
+  inherit (lib-mine.types) colorType;
 
   cfg = config.theme-config;
 in {
