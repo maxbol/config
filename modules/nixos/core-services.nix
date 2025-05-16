@@ -83,7 +83,7 @@ lib-mine.mkFeature "features.core-services" {
   };
 
   networking = {
-    networkmanager.enable = false;
+    networkmanager.enable = true;
   };
 
   programs.seahorse.enable = true;

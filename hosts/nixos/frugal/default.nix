@@ -1,7 +1,17 @@
-{...}: {
+{pkgs, ...}: {
   imports = [
     ./hardware-configuration.nix
   ];
+
+  networking.hostName = "frugal";
+
+  users.users.max = {
+    isNormalUser = true;
+    description = "Max Bolotin";
+    extraGroups = ["networkmanager" "wheel" "docker" "plugdev"];
+    packages = [];
+    shell = pkgs.zsh;
+  };
 
   features.application-config.enable = true;
   features.core-services.enable = true;
