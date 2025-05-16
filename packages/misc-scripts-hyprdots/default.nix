@@ -11,8 +11,8 @@
   libnotify,
   procps,
   dbus,
-  inputs,
   lib,
+  vendor,
   ...
 }:
 symlinkJoin {
@@ -23,12 +23,12 @@ symlinkJoin {
       runtimeInputs = [
         dunst
         brightnessctl
-        inputs.hyprland.packages.default
+        vendor.hyprland.default
         jq
         gnused
         gawk
         pamixer
-        inputs.hypr-contrib.packages.grimblast
+        vendor.hypr-contrib.grimblast
         swappy
         procps
         libnotify

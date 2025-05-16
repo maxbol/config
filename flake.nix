@@ -105,6 +105,14 @@
           packageArgs = {
             self = self'.packages;
             inputs = inputs;
+            vendor = pkgs.lib.foldlAttrs (inputPackages: inputName: input:
+              inputPackages
+              // (
+                if inputName == "nixpkgs"
+                then {}
+                else {${inputName} = input.packages.${system};}
+              )) {}
+            inputs;
           };
         in {
           _module.args.pkgs = import nixpkgs {
