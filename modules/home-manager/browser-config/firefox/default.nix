@@ -39,7 +39,7 @@
     (drv:
       if pkgs.stdenv.hostPlatform.isDarwin == true
       then drv
-      else {override = {...}: drv;})
+      else {...}: drv)
     pkgs.runCommand "firefox-with-customjs" {} ''
       RESOURCES="$out${resourcesPath}"
 
