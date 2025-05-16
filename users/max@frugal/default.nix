@@ -8,7 +8,6 @@
 
   features.application-support.enable = true;
   features.browser-config.enable = true;
-  # features.darwin-desktop.enable = true;
   features.terminal-services.enable = true;
   features.nix-services.enable = true;
   features.tmux-config.enable = true;
