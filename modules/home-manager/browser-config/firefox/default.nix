@@ -40,7 +40,7 @@
       if pkgs.stdenv.hostPlatform.isDarwin == true
       then drv
       else {...}: drv)
-    pkgs.runCommand "firefox-with-customjs" {} ''
+    (pkgs.runCommand "firefox-with-customjs" {} ''
       RESOURCES="$out${resourcesPath}"
 
       cp -R ${firefox-unmodified} $out
@@ -48,7 +48,7 @@
       cp ${customJsForFx}/script_loader/firefox/config.js "$RESOURCES/config.js"
       cp -R ${customJsForFx}/script_loader/firefox/defaults "$RESOURCES/defaults"
       chmod u-w $RESOURCES
-    '';
+    '');
 
   firefoxMacOSCmd = pkgs.writeShellScriptBin "firefox" ''
     cd ${firefox}/Applications/Firefox.app/Contents/MacOS
