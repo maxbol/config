@@ -40,7 +40,7 @@
       url = "github:hyprwm/hyprlang";
       inputs.nixpkgs.follows = "nixpkgs";
       # inputs.systems.follows = "systems-linux";
-      inputs.hyprutils.follows = "hyprutils";
+      # inputs.hyprutils.follows = "hyprutils";
     };
 
     hypr-contrib = {
