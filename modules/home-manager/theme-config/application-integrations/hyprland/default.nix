@@ -1,14 +1,14 @@
 {
   config,
-  origin,
   options,
   pkgs,
   lib,
   vendor,
+  lib-mine,
   ...
 }:
 with lib; let
-  inherit (origin.self.lib.types) colorType;
+  inherit (lib-mine) colorType;
 
   cfg = config.theme-config;
 in {
