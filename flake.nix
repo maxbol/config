@@ -35,6 +35,14 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
+    # The Window Manager I use + tooling
+    hyprlang = {
+      url = "github:hyprwm/hyprlang";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems-linux";
+      inputs.hyprutils.follows = "hyprutils";
+    };
+
     hypr-contrib = {
       url = "github:hyprwm/contrib";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
