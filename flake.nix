@@ -45,6 +45,13 @@
       inputs.hyprland.follows = "hyprland";
     };
 
+    hyprcursor = {
+      url = "github:hyprwm/hyprcursor";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.hyprlang.follows = "hyprlang";
+      inputs.systems.follows = "systems-linux";
+    };
+
     custom-udev-rules.url = "github:MalteT/custom-udev-rules";
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
