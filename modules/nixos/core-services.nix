@@ -3,7 +3,7 @@
   pkgs,
   ...
 }:
-lib-mine.mkFeature "core-services" {
+lib-mine.mkFeature "features.core-services" {
   hardware = {
     pulseaudio = {
       enable = false;
@@ -77,7 +77,7 @@ lib-mine.mkFeature "core-services" {
     };
   };
 
-  user.groups = {
+  users.groups = {
     docker = {};
     plugdev = {};
   };
