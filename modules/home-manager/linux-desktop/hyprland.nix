@@ -41,8 +41,8 @@ lib-mine.mkFeature "features.linux-desktop.hyprland" {
   };
 
   home.packages = with pkgs; [
-    copper.packages.systemctl-toggle
-    copper.packages.misc-scripts-hyprdots
+    self.systemctl-toggle
+    self.misc-scripts-hyprdots
     xwaylandvideobridge
     procps
     wl-clipboard

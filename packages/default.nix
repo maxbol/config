@@ -8,10 +8,12 @@ packageArgs @ {pkgs, ...}: {
   hyprdots-kvantum = pkgs.callPackage ./hyprdots-kvantum packageArgs;
   hyprdots-qt5ct = pkgs.callPackage ./hyprdots-qt5ct packageArgs;
   libadwaita-without-adwaita = pkgs.callPackage ./libadwaita-without-adwaita packageArgs;
+  misc-scripts-hyprdots = pkgs.callPackage ./misc-scripts-hyprdots packageArgs;
   nancy = pkgs.callPackage ./nancy packageArgs;
   rofi-launchers-hyprdots-swwwallselect-patch = pkgs.callPackage ./rofi-launchers-hyprdots-swwwallselect-patch packageArgs;
   runcached = pkgs.callPackage ./runcached packageArgs;
   synp = pkgs.callPackage ./synp packageArgs;
+  systemctl-toggle = pkgs.callPackage ./systemctl-toggle packageArgs;
   zathura-darwin = pkgs.callPackage ./zathura-darwin packageArgs;
   zathura-darwin-app = pkgs.callPackage ./zathura-darwin-app packageArgs;
 }
