@@ -6,6 +6,7 @@
   ...
 }:
 lib-mine.mkFeature "features.theme-defaults" {
+  systemd.user.startServices = "sd-switch";
   theme-config = lib.mkMerge [
     {
       enable = true;
