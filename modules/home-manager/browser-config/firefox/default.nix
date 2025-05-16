@@ -37,7 +37,12 @@
     f =
       if pkgs.stdenv.hostPlatform.isDarwin == true
       then firefox-unmodified
-      else (firefox-unmodified.override attrs);
+      else
+        (
+          if attrs != {}
+          then firefox-unmodified.override attrs
+          else firefox-unmodified
+        );
   in (pkgs.runCommand "firefox-with-customjs" {} ''
     RESOURCES="$out${resourcesPath}"
 
