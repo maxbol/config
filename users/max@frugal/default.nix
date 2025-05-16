@@ -13,7 +13,7 @@
   features.nix-services.enable = true;
   features.tmux-config.enable = true;
   features.git-config.enable = true;
-  features.secrets-management.enable = true;
+  # features.secrets-management.enable = true;
   features.theme-defaults.enable = true;
 
   programs.git = {
