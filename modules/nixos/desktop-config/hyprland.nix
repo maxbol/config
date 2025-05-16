@@ -1,4 +1,5 @@
 {
+  lib,
   lib-mine,
   pkgs,
   origin,
@@ -16,6 +17,7 @@ lib-mine.mkFeature "features.desktop-config.hyprland" {
       package = vendor.hyprland.default;
       portalPackage = vendor.hyprland.xdg-desktop-portal-hyprland;
     };
+
     # xdg-desktop-portal-hyprland is implicitly included by the Hyprland module
     xdg.portal.enable = true;
     xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gtk];
