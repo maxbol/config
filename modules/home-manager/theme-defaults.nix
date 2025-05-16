@@ -15,7 +15,7 @@ lib-mine.mkFeature "features.theme-defaults" {
     }
     (
       lib.mkIf
-      (pkgs.stdenv.hostPlatform.isDarwin)
+      (pkgs.stdenv.hostPlatform.isLinux)
       {
         desktop.enable = true;
       }
