@@ -79,7 +79,7 @@ lib-mine.mkFeature "features.linux-desktop.hyprland" {
 
     Service = {
       Type = "oneshot";
-      ExecStart = "${config.maxdots.chroma.themeDirectory}/active/activate";
+      ExecStart = "${config.theme-config.themeDirectory}/active/activate";
       Restart = "always";
     };
 
