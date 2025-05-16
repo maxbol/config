@@ -13,6 +13,13 @@
     shell = pkgs.zsh;
   };
 
+  environment.systemPackages = with pkgs; [vim];
+
+  nix.settings = {
+    experimental-features = "nix-command flakes";
+    trusted-users = ["max"];
+  };
+
   features.application-config.enable = true;
   features.core-services.enable = true;
   features.custom-udev-rules.enable = true;
