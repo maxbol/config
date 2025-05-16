@@ -4,7 +4,7 @@
   lib,
   lib-mine,
   options,
-  vendor,
+  # vendor,
   self,
   ...
 }:
@@ -23,7 +23,7 @@ lib-mine.mkFeature "features.linux-desktop.hyprland" {
   wayland.windowManager.hyprland = {
     enable = true;
     # TODO: this also installs a hyprland package, how does this conflict with the global install
-    package = vendor.hyprland.default;
+    # package = vendor.hyprland.default;
     # plugins = [
     #   origin.inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
     #   # ...
