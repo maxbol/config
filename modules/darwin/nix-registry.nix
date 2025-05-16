@@ -1,23 +1,13 @@
 {
-  config,
   origin,
   lib,
+  lib-mine,
   ...
 }: let
-  cfg = config.features.nix-registry;
   inputsToRegistry = lib.attrsets.mapAttrs (_: input: {
     flake = input;
   });
-in {
-  options = with lib; {
-    features.nix-registry = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-    };
-  };
-  config = lib.mkIf (cfg.enable) {
+in
+  lib-mine.mkFeature "features.nix-registry" {
     nix.registry = inputsToRegistry origin.inputs;
-  };
-}
+  }

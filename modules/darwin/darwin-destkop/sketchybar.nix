@@ -1,24 +1,12 @@
 {
   pkgs,
-  config,
-  lib,
+  lib-mine,
   ...
-}: let
-  cfg = config.features.darwin-desktop.sketchybar;
-in {
-  options = with lib; {
-    features.darwin-desktop.sketchybar = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-    };
-  };
-  config = lib.mkIf (cfg.enable) {
-    # Sketchybar is configured by home-manager/chroma, so no settings should be set in the darwin module
-    environment.systemPackages = [
-      pkgs.sketchybar
-    ];
-    services.sketchybar.enable = true;
-  };
+}:
+lib-mine.mkFeature "features.darwin-desktop.sketchybar" {
+  # Sketchybar is configured by home-manager/chroma, so no settings should be set in the darwin module
+  services.sketchybar.enable = true;
+  environment.systemPackages = [
+    pkgs.sketchybar
+  ];
 }

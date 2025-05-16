@@ -1,22 +1,12 @@
 {
-  config,
   pkgs,
   self,
-  lib,
+  lib-mine,
   ...
 }: let
-  cfg = config.features.darwin-desktop.aerospace;
   PATH = "/usr/bin:/bin:/usr/sbin:/sbin:${pkgs.sketchybar}/bin:${pkgs.aerospace}/bin:${pkgs.jankyborders}/bin";
-in {
-  options = with lib; {
-    features.darwin-desktop.aerospace = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-    };
-  };
-  config = lib.mkIf (cfg.enable) {
+in
+  lib-mine.mkFeature "features.darwin-desktop.aerospace" {
     environment.systemPackages = [
       pkgs.aerospace
       self.aerospace-swipe
@@ -111,5 +101,4 @@ in {
         };
       };
     };
-  };
-}
+  }

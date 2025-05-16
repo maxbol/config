@@ -1,23 +1,8 @@
-{
-  config,
-  lib,
-  ...
-}: let
-  cfg = config.features.gc;
-in {
-  options = with lib; {
-    features.gc = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-    };
-  };
-  config = lib.mkIf (cfg.enable) {
-    nix.gc = {
-      automatic = true;
-      interval.Hour = 0;
-      options = "--delete-older-than 1d";
-    };
+{lib-mine, ...}:
+lib-mine.mkFeature "features.gc" {
+  nix.gc = {
+    automatic = true;
+    interval.Hour = 0;
+    options = "--delete-older-than 1d";
   };
 }

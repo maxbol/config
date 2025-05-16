@@ -1,21 +1,12 @@
 {
-  config,
   pkgs,
   lib,
+  lib-mine,
   ...
 }: let
-  cfg = config.features.darwin-desktop.jankyborders;
   PATH = "/usr/bin:/bin:/usr/sbin:/sbin:${pkgs.sketchybar}/bin:${pkgs.aerospace}/bin:${pkgs.jankyborders}/bin";
-in {
-  options = with lib; {
-    features.darwin-desktop.jankyborders = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-    };
-  };
-  config = lib.mkIf (cfg.enable) {
+in
+  lib-mine.mkFeature "features.darwin-desktop.jankyborders" {
     environment.systemPackages = [
       pkgs.jankyborders
     ];
@@ -28,5 +19,4 @@ in {
       ];
       environment.PATH = PATH;
     };
-  };
-}
+  }

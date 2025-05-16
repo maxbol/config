@@ -9,11 +9,10 @@
   dconf,
   cliphist,
   self,
-  inputs,
   lib,
   ...
 }: let
-  inherit (inputs.copper.packages) swimctl chromactl nailgun;
+  inherit (self) swimctl chromactl nailgun;
 in
   symlinkJoin {
     name = "rofi-launcher-hyprdots-swwwallselect-patch";

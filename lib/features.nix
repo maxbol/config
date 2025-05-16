@@ -1,4 +1,7 @@
 {lib, ...}: rec {
+  batchEnable = let
+    enable = name: {${name}.enable = true;};
+  in {};
   barrelGroup = {
     path,
     here,

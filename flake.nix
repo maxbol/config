@@ -30,6 +30,23 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    hyprland = {
+      url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    hypr-contrib = {
+      url = "github:hyprwm/contrib";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    hyprland-plugins = {
+      url = "github:hyprwm/hyprland-plugins";
+      inputs.hyprland.follows = "hyprland";
+    };
+
+    custom-udev-rules.url = "github:MalteT/custom-udev-rules";
+
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     nur.url = "github:nix-community/NUR";
     textfox.url = "github:maxbol/textfox/copy-on-activation-mode@allow-custom-css@flatten-css";
@@ -60,6 +77,7 @@
         hmModuleRoot = import ./modules/home-manager;
         themeConfigModule = import ./modules/home-manager/theme-config;
         darwinModuleRoot = import ./modules/darwin;
+        nixosModuleRoot = import ./modules/nixos;
         overlays = (import ./overlays) flake-args;
         lib-mine = (import ./lib) {inherit (nixpkgs) lib;};
         moduleArgs = self // {inherit config options;};
@@ -123,17 +141,53 @@
             inputs;
           };
 
-          mkDarwinConfiguration = {host}: let
+          mkDarwinConfiguration = {
+            host,
+            system,
+          }: let
             hostModule = import (./. + ''/hosts/darwin/${host}'');
           in
             nix-darwin.lib.darwinSystem {
-              specialArgs = mkSpecialArgs "aarch64-darwin";
-              pkgs = mkPackages "aarch64-darwin";
+              specialArgs = mkSpecialArgs system;
+              pkgs = mkPackages system;
               modules = [
                 darwinModuleRoot
                 hostModule
+                ({lib, ...}: {
+                  nixpkgs.hostPlatform = lib.mkDefault system;
+                })
               ];
             };
+
+          mkDarwinConfigurations = builtins.foldl' (acc: config @ {host, ...}:
+            acc
+            // {
+              ${host} = mkDarwinConfiguration config;
+            }) {};
+
+          mkNixosConfiguration = {
+            host,
+            system,
+          }: let
+            hostModule = import (./. + "/hosts/nixos/${host}");
+          in
+            nixpkgs.lib.nixosSystem {
+              specialArgs = mkSpecialArgs system;
+              pkgs = mkPackages system;
+              modules = [
+                nixosModuleRoot
+                hostModule
+                ({lib, ...}: {
+                  nixpkgs.hostPlatform = lib.mkDefault system;
+                })
+              ];
+            };
+
+          mkNixosConfigurations = builtins.foldl' (acc: config @ {host, ...}:
+            acc
+            // {
+              ${host} = mkNixosConfiguration config;
+            }) {};
 
           mkHomeManagerConfiguration = {
             system,
@@ -146,17 +200,61 @@
               modules = [
                 hmModuleRoot
                 userModule
+                ({lib, ...}: {
+                  home.username = username;
+                  home.homeDirectory =
+                    lib.mkDefault
+                    (
+                      if system == "aarch64-darwin"
+                      then "/Users/${username}/"
+                      else "/home/${username}"
+                    );
+                })
               ];
               pkgs = mkPackages system;
               extraSpecialArgs = mkSpecialArgs system;
             };
+
+          mkHomeManagerConfigurations = builtins.foldl' (acc: config @ {
+            username,
+            host,
+            ...
+          }:
+            acc
+            // {
+              "${username}@${host}" = mkHomeManagerConfiguration config;
+            }) {};
         in {
-          darwinConfigurations."void" = mkDarwinConfiguration {host = "void";};
-          homeConfigurations."maxbolotin@void" = mkHomeManagerConfiguration {
-            system = "aarch64-darwin";
-            username = "maxbolotin";
-            host = "void";
-          };
+          nixosConfigurations = mkNixosConfigurations [
+            {
+              host = "jockey";
+              system = "x86_64-linux";
+            }
+            {
+              host = "frugal";
+              system = "x86_64-linux";
+            }
+          ];
+
+          darwinConfigurations = mkDarwinConfigurations [
+            {
+              host = "void";
+              system = "aarch64-darwin";
+            }
+          ];
+
+          homeConfigurations = mkHomeManagerConfigurations [
+            {
+              system = "aarch64-darwin";
+              username = "maxbolotin";
+              host = "void";
+            }
+            {
+              system = "x86_64-linux";
+              username = "max";
+              host = "frugal";
+            }
+          ];
 
           darwinModules = {
             all = darwinModuleRoot;
