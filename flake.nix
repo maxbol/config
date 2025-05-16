@@ -57,7 +57,7 @@
       url = "github:hyprwm/hyprcursor";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.hyprlang.follows = "hyprlang";
-      inputs.systems.follows = "systems-linux";
+      # inputs.systems.follows = "systems-linux";
     };
 
     custom-udev-rules.url = "github:MalteT/custom-udev-rules";
