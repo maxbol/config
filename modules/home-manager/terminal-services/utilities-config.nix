@@ -91,7 +91,6 @@ in {
       httpie
       jq
       lsd
-      m-cli
       self.clockify-cli
       ncdu
       neofetch
