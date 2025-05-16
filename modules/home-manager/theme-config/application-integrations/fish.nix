@@ -8,7 +8,7 @@ with lib; let
   cfg = config.theme-config;
 in {
   options = {
-    theme-config.fish.enable = mkEnableOption "Chroma integration for fish" // {default = true;};
+    theme-config.fish.enable = mkEnableOption "Chroma integration for fish" // {default = false;};
   };
 
   config = mkMerge [
