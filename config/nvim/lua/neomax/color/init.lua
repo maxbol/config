@@ -1,0 +1,8 @@
+vim.cmd("highlight clear")
+vim.cmd("colorscheme ayu-mirage")
+vim.cmd("set background=dark")
+vim.cmd("hi BlinkCmpGhostText guifg=#707a8c")
+vim.cmd("hi Function guifg=#dfbfff")
+vim.cmd("hi HLChunk1 guifg=#ffad66")
+vim.cmd("hi HLLineNum1 guifg=#ffad66")
+vim.cmd("hi Visual guibg=#637599")
