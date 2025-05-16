@@ -31,8 +31,6 @@ in
       };
 
       home.sessionVariables.DIRENV_LOG_FORMAT = "";
-    }
-    (lib.mkIf (pkgs.stdenv.hostPlatform.isDarwin) {
       launchd.agents.clearDirenv = {
         enable = true;
         config = {
@@ -41,5 +39,5 @@ in
           RunAtLoad = true;
         };
       };
-    })
+    }
   ])
