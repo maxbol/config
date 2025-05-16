@@ -92,14 +92,13 @@
 
         imports = [
           ./meta.nix
-          (import ./transpose-themes.nix {inherit flake-parts self;})
+          # (import ./transpose-themes.nix {inherit flake-parts self lib-mine;})
         ];
 
         perSystem = {
           pkgs,
           self',
           system,
-          lib,
           ...
         }: let
           packageArgs = {
@@ -120,10 +119,12 @@
           };
 
           packages = pkgs.callPackage ./packages packageArgs;
-          themes = import ./themes ({
-              inherit pkgs lib;
-            }
-            // packageArgs);
+          # themes = import ./themes (
+          #   {
+          #     inherit pkgs lib lib-mine options;
+          #   }
+          #   // packageArgs
+          # );
         };
 
         flake = let

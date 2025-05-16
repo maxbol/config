@@ -34,7 +34,7 @@ in {
     theme-config.programs.macoswallpaper = {
       themeOptions = {
         wallpaper = lib.mkOption {
-          type = lib.types.str;
+          type = lib.types.oneOf [lib.types.str lib.types.path];
           example = "/path/to/image";
           description = ''
             The path to the wallpaper image.

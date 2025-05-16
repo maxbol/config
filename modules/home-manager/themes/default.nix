@@ -1,5 +1,9 @@
-{pkgs, ...} @ themeArgs: {
-  Ayu-Dark = import ./ayu (themeArgs
+{
+  pkgs,
+  specialArgs,
+  ...
+}: {
+  Ayu-Dark = pkgs.callPackage ./ayu (specialArgs
     // {
       neovimOverrides = palette: {
         colorscheme = "ayu-dark";
@@ -19,7 +23,7 @@
       };
     });
 
-  Ayu-Mirage = import ./ayu (themeArgs
+  Ayu-Mirage = pkgs.callPackage ./ayu (specialArgs
     // {
       variant = "mirage";
       wallpaper = ./ayu/wallpapers/ayu-mirage-default.png;
@@ -39,11 +43,11 @@
       };
     });
 
-  Blue-Nightmare = import ./blue-nightmare themeArgs;
+  Blue-Nightmare = pkgs.callPackage ./blue-nightmare (specialArgs // {});
 
-  Bluloco-Dark = import ./bluloco themeArgs;
+  Bluloco-Dark = pkgs.callPackage ./bluloco (specialArgs // {luminance = "dark";});
 
-  Catppuccin-Latte = import ./catppuccin (themeArgs
+  Catppuccin-Latte = pkgs.callPackage ./catppuccin (specialArgs
     // {
       variant = "latte";
       accent = "rosewater";
@@ -76,7 +80,7 @@
       };
     });
 
-  Catppuccin-Mocha = import ./catppuccin (themeArgs
+  Catppuccin-Mocha = pkgs.callPackage ./catppuccin (specialArgs
     // {
       variant = "mocha";
 
@@ -114,18 +118,18 @@
       };
     });
 
-  Gruvbox-Dark = import ./gruvbox themeArgs;
+  Gruvbox-Dark = pkgs.callPackage ./gruvbox (specialArgs // {luminance = "dark";});
 
-  Newpaper-Light = import ./newpaper themeArgs;
+  Newpaper-Light = pkgs.callPackage ./newpaper (specialArgs // {luminance = "light";});
 
-  Oh-Lucy = import ./oh-lucy (themeArgs
+  Oh-Lucy = pkgs.callPackage ./oh-lucy (specialArgs
     // {
       neovimOverrides = palette: {
         colorscheme = "oh-lucy";
       };
     });
 
-  Oh-Lucy-Evening = import ./oh-lucy (themeArgs
+  Oh-Lucy-Evening = pkgs.callPackage ./oh-lucy (specialArgs
     // {
       variant = "evening";
       neovimOverrides = palette: {
@@ -133,7 +137,7 @@
       };
     });
 
-  Rose-Pine = import ./rose-pine (themeArgs
+  Rose-Pine = pkgs.callPackage ./rose-pine (specialArgs
     // {
       variant = "pine";
       neovimOverrides = palette: {
@@ -151,7 +155,7 @@
       };
     });
 
-  Rose-Pine-Eclipse = import ./rose-pine (themeArgs
+  Rose-Pine-Eclipse = pkgs.callPackage ./rose-pine (specialArgs
     // {
       variant = "eclipse";
       neovimOverrides = palette: {
@@ -172,7 +176,7 @@
       kittyOverrides.file."theme.conf".source = ./rose-pine/eclipse-kitty.conf;
     });
 
-  Rose-Pine-Moon = import ./rose-pine (themeArgs
+  Rose-Pine-Moon = pkgs.callPackage ./rose-pine (specialArgs
     // {
       variant = "moon";
       neovimOverrides = palette: {
@@ -191,5 +195,5 @@
       wallpaper = ./rose-pine/wallpapers/moon.png;
     });
 
-  Tsoding-Mode = import ./tsoding-mode themeArgs;
+  Tsoding-Mode = pkgs.callPackage ./tsoding-mode (specialArgs // {});
 }

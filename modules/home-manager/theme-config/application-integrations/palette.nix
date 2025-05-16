@@ -2,7 +2,7 @@
   pkgs,
   lib,
   lib-mine,
-  maxdots,
+  self,
   ...
 }:
 with lib; let
@@ -105,7 +105,7 @@ in {
                 echo "${template}"
                 echo "${palette}"
                 echo "${overrides}"
-                ${lib.getExe maxdots.packages.dynachrome} "${template}" "${palette}" ${overrides} > $out
+                ${lib.getExe self.dynachrome} "${template}" "${palette}" ${overrides} > $out
                 ${
                   if executable == true
                   then "chmod a+x $out"
