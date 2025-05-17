@@ -54,7 +54,7 @@ in {
         };
       };
 
-      reloadCommand = "${lib.getExe pkgs.tmux} source ~/.config/tmux/tmux.conf";
+      reloadCommand = "${lib.getExe pkgs.tmux} source ${config.xdg.configHome}/tmux/tmux.conf";
     };
   };
 
@@ -74,7 +74,7 @@ in {
             };
           };
           extraConfig = ''
-            source ~/.config/chroma/active/tmux/tinted-tmux-statusline.conf
+            source ${config.xdg.configHome}/active/tmux/tinted-tmux-statusline.conf
           '';
         }
       ];

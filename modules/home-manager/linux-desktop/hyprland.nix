@@ -86,6 +86,8 @@ lib-mine.mkFeature "features.linux-desktop.hyprland" {
     Install.WantedBy = ["hyprland-session.target"];
   };
 
+  theme-config.systemdTarget = "hyprland-session.target";
+
   services.network-manager-applet.enable = true;
   services.blueman-applet.enable = true;
 }
