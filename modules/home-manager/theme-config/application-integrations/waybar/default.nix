@@ -1,14 +1,14 @@
 {
   config,
   lib,
+  lib-mine,
   pkgs,
-  origin,
   ...
 }:
 with lib; let
   cfg = config.theme-config;
 
-  inherit (origin.self.lib.types) colorType;
+  inherit (lib-mine.types) colorType;
 in {
   options = {
     theme-config.waybar.enable = mkOption {
