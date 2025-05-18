@@ -4,6 +4,7 @@
     ./application-support
     ./browser-config
     ./darwin-desktop
+    ./default-development-environment.nix
     ./git-config.nix
     ./impure-config-management.nix
     ./linux-desktop

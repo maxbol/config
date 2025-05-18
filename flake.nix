@@ -67,6 +67,7 @@
     textfox.url = "github:maxbol/textfox/copy-on-activation-mode@allow-custom-css@flatten-css";
 
     zig-overlay.url = "github:mitchellh/zig-overlay";
+    zls.url = "github:zigtools/zls";
 
     clockifyd.url = "github:maxbol/clockifyd";
     nvim-colorctl.url = "github:maxbol/nvim-colorctl/log-the-shit-out-of-the-filenotfound-error";
