@@ -89,18 +89,25 @@
         options,
         self,
         ...
-      } @ flake-args: let
+      }: let
         hmModuleRoot = import ./modules/home-manager;
         themeConfigModule = import ./modules/home-manager/theme-config;
         darwinModuleRoot = import ./modules/darwin;
         nixosModuleRoot = import ./modules/nixos;
-        overlays = (import ./overlays) {inherit (nixpkgs) lib;};
         lib-mine = (import ./lib) {inherit (nixpkgs) lib;};
         moduleArgs = self // {inherit config options;};
         systems = [
           "aarch64-darwin"
           "x86_64-linux"
         ];
+
+        mkOverlays = (import ./overlays) {inherit (nixpkgs) lib;};
+        mkPackages = system:
+          import nixpkgs {
+            inherit system;
+            overlays = mkOverlays system;
+            config.allowUnfree = true;
+          };
       in {
         inherit systems;
 
@@ -130,9 +137,7 @@
             inputs;
           };
         in {
-          _module.args.pkgs = import nixpkgs {
-            inherit system overlays;
-          };
+          _module.args.pkgs = mkPackages system;
 
           packages = pkgs.callPackage ./packages packageArgs;
           # themes = import ./themes (
@@ -144,12 +149,6 @@
         };
 
         flake = let
-          mkPackages = system:
-            import nixpkgs {
-              inherit system overlays;
-              config.allowUnfree = true;
-            };
-
           mkSpecialArgs = system: let
             pkgs = mkPackages system;
           in {
