@@ -1,6 +1,6 @@
 return {
-	-- "stevearc/dressing.nvim",
-	dir = "~/Source/dressing.nvim",
+	"stevearc/dressing.nvim",
+	-- dir = "~/Source/dressing.nvim",
 	lazy = false,
 	config = function()
 		require("dressing").setup({
