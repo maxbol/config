@@ -6,7 +6,7 @@
   impure-config-management.symlink.enable = true;
   impure-config-management.symlink.base = "${home.homeDirectory}/src/config";
 
-  # features.browser-config.enable = true;
+  features.browser-config.enable = true;
   # features.secrets-management.enable = true;
   features.application-support.enable = true;
   features.application-support.obsidian.enable = false;

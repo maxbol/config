@@ -26,7 +26,7 @@
   resourcesPath =
     if pkgs.stdenv.hostPlatform.isDarwin == true
     then "/Applications/Firefox.app/Contents/Resources"
-    else "/usr/lib/firefox";
+    else "/lib/firefox";
 
   startupCachePath =
     if pkgs.stdenv.hostPlatform.isDarwin == true
@@ -47,10 +47,11 @@
     RESOURCES="$out${resourcesPath}"
 
     cp -R ${f} $out
-    chmod u+w $RESOURCES
+    chmod -R u+w $RESOURCES
     cp ${customJsForFx}/script_loader/firefox/config.js "$RESOURCES/config.js"
+    rm -R "$RESOURCES/defaults"
     cp -R ${customJsForFx}/script_loader/firefox/defaults "$RESOURCES/defaults"
-    chmod u-w $RESOURCES
+    chmod -R u-w $RESOURCES
   '')) {};
 
   firefoxMacOSCmd = pkgs.writeShellScriptBin "firefox" ''
@@ -101,8 +102,8 @@ in
       textfox = {
         enable = true;
         profile = profileName;
-        flattenCss = true;
-        copyOnActivation = true;
+        flattenCss = false;
+        # copyOnActivation = true;
         config = {
           displayNavButtons = true;
           displaySidebarTools = true;
@@ -116,7 +117,7 @@ in
 
       home.packages = with pkgs; [
         brotab
-        firefox
+        # firefox
         # TODO(2025-05-10, Max Bolotin): Reactivate iosevka again once nodejs_20 builds on mac os
         # iosevka
         (lib.mkIf
