@@ -2,6 +2,7 @@
   lib-mine,
   pkgs,
   vendor,
+  origin,
   ...
 }: let
   neovim-unwrapped = vendor.neovim-nightly-overlay.default.overrideAttrs (old: {
@@ -26,7 +27,7 @@ in
       enable = true;
       package = neovim-unwrapped;
       extraPackages = with pkgs; [
-        tree-sitter
+        origin.inputs.nixpkgs-unstable.legacyPackages.${pkgs.system}.tree-sitter
         imagemagick
         fd
         ripgrep

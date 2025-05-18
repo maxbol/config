@@ -2,7 +2,6 @@
   lib,
   lib-mine,
   pkgs,
-  vendor,
   ...
 }:
 lib-mine.mkFeature "features.system-start" ({config, ...}: let
@@ -58,7 +57,7 @@ in {
       enable = true;
       settings = rec {
         initial_session = {
-          command = lib.getExe vendor.hyprland.default;
+          command = lib.getExe pkgs.hyprland;
           user = cfg.defaultUser;
         };
         default_session = initial_session;

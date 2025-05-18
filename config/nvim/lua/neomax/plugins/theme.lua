@@ -77,9 +77,6 @@ return {
 				end,
 			},
 			{
-				"scottmckendry/cyberdream.nvim",
-			},
-			{
 				"Yazeed1s/oh-lucy.nvim",
 			},
 			{ "savq/melange-nvim" },

@@ -22,7 +22,7 @@ in {
   options = {
     theme-config.macoswallpaper.enable = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = pkgs.stdenv.hostPlatform.isDarwin;
       example = false;
       description = ''
         Whether to enable macoswallpaper setting as part of Chroma.

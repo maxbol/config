@@ -109,8 +109,8 @@ in
           #bash
           ''
             if command -v systemctl &> /dev/null; then
-              systemctl --user import-environment PATH
-                fi
+              systemctl --user import-environment PATH TMUX_TMPDIR
+            fi
           '';
 
         initExtra = lib.concatStringsSep "\n" (

@@ -94,7 +94,7 @@
         themeConfigModule = import ./modules/home-manager/theme-config;
         darwinModuleRoot = import ./modules/darwin;
         nixosModuleRoot = import ./modules/nixos;
-        overlays = (import ./overlays) flake-args;
+        overlays = (import ./overlays) {inherit (nixpkgs) lib;};
         lib-mine = (import ./lib) {inherit (nixpkgs) lib;};
         moduleArgs = self // {inherit config options;};
         systems = [

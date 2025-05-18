@@ -7,15 +7,15 @@
   ...
 }:
 lib-mine.mkFeature "features.desktop-config.hyprland" {
-  imports = [
-    origin.inputs.hyprland.nixosModules.default
-  ];
+  # imports = [
+  #   origin.inputs.hyprland.nixosModules.default
+  # ];
 
   config = {
     programs.hyprland = {
       enable = true;
-      package = vendor.hyprland.default;
-      portalPackage = vendor.hyprland.xdg-desktop-portal-hyprland;
+      package = pkgs.hyprland;
+      portalPackage = pkgs.xdg-desktop-portal-hyprland;
     };
 
     # xdg-desktop-portal-hyprland is implicitly included by the Hyprland module

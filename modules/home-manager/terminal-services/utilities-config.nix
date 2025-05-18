@@ -103,6 +103,7 @@ in {
       fzf
       httpie
       jq
+      killall
       lsd
       self.clockify-cli
       ncdu
@@ -111,6 +112,7 @@ in {
       nix-info
       nnn
       nurl
+      procps
       ranger
       ripgrep
       ripgrep-all

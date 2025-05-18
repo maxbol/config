@@ -158,5 +158,5 @@ in
         ];
     };
 
-    home.packages = [ta];
+    home.packages = [ta clockifyd];
   }

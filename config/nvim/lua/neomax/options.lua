@@ -118,7 +118,7 @@ vim.cmd([[autocmd! BufNewFile,BufRead *.vs,*.fs,*.frag,*.vert set ft=glsl]])
 -- Diagnostics as virtual text
 vim.diagnostic.config({ virtual_text = true })
 
--- require("vim._extui").enable({})
+require("vim._extui").enable({})
 
 require("neomax.configs.make")
 require("neomax.modules.obsidian")
