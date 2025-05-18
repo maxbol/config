@@ -14,6 +14,7 @@ packageArgs @ {pkgs, ...}: {
   runcached = pkgs.callPackage ./runcached packageArgs;
   synp = pkgs.callPackage ./synp packageArgs;
   systemctl-toggle = pkgs.callPackage ./systemctl-toggle packageArgs;
+  waybar-confgen-hyprdots = pkgs.callPackage ./waybar-confgen-hyprdots packageArgs;
   zathura-darwin = pkgs.callPackage ./zathura-darwin packageArgs;
   zathura-darwin-app = pkgs.callPackage ./zathura-darwin-app packageArgs;
 }
