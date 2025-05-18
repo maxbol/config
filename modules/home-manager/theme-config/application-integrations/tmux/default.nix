@@ -74,7 +74,7 @@ in {
             };
           };
           extraConfig = ''
-            source ${config.xdg.configHome}/active/tmux/tinted-tmux-statusline.conf
+            source ${config.xdg.configHome}/chroma/active/tmux/tinted-tmux-statusline.conf
           '';
         }
       ];
