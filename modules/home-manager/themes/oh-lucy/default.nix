@@ -1,10 +1,12 @@
 {
   pkgs,
+  self,
   variant ? "default",
-  accent1 ? "red",
+  accent ? "red",
   accent2 ? "green",
   accent3 ? "blue",
   neovimOverrides ? p: {},
+  makeDesktop,
   ...
 }: let
   variantOptions = [
@@ -109,7 +111,7 @@
       overlay = palette_.gray2;
       surface = palette_.gray1;
       background = palette_.bg;
-      accent1 = accents.${accent1};
+      accent1 = accents.${accent};
       accent2 = accents.${accent2};
       accent3 = accents.${accent3};
     };
@@ -154,7 +156,33 @@
     aqua = "#${p.accents.teal}"
     orange = "#${p.accents.yellow}"
   '';
+  telaMap = {
+    "red" = "red";
+    "green" = "green";
+    "yellow" = "yellow";
+    "blue" = "blue";
+  };
 in rec {
+  desktop = makeDesktop {inherit accent telaMap;};
+
+  # TODO(2025-05-19, Max Bolotin): Copying this from gruvbox for now, should be replace with theme specific
+  gtk = {
+    theme.package =
+      pkgs
+      .gruvbox-gtk-theme
+      .overrideAttrs (prev: {propagatedUserEnvPkgs = prev.propagatedUserEnvPkgs ++ [pkgs.gnome-themes-extra];});
+    theme.name = "Gruvbox-Dark-BL";
+    documentFont = desktop.font;
+    colorScheme = "prefer-dark";
+  };
+
+  qt = {
+    kvantum = {
+      package = self.hyprdots-kvantum;
+      name = "Gruvbox-Retro";
+    };
+  };
+
   palette = allPalettes.${variant};
 
   neovim = let
@@ -223,6 +251,8 @@ in rec {
   };
 
   macoswallpaper = {
-    wallpaper = ./wallpaper.png;
+    wallpaper = ./wallpapers/wallpaper.png;
   };
+
+  swim.wallpaperDirectory = ./wallpapers;
 }

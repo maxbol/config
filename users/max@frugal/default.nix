@@ -1,4 +1,4 @@
-{...}: rec {
+{pkgs, ...}: rec {
   home.stateVersion = "24.11";
   home.username = "max";
   home.homeDirectory = "/home/max/";
@@ -16,11 +16,21 @@
   features.nix-services.enable = true;
   features.terminal-services.enable = true;
   features.terminal-services.terminal-config.enable = true;
-  features.theme-defaults.enable = true;
+  features.linux-theme-defaults.enable = true;
   features.tmux-config.enable = true;
+
+  identity = {
+    userImage = ./image.jpg;
+  };
 
   programs.git = {
     userName = "Max Bolotin";
     userEmail = "maks.bolotin@gmail.com";
   };
+
+  home.packages = with pkgs; [
+    xfce.thunar
+    dolphin
+    nautilus
+  ];
 }

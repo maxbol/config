@@ -38,6 +38,11 @@ in {
         '';
       };
 
+      copyOnActivation = lib.mkOption {
+        type = lib.types.bool;
+        default = pkgs.stdenv.hostPlatform.isDarwin;
+      };
+
       vimiumFontFamily = lib.mkOption {
         type = lib.types.str;
         example = "Iosevka";
@@ -75,50 +80,56 @@ in {
         config,
         opts,
         ...
-      }: {
+      }: let
+        chromeColorsCss = opts.palette.generateDynamic {
+          template = ./colors.css.dyn;
+          paletteOverrides = config.colorOverrides;
+        };
+
+        siteColorsCss = opts.palette.generateDynamic {
+          template = ./sitecolors.css.dyn;
+          paletteOverrides = config.colorOverrides;
+        };
+
+        colorsCss = pkgs.writeText "colors.css" (lib.strings.concatStringsSep "\n" [
+          (
+            if config.enableColors == true
+            then (builtins.readFile chromeColorsCss)
+            else ""
+          )
+          (
+            if config.enableSiteColors == true
+            then (builtins.readFile siteColorsCss)
+            else ""
+          )
+        ]);
+      in {
+        file."colors.css" = lib.mkIf (cfg.firefox.copyOnActivation == false) {
+          required = true;
+          source = lib.mkDefault colorsCss;
+        };
+
         file."setcolors.sh" = let
           profileDir =
             if pkgs.stdenv.hostPlatform.isDarwin
             then "Library/Application\ Support/Firefox/Profiles"
             else ".mozilla/firefox";
+        in
+          lib.mkIf (cfg.firefox.copyOnActivation) {
+            required = true;
+            source = lib.mkDefault (pkgs.writeScript "setcolors.sh" ''
+              profile_dir="$HOME/${profileDir}/${cfg.firefox.profile}"
+              chrome_dir="$profile_dir/chrome"
+              mkdir -p "$chrome_dir"
 
-          chromeColorsCss = opts.palette.generateDynamic {
-            template = ./colors.css.dyn;
-            paletteOverrides = config.colorOverrides;
+              cp ${colorsCss} "$chrome_dir/colors.css"
+              chown -R $USER "$chrome_dir/colors.css"
+              chmod 177 "$chrome_dir/colors.css"
+            '');
           };
-
-          siteColorsCss = opts.palette.generateDynamic {
-            template = ./sitecolors.css.dyn;
-            paletteOverrides = config.colorOverrides;
-          };
-
-          colorsCss = pkgs.writeText "colors.css" (lib.strings.concatStringsSep "\n" [
-            (
-              if config.enableColors == true
-              then (builtins.readFile chromeColorsCss)
-              else ""
-            )
-            (
-              if config.enableSiteColors == true
-              then (builtins.readFile siteColorsCss)
-              else ""
-            )
-          ]);
-        in {
-          required = true;
-          source = lib.mkDefault (pkgs.writeScript "setcolors.sh" ''
-            profile_dir="$HOME/${profileDir}/${cfg.firefox.profile}"
-            chrome_dir="$profile_dir/chrome"
-            mkdir -p "$chrome_dir"
-
-            cp ${colorsCss} "$chrome_dir/colors.css"
-            chown -R $USER "$chrome_dir/colors.css"
-            chmod 744 "$chrome_dir/colors.css"
-          '');
-        };
       };
 
-      reloadCommand = "~/.config/chroma/active/firefox/setcolors.sh";
+      reloadCommand = lib.mkIf cfg.firefox.copyOnActivation "~/.config/chroma/active/firefox/setcolors.sh";
     };
   };
 
@@ -129,7 +140,11 @@ in {
         textfox = {
           config = {
             customCss = ''
-              @import url("colors.css");
+              @import url("${
+                if cfg.firefox.copyOnActivation
+                then "colors.css"
+                else "${config.xdg.configHome}/chroma/active/firefox/colors.css"
+              }");
 
               :root {
                 --vimium-font-family: "${cfg.firefox.vimiumFontFamily}" !important;

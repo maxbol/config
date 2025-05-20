@@ -10,8 +10,8 @@
 }:
 lib-mine.mkFeature "features.linux-desktop.hyprland" {
   impure-config-management.config = lib.genAttrs [
-    "hypr/hypridle.conf"
-    "hypr/hyprlock.conf"
+    # "hypr/hypridle.conf"
+    # "hypr/hyprlock.conf"
     "hypr/animations.conf"
     "hypr/entry.conf"
     "hypr/keybindings.conf"
@@ -22,6 +22,9 @@ lib-mine.mkFeature "features.linux-desktop.hyprland" {
 
   wayland.windowManager.hyprland = {
     enable = true;
+    plugins = with pkgs.hyprlandPlugins; [
+      hyprscroller
+    ];
     # TODO: this also installs a hyprland package, how does this conflict with the global install
     # package = vendor.hyprland.default;
     # plugins = [

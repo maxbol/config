@@ -21,6 +21,11 @@ in {
       lib.mkIf
       (cfg.terminal-services.terminal-config.enable)
       {
+        home.packages = [
+          pkgs.nerdfonts
+          # Necessary for Nautilus and other GNOME apps to correctly use kitty to open .desktop files with Terminal=true
+          pkgs.xdg-terminal-exec
+        ];
         programs.kitty = {
           enable = true;
           package = nixpkgs-unstable.kitty;

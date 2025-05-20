@@ -12,6 +12,7 @@
   tmuxOverrides ? p: {},
   sketchybarOverrides ? p: {},
   neovimOverrides ? p: {},
+  makeDesktop,
   ...
 }: let
   capitalize = str: "${pkgs.lib.toUpper (builtins.substring 0 1 str)}${builtins.substring 1 (builtins.stringLength str) str}";
@@ -89,28 +90,13 @@ in rec {
 
   neovim = neovimOverrides palette;
 
-  desktop = {
-    # Note: this propagatedInputs override should be upstreamed to nixpkgs
-    iconTheme.package = pkgs.tela-icon-theme.overrideAttrs (final: prev: {propagatedBuildInputs = prev.propagatedBuildInputs ++ [pkgs.gnome.adwaita-icon-theme pkgs.libsForQt5.breeze-icons];});
-    iconTheme.name = "Tela-${telaMap.${accent}}";
-    cursorTheme.package = pkgs.bibata-cursors;
-    cursorTheme.name = "Bibata-Original-Ice";
-    cursorTheme.size = 20;
-    font.name = "Cantarell";
-    font.size = 10;
-    font.package = pkgs.cantarell-fonts;
-    monospaceFont.name = "CaskaydiaCove Nerd Font Mono";
-    monospaceFont.size = 9;
-    monospaceFont.package = pkgs.nerdfonts;
-  };
+  desktop = makeDesktop {inherit accent telaMap;};
 
   gtk = {
-    theme.package =
-      (pkgs.catppuccin-gtk.override {
-        inherit variant;
-        accents = [accent];
-      })
-      .overrideAttrs (prev: {propagatedUserEnvPkgs = prev.propagatedUserEnvPkgs ++ [pkgs.gnome.gnome-themes-extra];});
+    theme.package = pkgs.catppuccin-gtk.override {
+      inherit variant;
+      accents = [accent];
+    };
     theme.name = "Catppuccin-${Variant}-Standard-${Accent}-${Luminance}";
     documentFont = desktop.font;
     colorScheme = "prefer-${luminance}";
@@ -188,6 +174,8 @@ in rec {
   nvchad.theme = "catppuccin";
 
   macoswallpaper = {
-    wallpaper = ./wallpaper.png;
+    wallpaper = ./wallpapers/wallpaper.png;
   };
+
+  swim.wallpaperDirectory = ./wallpapers;
 }

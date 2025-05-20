@@ -1,5 +1,6 @@
 {
   pkgs,
+  self,
   accent ? "yellow",
   accent2 ? "wisteria",
   accent3 ? "green",
@@ -9,6 +10,7 @@
   tmuxOverrides ? p: {},
   sketchybarOverrides ? p: {},
   neovimOverrides ? p: {},
+  makeDesktop,
   ...
 }: let
   palette_ = {
@@ -97,6 +99,26 @@
 in rec {
   inherit palette;
 
+  desktop = makeDesktop {inherit telaMap accent;};
+
+  # TODO(2025-05-19, Max Bolotin): Copying this from gruvbox for now, should be replace with theme specific
+  gtk = {
+    theme.package =
+      pkgs
+      .gruvbox-gtk-theme
+      .overrideAttrs (prev: {propagatedUserEnvPkgs = prev.propagatedUserEnvPkgs ++ [pkgs.gnome-themes-extra];});
+    theme.name = "Gruvbox-Dark-BL";
+    documentFont = desktop.font;
+    colorScheme = "prefer-dark";
+  };
+
+  qt = {
+    kvantum = {
+      package = self.hyprdots-kvantum;
+      name = "Gruvbox-Retro";
+    };
+  };
+
   hyprland.colorOverrides = hyprlandOverrides palette;
 
   waybar.colorOverrides = waybarOverrides palette;
@@ -155,6 +177,8 @@ in rec {
   };
 
   macoswallpaper = {
-    wallpaper = ./wallpaper.jpg;
+    wallpaper = ./wallpapers/wallpaper.jpg;
   };
+
+  swim.wallpaperDirectory = ./wallpapers;
 }

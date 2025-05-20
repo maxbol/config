@@ -9,6 +9,7 @@
   tmuxOverrides ? p: {},
   sketchybarOverrides ? p: {},
   neovimOverrides ? p: {},
+  makeDesktop,
   ...
 }: let
   palette_ = {
@@ -101,6 +102,10 @@ in rec {
 
   sketchybar.colorOverrides = sketchybarOverrides palette;
 
+  telaMap = {${accent} = "blue";};
+
+  desktop = makeDesktop {inherit accent telaMap;};
+
   neovim =
     {
       colorscheme = "borland";
@@ -158,6 +163,8 @@ in rec {
   };
 
   macoswallpaper = {
-    wallpaper = ./wallpaper.jpg;
+    wallpaper = ./wallpapers/wallpaper.jpg;
   };
+
+  swim.wallpaperDirectory = ./wallpapers;
 }

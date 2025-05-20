@@ -423,7 +423,7 @@ in {
       ++ lib.flatten (lib.mapAttrsToList (name: theme:
         builtins.map (fallback: {
           assertion = cfg.themes ? fallback;
-          message = "The theme ${fallback} used as a fallback for ${name} must be defined.";
+          message = "The theme ${fallback} used as a fallback for ${name} must be defined. Available: ${concatStringsSep " " (builtins.attrNames cfg.themes)}";
         })
         theme.fallbacks
         ++ flatten (map (prog:

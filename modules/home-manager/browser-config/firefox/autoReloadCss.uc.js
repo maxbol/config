@@ -78,4 +78,6 @@
 
   // Poll every 3 seconds
   setInterval(checkForChanges, 3000);
+
+  console.log("[userChrome.js] Loaded autoReloadCss.uc.js")
 })();

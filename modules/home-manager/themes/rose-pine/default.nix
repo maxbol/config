@@ -11,7 +11,10 @@
   sketchybarOverrides ? p: {},
   neovimOverrides ? p: {},
   kittyOverrides ? {},
-  wallpaper ? ./wallpapers/default.png,
+  wallpaper ? ./wallpapers/default/wallpaper.png,
+  makeDesktop,
+  lib-mine,
+  self,
   ...
 }: let
   palette_ = {
@@ -153,6 +156,11 @@
         else "rose-pine-${variant}"
       );
 
+  gtkThemeName =
+    if variant == "eclipse"
+    then "rose-pine"
+    else normalizedThemeName;
+
   kittyThemeFileName = "${normalizedThemeName}.conf";
 
   tmTheme = pkgs.fetchFromGitHub {
@@ -161,8 +169,25 @@
     rev = "c4235f9a65fd180ac0f5e4396e3a86e21a0884ec";
     hash = "sha256-jji8WOKDkzAq8K+uSZAziMULI8Kh7e96cBRimGvIYKY=";
   };
+
+  telaMap = {
+    "blue" = "blue";
+    "green" = "green";
+    "red" = "red";
+    "yellow" = "yellow";
+    "rose" = "pink";
+    "pine" = "green";
+    "foam" = "blue";
+    "gold" = "pink";
+    "love" = "red";
+    "iris" = "purple";
+  };
+
+  telaMap = {};
 in rec {
   inherit palette;
+
+  desktop = makeDesktop {inherit telaMap accent;};
 
   hyprland.colorOverrides = hyprlandOverrides palette;
 
@@ -180,6 +205,27 @@ in rec {
     filetype_fallback_dir_fg = palette.accents.${accent3};
   };
   yazi.syntectTheme = "${tmTheme}/dist/themes/${normalizedThemeName}.tmTheme";
+
+  gtk = {
+    theme.package =
+      pkgs
+      .rose-pine-gtk-theme;
+    theme.name = gtkThemeName;
+    documentFont = desktop.font;
+    colorScheme = "prefer-dark";
+  };
+
+  qt = {
+    kvantum = {
+      package = self.hyprdots-kvantum;
+      name = "Rose-Pine";
+    };
+
+    qtct = {
+      package = self.hyprdots-qt5ct;
+      name = "Rose-Pine";
+    };
+  };
 
   dynawall.shader = "monterrey2";
   dynawall.colorOverrides = {
@@ -208,4 +254,6 @@ in rec {
   };
 
   macoswallpaper.wallpaper = wallpaper;
+
+  swim.wallpaperDirectory = lib-mine.path.dirname wallpaper;
 }

@@ -3,7 +3,7 @@ require("neomax.mappings-chad")
 local map = vim.keymap.set
 
 map("n", "<leader>fm", function()
-	require("conform").format()
+  require("conform").format()
 end, { desc = "formatting" })
 map("n", "gp", "`[v`]", { desc = "select pasted text" })
 map("n", "<D-d>", "<C-d>zz", { desc = "scroll down" })
@@ -17,8 +17,8 @@ map("n", "n", "nzzzv", { desc = "search next" })
 
 map("v", ">", ">gv", { desc = "indent" })
 map("v", "<", "<gv", { desc = "indent" })
-map("v", "J", ":m '>+1<CR>gv=gv", { desc = "move line down" })
-map("v", "K", ":m '<-2<CR>gv=gv", { desc = "move line up" })
+map("v", "J", ":silent m '>+1<CR>gv=gv", { desc = "move line down" })
+map("v", "K", ":silent m '<-2<CR>gv=gv", { desc = "move line up" })
 
 -- resize windows
 map("n", "<M-h>", "<C-w><", { desc = "resize window" })

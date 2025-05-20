@@ -12,6 +12,7 @@
   tmuxOverrides ? p: {},
   sketchybarOverrides ? p: {},
   neovimOverrides ? p: {},
+  makeDesktop,
   ...
 }: let
   capitalize = str: "${pkgs.lib.toUpper (builtins.substring 0 1 str)}${builtins.substring 1 (builtins.stringLength str) str}";
@@ -52,7 +53,7 @@
     "yellow" = "yellow";
     "blue" = "blue";
     "purple" = "purple";
-    "aqua" = "blue";
+    "aqua" = "green";
     "orange" = "orange";
   };
 
@@ -207,27 +208,14 @@ in rec {
     }
     // (neovimOverrides palette);
 
-  desktop = {
-    # Note: this propagatedInputs override should be upstreamed to nixpkgs
-    iconTheme.package = pkgs.tela-icon-theme.overrideAttrs (final: prev: {propagatedBuildInputs = prev.propagatedBuildInputs ++ [pkgs.gnome.adwaita-icon-theme pkgs.libsForQt5.breeze-icons];});
-    iconTheme.name = "Tela-${telaMap.${accent}}";
-    cursorTheme.package = pkgs.bibata-cursors;
-    cursorTheme.name = "Bibata-Original-Ice";
-    cursorTheme.size = 20;
-    font.name = "Cantarell";
-    font.size = 10;
-    font.package = pkgs.cantarell-fonts;
-    monospaceFont.name = "CaskaydiaCove Nerd Font Mono";
-    monospaceFont.size = 9;
-    monospaceFont.package = pkgs.nerdfonts;
-  };
+  desktop = makeDesktop {inherit accent telaMap;};
 
   gtk = {
     theme.package =
       pkgs
       .gruvbox-gtk-theme
-      .overrideAttrs (prev: {propagatedUserEnvPkgs = prev.propagatedUserEnvPkgs ++ [pkgs.gnome.gnome-themes-extra];});
-    theme.name = "Gruvbox-${Luminance}-BL";
+      .overrideAttrs (prev: {propagatedUserEnvPkgs = prev.propagatedUserEnvPkgs ++ [pkgs.gnome-themes-extra];});
+    theme.name = "Gruvbox-${Luminance}";
     documentFont = desktop.font;
     colorScheme = "prefer-${luminance}";
   };
@@ -267,6 +255,8 @@ in rec {
   };
 
   macoswallpaper = {
-    wallpaper = ./wallpaper.jpg;
+    wallpaper = ./wallpapers/wallpaper.jpg;
   };
+
+  swim.wallpaperDirectory = ./wallpapers;
 }

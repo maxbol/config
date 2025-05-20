@@ -5,13 +5,13 @@
 }:
 lib-mine.mkFeature "features.core-services" {
   hardware = {
-    pulseaudio = {
-      enable = false;
-      extraConfig = "
-        load-module module-switch-on-connect
-        ";
-      support32Bit = true;
-    };
+    # pulseaudio = {
+    #   enable = false;
+    #   extraConfig = "
+    #     load-module module-switch-on-connect
+    #     ";
+    #   support32Bit = true;
+    # };
 
     bluetooth.enable = true;
     i2c.enable = true;

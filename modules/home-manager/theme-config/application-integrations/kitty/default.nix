@@ -53,7 +53,7 @@ in {
           # };
           default = {
             name = "Iosevka";
-            size = 18;
+            size = 14;
             package = pkgs.iosevka;
           };
           description = ''

@@ -2,31 +2,67 @@
   pkgs,
   specialArgs,
   ...
-}: {
-  Ayu-Dark = pkgs.callPackage ./ayu (specialArgs
-    // {
-      neovimOverrides = palette: {
-        colorscheme = "ayu-dark";
-        background = "dark";
-        hlGroupsFg = {
-          HLChunk1 = "#" + palette.semantic.accent2;
-          HLLineNum1 = "#" + palette.semantic.accent2;
-          LineNr = "#" + palette.semantic.text2;
-          IncSearch = "#" + palette.semantic.background;
-          Function = "#" + palette.semantic.text;
-          BlinkCmpGhostText = "#" + palette.semantic.text1;
-        };
-        hlGroupsBg = {
-          Visual = "#" + palette.semantic.text2;
-          IncSearch = "#" + palette.accents.peach;
-        };
-      };
-    });
+}: let
+  # telaMap = {
+  #   "blue" = "blue";
+  #   "flamingo" = "pink";
+  #   "green" = "green";
+  #   "lavender" = "blue";
+  #   "maroon" = "brown";
+  #   "mauve" = "purple";
+  #   "peach" = "orange";
+  #   "pink" = "pink";
+  #   "red" = "red";
+  #   "rosewater" = "pink";
+  #   "sapphire" = "blue";
+  #   "sky" = "blue";
+  #   "teal" = "blue";
+  #   "yellow" = "yellow";
+  # };
+  makeDesktop = {
+    accent,
+    telaMap,
+  }: {
+    # Note: this propagatedInputs override should be upstreamed to nixpkgs
+    iconTheme.package = pkgs.tela-icon-theme.overrideAttrs (final: prev: {propagatedBuildInputs = prev.propagatedBuildInputs ++ [pkgs.adwaita-icon-theme pkgs.libsForQt5.breeze-icons];});
+    iconTheme.name = "Tela-${telaMap.${accent} or "blue"}";
+    cursorTheme.package = pkgs.apple-cursor;
+    cursorTheme.name = "macOS";
+    cursorTheme.size = 28;
+    font.name = "Cantarell";
+    font.size = 14;
+    font.package = pkgs.cantarell-fonts;
+    monospaceFont.name = "Iosevka";
+    monospaceFont.size = 12;
+    monospaceFont.package = pkgs.iosevka;
+  };
 
-  Ayu-Mirage = pkgs.callPackage ./ayu (specialArgs
-    // {
+  makeTheme = path: args: (pkgs.callPackage path (specialArgs // args // {inherit makeDesktop;}));
+in {
+  Ayu-Dark = makeTheme ./ayu {
+    neovimOverrides = palette: {
+      colorscheme = "ayu-dark";
+      background = "dark";
+      hlGroupsFg = {
+        HLChunk1 = "#" + palette.semantic.accent2;
+        HLLineNum1 = "#" + palette.semantic.accent2;
+        LineNr = "#" + palette.semantic.text2;
+        IncSearch = "#" + palette.semantic.background;
+        Function = "#" + palette.semantic.text;
+        BlinkCmpGhostText = "#" + palette.semantic.text1;
+      };
+      hlGroupsBg = {
+        Visual = "#" + palette.semantic.text2;
+        IncSearch = "#" + palette.accents.peach;
+      };
+    };
+  };
+
+  Ayu-Mirage =
+    makeTheme ./ayu
+    {
       variant = "mirage";
-      wallpaper = ./ayu/wallpapers/ayu-mirage-default.png;
+      wallpaper = ./ayu/wallpapers/mirage/wallpaper.png;
 
       neovimOverrides = palette: {
         colorscheme = "ayu-mirage";
@@ -41,14 +77,15 @@
           Visual = "#" + palette.semantic.text2;
         };
       };
-    });
+    };
 
-  Blue-Nightmare = pkgs.callPackage ./blue-nightmare (specialArgs // {});
+  # Blue-Nightmare = makeTheme ./blue-nightmare {};
 
-  Bluloco-Dark = pkgs.callPackage ./bluloco (specialArgs // {luminance = "dark";});
+  Bluloco-Dark = makeTheme ./bluloco {luminance = "dark";};
 
-  Catppuccin-Latte = pkgs.callPackage ./catppuccin (specialArgs
-    // {
+  Catppuccin-Latte =
+    makeTheme ./catppuccin
+    {
       variant = "latte";
       accent = "rosewater";
       accent2 = "blue";
@@ -78,10 +115,11 @@
           CursorLine = "#bcc0cc";
         };
       };
-    });
+    };
 
-  Catppuccin-Mocha = pkgs.callPackage ./catppuccin (specialArgs
-    // {
+  Catppuccin-Mocha =
+    makeTheme ./catppuccin
+    {
       variant = "mocha";
 
       hyprlandOverrides = palette: {
@@ -116,29 +154,32 @@
         status_window_inactive_bg = palette.semantic.surface;
         status_modules_outer_bg = palette.semantic.surface;
       };
-    });
+    };
 
-  Gruvbox-Dark = pkgs.callPackage ./gruvbox (specialArgs // {luminance = "dark";});
+  Gruvbox-Dark = makeTheme ./gruvbox {luminance = "dark";};
 
-  Newpaper-Light = pkgs.callPackage ./newpaper (specialArgs // {luminance = "light";});
+  Newpaper-Light = makeTheme ./newpaper {luminance = "light";};
 
-  Oh-Lucy = pkgs.callPackage ./oh-lucy (specialArgs
-    // {
+  Oh-Lucy =
+    makeTheme ./oh-lucy
+    {
       neovimOverrides = palette: {
         colorscheme = "oh-lucy";
       };
-    });
+    };
 
-  Oh-Lucy-Evening = pkgs.callPackage ./oh-lucy (specialArgs
-    // {
+  Oh-Lucy-Evening =
+    makeTheme ./oh-lucy
+    {
       variant = "evening";
       neovimOverrides = palette: {
         colorscheme = "oh-lucy-evening";
       };
-    });
+    };
 
-  Rose-Pine = pkgs.callPackage ./rose-pine (specialArgs
-    // {
+  Rose-Pine =
+    makeTheme ./rose-pine
+    {
       variant = "pine";
       neovimOverrides = palette: {
         colorscheme = "rose-pine-main";
@@ -153,10 +194,11 @@
           Folded = "#44415a";
         };
       };
-    });
+    };
 
-  Rose-Pine-Eclipse = pkgs.callPackage ./rose-pine (specialArgs
-    // {
+  Rose-Pine-Eclipse =
+    makeTheme ./rose-pine
+    {
       variant = "eclipse";
       neovimOverrides = palette: {
         colorscheme = "rose-pine-moon";
@@ -172,12 +214,13 @@
         };
       };
 
-      wallpaper = ./rose-pine/wallpapers/eclipse.png;
+      wallpaper = ./rose-pine/wallpapers/eclipse/wallpaper.png;
       kittyOverrides.file."theme.conf".source = ./rose-pine/eclipse-kitty.conf;
-    });
+    };
 
-  Rose-Pine-Moon = pkgs.callPackage ./rose-pine (specialArgs
-    // {
+  Rose-Pine-Moon =
+    makeTheme ./rose-pine
+    {
       variant = "moon";
       neovimOverrides = palette: {
         colorscheme = "rose-pine-moon";
@@ -192,8 +235,8 @@
           Folded = "#44415a";
         };
       };
-      wallpaper = ./rose-pine/wallpapers/moon.png;
-    });
+      wallpaper = ./rose-pine/wallpapers/moon/wallpaper.png;
+    };
 
-  Tsoding-Mode = pkgs.callPackage ./tsoding-mode (specialArgs // {});
+  Tsoding-Mode = makeTheme ./tsoding-mode {};
 }

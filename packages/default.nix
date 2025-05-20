@@ -9,12 +9,16 @@ packageArgs @ {pkgs, ...}: {
   hyprdots-qt5ct = pkgs.callPackage ./hyprdots-qt5ct packageArgs;
   libadwaita-without-adwaita = pkgs.callPackage ./libadwaita-without-adwaita packageArgs;
   misc-scripts-hyprdots = pkgs.callPackage ./misc-scripts-hyprdots packageArgs;
+  nailgun = pkgs.callPackage ./nailgun packageArgs;
   nancy = pkgs.callPackage ./nancy packageArgs;
-  rofi-launchers-hyprdots-swwwallselect-patch = pkgs.callPackage ./rofi-launchers-hyprdots-swwwallselect-patch packageArgs;
+  rofi-launchers-hyprdots = pkgs.callPackage ./rofi-launchers-hyprdots packageArgs;
   runcached = pkgs.callPackage ./runcached packageArgs;
+  sddm-theme-corners = pkgs.callPackage ./sddm-theme-corners.nix packageArgs;
+  swimctl = pkgs.callPackage ./swimctl packageArgs;
   synp = pkgs.callPackage ./synp packageArgs;
   systemctl-toggle = pkgs.callPackage ./systemctl-toggle packageArgs;
   waybar-confgen-hyprdots = pkgs.callPackage ./waybar-confgen-hyprdots packageArgs;
+  wlogout-launcher-hyprdots = pkgs.callPackage ./wlogout-launcher-hyprdots packageArgs;
   zathura-darwin = pkgs.callPackage ./zathura-darwin packageArgs;
   zathura-darwin-app = pkgs.callPackage ./zathura-darwin-app packageArgs;
 }

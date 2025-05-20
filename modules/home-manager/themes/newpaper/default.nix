@@ -1,11 +1,14 @@
 {
   pkgs,
+  self,
   luminance ? "light",
-  accent1 ? "darkblue",
+  accent ? "darkblue",
   accent2 ? "darkgreen",
   accent3 ? "darkorange",
   neovimOverrides ? p: {},
-  wallpaper ? ./wallpapers/light.jpg,
+  wallpaper ? ./wallpapers/light/wallpaper.jpg,
+  makeDesktop,
+  lib-mine,
   ...
 }: let
   luminanceOptions = [
@@ -64,7 +67,7 @@
       overlay = palette_.bg2;
       surface = palette_.bg1;
       background = palette_.bg;
-      accent1 = palette_.${accent1};
+      accent1 = palette_.${accent};
       accent2 = palette_.${accent2};
       accent3 = palette_.${accent3};
     };
@@ -108,8 +111,37 @@
     aqua = "#${p.accents.teal}"
     orange = "#${p.accents.yellow}"
   '';
+
+  telaMap = {
+    "red" = "red";
+    "green" = "green";
+    "yellow" = "yellow";
+    "blue" = "blue";
+    "mauve" = "purple";
+    "teal" = "blue";
+  };
 in rec {
   palette = allPalettes.${luminance};
+
+  desktop = makeDesktop {inherit accent telaMap;};
+
+  # TODO(2025-05-19, Max Bolotin): Copying this from gruvbox for now, should be replace with theme specific
+  gtk = {
+    theme.package =
+      pkgs
+      .gruvbox-gtk-theme
+      .overrideAttrs (prev: {propagatedUserEnvPkgs = prev.propagatedUserEnvPkgs ++ [pkgs.gnome-themes-extra];});
+    theme.name = "Gruvbox-Light-BL";
+    documentFont = desktop.font;
+    colorScheme = "prefer-light";
+  };
+
+  qt = {
+    kvantum = {
+      package = self.hyprdots-kvantum;
+      name = "Gruvbox-Retro";
+    };
+  };
 
   neovim =
     {
@@ -161,4 +193,6 @@ in rec {
     enableColors = enable;
     enableSiteColors = enable;
   };
+
+  swim.wallpaperDirectory = lib-mine.path.dirname wallpaper;
 }

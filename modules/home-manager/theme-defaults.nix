@@ -13,12 +13,5 @@ lib-mine.mkFeature "features.theme-defaults" {
       initialTheme = "Tsoding-Mode";
       themes = (import ./themes) {inherit pkgs specialArgs;};
     }
-    (
-      lib.mkIf
-      (pkgs.stdenv.hostPlatform.isLinux)
-      {
-        desktop.enable = true;
-      }
-    )
   ];
 }

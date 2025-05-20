@@ -2,9 +2,11 @@
   config,
   pkgs,
   lib,
+  lib-mine,
   ...
 }:
 with lib; let
+  inherit (lib-mine.types) colorType;
   cfg = config.theme-config;
 in {
   options = {
@@ -28,19 +30,30 @@ in {
       themeOptions = {
         qtct = {
           package = mkOption {
-            type = types.package;
+            type = types.nullOr types.package;
+            default = null;
             description = ''
               A package containing Qt5ct colors.
             '';
           };
 
           name = mkOption {
-            type = types.str;
+            type = types.nullOr types.str;
+            default = null;
             example = "Catppuccin-Latte";
             description = ''
               The name of the color scheme to apply. Must correspond to the
               name of the folder used in the package definition.
             '';
+          };
+
+          generate = mkOption {
+            type = types.attrsOf colorType;
+            default = {};
+          };
+
+          finalPackage = mkOption {
+            type = types.package;
           };
         };
 
@@ -66,13 +79,43 @@ in {
         config,
         opts,
         ...
-      }: {
+      }: let
+        package = config.qtct.package;
+        name = config.qtct.name;
+
+        dynamicConfig = opts.palette.generateDynamic {
+          template = ./qt5ct-colors.conf.dyn;
+          paletteOverrides = config.qtct.generate;
+        };
+
+        finalName =
+          if name != null
+          then "${name}.conf"
+          else "dynamic-${opts.name}.conf";
+
+        finalPackage =
+          if (package != null && name != null)
+          then package
+          else
+            pkgs.runCommand "qt5ct-colors" {} ''
+              mkdir -p $out/share/qt5ct/colors
+              mkdir -p $out/share/qt6ct/colors
+              cp ${dynamicConfig} "$out/share/qt5ct/colors/${finalName}"
+              cp ${dynamicConfig} "$out/share/qt6ct/colors/${finalName}"
+            '';
+
+        colorSchemePath = "${finalPackage}/share/qt5ct/colors/${finalName}";
+      in {
+        qtct = {
+          inherit finalPackage;
+        };
+
         # The font format is documented at: https://doc.qt.io/qt-6/qfont.html#toString
         file."qt5ct.conf".text = let
           desktop = opts.desktop;
         in ''
           [Appearance]
-          color_scheme_path=${config.qtct.package}/share/qt5ct/colors/${config.qtct.name}.conf
+          color_scheme_path=${colorSchemePath}
           custom_palette=true
           icon_theme=${desktop.iconTheme.name}
           standard_dialogs=default
@@ -129,7 +172,7 @@ in {
       xdg.configFile."qt5ct/qt5ct.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.theme-config.themeDirectory}/active/qt/qt5ct.conf";
       xdg.configFile."qt6ct/qt6ct.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.theme-config.themeDirectory}/active/qt/qt5ct.conf";
 
-      home.packages = concatLists (mapAttrsToList (name: opts: with opts.qt; [qtct.package kvantum.package]) cfg.themes);
+      home.packages = concatLists (mapAttrsToList (name: opts: with opts.qt; [qtct.finalPackage kvantum.package]) cfg.themes);
     })
   ];
 

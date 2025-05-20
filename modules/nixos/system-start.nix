@@ -1,6 +1,7 @@
 {
   lib,
   lib-mine,
+  self,
   pkgs,
   ...
 }:

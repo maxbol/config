@@ -243,7 +243,7 @@ in {
               monospace-font-name = toFontString opts.desktop.monospaceFont;
             }
             // optionalAttrs (config.documentFont != null) {
-              monospace-font-name = toFontString config.documentFont;
+              document-font-name = toFontString config.documentFont;
             }
             // optionalAttrs (config.theme != null) {gtk-theme = config.theme.name;}
             // optionalAttrs (opts.desktop.iconTheme != null) {

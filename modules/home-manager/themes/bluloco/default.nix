@@ -1,5 +1,6 @@
 {
   pkgs,
+  self,
   accent ? "blue",
   accent2 ? "red",
   accent3 ? "green",
@@ -11,6 +12,7 @@
   sketchybarOverrides ? p: {},
   yaziOverrides ? p: {},
   luminance ? "dark",
+  makeDesktop,
   ...
 }: let
   bluloco_pkg = pkgs.fetchFromGitHub {
@@ -144,6 +146,26 @@ in rec {
     then palette_dark
     else palette_light;
 
+  desktop = makeDesktop {inherit accent telaMap;};
+
+  # TODO(2025-05-19, Max Bolotin): Copying this from gruvbox for now, should be replace with theme specific
+  gtk = {
+    theme.package =
+      pkgs
+      .gruvbox-gtk-theme
+      .overrideAttrs (prev: {propagatedUserEnvPkgs = prev.propagatedUserEnvPkgs ++ [pkgs.gnome-themes-extra];});
+    theme.name = "Gruvbox-Dark-BL";
+    documentFont = desktop.font;
+    colorScheme = "prefer-dark";
+  };
+
+  qt = {
+    kvantum = {
+      package = self.hyprdots-kvantum;
+      name = "Gruvbox-Retro";
+    };
+  };
+
   hyprland.colorOverrides = hyprlandOverrides palette;
 
   waybar.colorOverrides = waybarOverrides palette;
@@ -199,6 +221,8 @@ in rec {
   };
 
   macoswallpaper = {
-    wallpaper = ./wallpaper.png;
+    wallpaper = ./wallpapers/wallpaper.png;
   };
+
+  swim.wallpaperDirectory = ./wallpapers;
 }

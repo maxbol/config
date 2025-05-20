@@ -1,6 +1,16 @@
 {
   pkgs,
   variant ? "dark",
+  gtkThemeVariant ? (
+    if variant == "dark"
+    then "Ayu-Dark"
+    else "Ayu"
+  ),
+  kvantumThemeVariant ? (
+    if variant == "dark"
+    then "AyuDark"
+    else "AyuMirage"
+  ),
   accent ? "orange",
   accent2 ? "lightblue",
   accent3 ? "yellow",
@@ -10,7 +20,9 @@
   tmuxOverrides ? p: {},
   sketchybarOverrides ? p: {},
   neovimOverrides ? p: {},
-  wallpaper ? ./wallpapers/ayu-dark-default.jpg,
+  wallpaper ? ./wallpapers/dark/wallpaper.jpg,
+  lib-mine,
+  makeDesktop,
   ...
 }: let
   variants = [
@@ -54,6 +66,19 @@
     builtins.readFile
     builtins.fromJSON
   ];
+
+  ayuKvantum = let
+    src = pkgs.fetchFromGitHub {
+      owner = "dnordstrom";
+      repo = "dotfiles-as-files";
+      rev = "b69b1abf1ad9f6c4f43e6b0a3e5292d932f0831c";
+      hash = "sha256-+Lk/5yZecoraFzJigUz8jSknU34P8A2kL4L0q2zSlmw=";
+    };
+  in
+    pkgs.runCommand "ayu-kvantum" {} ''
+      mkdir -p $out/share/Kvantum
+      cp -r ${src}/kvantum/* $out/share/Kvantum
+    '';
 
   toChromaPalette = jsonPalette: rec {
     colors = {
@@ -150,19 +175,20 @@ in rec {
     ];
   };
 
-  desktop = {
-    # Note: this propagatedInputs override should be upstreamed to nixpkgs
-    iconTheme.package = pkgs.tela-icon-theme.overrideAttrs (final: prev: {propagatedBuildInputs = prev.propagatedBuildInputs ++ [pkgs.gnome.adwaita-icon-theme pkgs.libsForQt5.breeze-icons];});
-    iconTheme.name = "Tela-${telaMap.${accent}}";
-    cursorTheme.package = pkgs.bibata-cursors;
-    cursorTheme.name = "Bibata-Original-Ice";
-    cursorTheme.size = 20;
-    font.name = "Cantarell";
-    font.size = 10;
-    font.package = pkgs.cantarell-fonts;
-    monospaceFont.name = "CaskaydiaCove Nerd Font Mono";
-    monospaceFont.size = 9;
-    monospaceFont.package = pkgs.nerdfonts;
+  desktop = makeDesktop {inherit accent telaMap;};
+
+  gtk = {
+    theme = {
+      package = pkgs.ayu-theme-gtk;
+      name = gtkThemeVariant;
+    };
+    documentFont = desktop.font;
+    colorScheme = "prefer-dark";
+  };
+
+  qt.kvantum = {
+    package = ayuKvantum;
+    name = kvantumThemeVariant;
   };
 
   kitty = let
@@ -205,4 +231,6 @@ in rec {
   macoswallpaper = {
     inherit wallpaper;
   };
+
+  swim.wallpaperDirectory = lib-mine.path.dirname wallpaper;
 }

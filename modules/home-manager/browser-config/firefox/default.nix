@@ -86,8 +86,13 @@ in
               "shyfox.enable.ext.mono.context.icons" = true;
               "shyfox.enable.context.menu.icons" = true;
               "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-              "general.config.filename" = "mozilla.cfg";
-              "general.config.obscure_value" = 0;
+              # "general.config.filename" = "mozilla.cfg";
+              # "general.config.obscure_value" = 0;
+              "devtools.chrome.enabled" = true;
+              "devtools.debugger.remote-enabled" = true;
+              # "general.config.obscure_value" = 0;
+              # "general.config.filename" = "config.js";
+              # "general.config.sandbox_enabled" = false;
             };
             extensions = with extensions; [
               vimium
@@ -102,7 +107,7 @@ in
       textfox = {
         enable = true;
         profile = profileName;
-        flattenCss = false;
+        flattenCss = true;
         # copyOnActivation = true;
         config = {
           displayNavButtons = true;
@@ -133,13 +138,16 @@ in
         bash
         */
         ''
-          CHROME_DIR="${config.home.homeDirectory}/${configDir}/${profileName}/chrome"
+          PROFILE_DIR="${config.home.homeDirectory}/${configDir}/${profileName}"
+          CHROME_DIR="$PROFILE_DIR/chrome"
           cp -R ${customJsForFx}/script_loader/profile/userChrome "$CHROME_DIR"
           chmod -R u+w "$CHROME_DIR/userChrome"
           cp ${autoReloadCssUCJS} "$CHROME_DIR/userChrome/autoReloadCss.uc.js"
           chmod u+w "$CHROME_DIR/userChrome/autoReloadCss.uc.js"
           cp ${userChromeJS} "$CHROME_DIR/userChrome.js"
           chmod u+w "$CHROME_DIR/userChrome.js"
+          cp ${customJsForFx}/script_loader/firefox/config.js "$CHROME_DIR/config.js"
+          chmod u+w "$PROFILE_DIR/config.js"
         '';
 
       home.activation.clearFirefoxStartupCache =

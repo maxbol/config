@@ -24,7 +24,7 @@ with lib; let
     };
   };
 
-  patchedPath = pkgs.replace-dependencies {
+  patchedPath = pkgs.replaceDependencies {
     drv = path;
     replacements = cfg.replaceRuntimeDependencies;
   };

@@ -20,7 +20,7 @@
     ./macos-wallpaper.nix
     ./neovim.nix
     ./palette.nix
-    ./qt.nix
+    ./qt
     ./starship.nix
     ./vscode.nix
     ./wezterm.nix

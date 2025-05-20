@@ -6,6 +6,7 @@
     ./desktop-config
     ./graphics-config.nix
     ./localisation.nix
+    ./nix-registry.nix
     ./secrets-management.nix
     ./system-start.nix
     ./vpn-config

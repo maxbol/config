@@ -26,6 +26,7 @@
   features.desktop-config.enable = true;
   features.graphics-config.enable = true;
   features.localisation.enable = true;
+  features.nix-registry.enable = true;
   features.secrets-management.enable = true;
   features.system-start = {
     enable = true;
