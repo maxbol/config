@@ -91,7 +91,7 @@ in
             font_size = 72;
             valign = "top";
             halign = "center";
-            text = date "1000" "%I:%M";
+            text = date "1000" "%H:%M";
             position = "0, -140";
             inherit monitor font_family color;
           }

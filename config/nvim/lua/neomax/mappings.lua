@@ -17,8 +17,8 @@ map("n", "n", "nzzzv", { desc = "search next" })
 
 map("v", ">", ">gv", { desc = "indent" })
 map("v", "<", "<gv", { desc = "indent" })
-map("v", "J", ":silent m '>+1<CR>gv=gv", { desc = "move line down" })
-map("v", "K", ":silent m '<-2<CR>gv=gv", { desc = "move line up" })
+map("v", "J", ":m '>+1<CR>gv=gv", { desc = "move line down" })
+map("v", "K", ":m '<-2<CR>gv=gv", { desc = "move line up" })
 
 -- resize windows
 map("n", "<M-h>", "<C-w><", { desc = "resize window" })

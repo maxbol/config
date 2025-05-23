@@ -60,6 +60,8 @@
       # inputs.systems.follows = "systems-linux";
     };
 
+    hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
+
     custom-udev-rules.url = "github:MalteT/custom-udev-rules";
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
@@ -101,7 +103,11 @@
           "x86_64-linux"
         ];
 
-        mkOverlays = (import ./overlays) {inherit (nixpkgs) lib;};
+        mkOverlays = (import ./overlays) {
+          inherit (nixpkgs) lib;
+          inherit inputs;
+        };
+
         mkPackages = system:
           import nixpkgs {
             inherit system;
@@ -115,7 +121,6 @@
 
         imports = [
           ./meta.nix
-          # (import ./transpose-themes.nix {inherit flake-parts self lib-mine;})
         ];
 
         perSystem = {

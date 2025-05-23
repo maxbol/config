@@ -4,6 +4,8 @@
   accent ? "blue",
   accent2 ? "red",
   accent3 ? "green",
+  accent4 ? "magenta",
+  accent5 ? "cyan",
   hyprlandOverrides ? p: {},
   waybarOverrides ? p: {},
   rofiOverrides ? p: {},
@@ -73,6 +75,8 @@
       accent1 = accents.${accent};
       accent2 = accents.${accent2};
       accent3 = accents.${accent3};
+      accent4 = accents.${accent4};
+      accent5 = accents.${accent5};
     };
   };
 
@@ -105,13 +109,13 @@
   };
 
   telaMap = {
+    "blue" = "blue";
     "red" = "red";
     "green" = "green";
     "yellow" = "yellow";
-    "blue" = "niagara";
-    "purple" = "wisteria";
-    "aqua" = "niagara";
-    "orange" = "darkbrown";
+    "magenta" = "purple";
+    "cyan" = "green";
+    "orange" = "orange";
   };
 
   mkStarshipPalette = name: palette: ''

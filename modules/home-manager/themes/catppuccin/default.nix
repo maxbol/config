@@ -6,7 +6,10 @@
   accent ? "blue",
   accent2 ? "rosewater",
   accent3 ? "mauve",
+  accent4 ? "lavender",
+  accent5 ? "peach",
   hyprlandOverrides ? p: {},
+  hyprpanelTheme ? "catppuccin_mocha",
   waybarOverrides ? p: {},
   rofiOverrides ? p: {},
   tmuxOverrides ? p: {},
@@ -65,6 +68,8 @@ in rec {
       accent1 = palette_.${accent};
       accent2 = palette_.${accent2};
       accent3 = palette_.${accent3};
+      accent4 = palette_.${accent4};
+      accent5 = palette_.${accent5};
     };
 
     accents = {
@@ -81,6 +86,11 @@ in rec {
   hyprland.colorOverrides = hyprlandOverrides palette;
 
   waybar.colorOverrides = waybarOverrides palette;
+
+  hyprpanel.theme = {
+    package = self.hyprpanel-themes;
+    name = hyprpanelTheme;
+  };
 
   rofi.colorOverrides = rofiOverrides palette;
 

@@ -1,6 +1,7 @@
-overlayArgs: system:
+overlayArgs @ {inputs, ...}: system:
 [
   (import ./azuredatastudio-fix.nix overlayArgs)
+  inputs.hyprpanel.overlay
 ]
 ++ (
   if system == "aarch64-darwin"

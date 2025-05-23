@@ -2,5 +2,18 @@
 lib-mine.barrelGroup {
   here = ./.;
   path = "features.linux-desktop";
-  submodules = ["hyprland" "waybar" "rofi" "swim" "fonts" "wlogout" "ui-toolkits" "lockscreen" "notifications"];
+  submodules = [
+    "fonts"
+    "gaming"
+    "lockscreen"
+    "panel"
+    "rofi"
+    "swim"
+    "ui-toolkits"
+    "wlogout"
+    "wm"
+    /*
+    "notifications"
+    */
+  ];
 }

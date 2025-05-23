@@ -8,7 +8,7 @@
   self,
   ...
 }:
-lib-mine.mkFeature "features.linux-desktop.hyprland" {
+lib-mine.mkFeature "features.linux-desktop.wm" {
   impure-config-management.config = lib.genAttrs [
     # "hypr/hypridle.conf"
     # "hypr/hyprlock.conf"

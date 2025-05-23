@@ -62,12 +62,9 @@ step="${2:-5}"
 icodir="${XDG_CONFIG_HOME:-$HOME/.config}/dunst/icons/vol"
 
 case $1 in
-    i) pamixer $srce -i ${step}
-        notify_vol ;;
-    d) pamixer $srce -d ${step}
-        notify_vol ;;
-    m) pamixer $srce -t
-        notify_mute ;;
+    i) pamixer $srce -i ${step} ;;
+    d) pamixer $srce -d ${step} ;;
+    m) pamixer $srce -t ;;
     *) print_error ;;
 esac
 

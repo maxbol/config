@@ -5,6 +5,8 @@
   accent ? "darkblue",
   accent2 ? "darkgreen",
   accent3 ? "darkorange",
+  accent4 ? "darkred",
+  accent5 ? "darkcyan",
   neovimOverrides ? p: {},
   wallpaper ? ./wallpapers/light/wallpaper.jpg,
   makeDesktop,
@@ -70,6 +72,8 @@
       accent1 = palette_.${accent};
       accent2 = palette_.${accent2};
       accent3 = palette_.${accent3};
+      accent4 = accents.${accent4};
+      accent5 = accents.${accent5};
     };
     accents = {
       inherit (palette_) darkgreen darkorange darkred darkcyan darkpurple darkblue lightred lightorange lightgreen lightpurple lightblue lightcyan;

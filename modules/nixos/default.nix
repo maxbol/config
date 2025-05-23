@@ -2,9 +2,9 @@
   imports = [
     ./application-config
     ./core-services.nix
-    ./custom-udev-rules
     ./desktop-config
     ./graphics-config.nix
+    ./hardware-support
     ./localisation.nix
     ./nix-registry.nix
     ./secrets-management.nix

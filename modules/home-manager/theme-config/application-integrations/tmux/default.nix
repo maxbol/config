@@ -58,26 +58,16 @@ in {
     };
   };
 
-  imports = [
-    (mkIf (cfg.enable && cfg.tmux.enable) {
-      programs.tmux.plugins = [
-        {
-          # https://github.com/nix-community/home-manager/issues/5952
-          plugin = pkgs.tmuxPlugins.mkTmuxPlugin {
-            pluginName = "loadtheme";
-            version = "1";
-            src = pkgs.writeTextFile {
-              name = "loadtheme";
-              destination = "/loadtheme.tmux";
-              executable = true;
-              text = '''';
-            };
-          };
-          extraConfig = ''
-            source ${config.xdg.configHome}/chroma/active/tmux/tinted-tmux-statusline.conf
-          '';
-        }
-      ];
-    })
-  ];
+  # imports = [
+  #   (mkIf (cfg.enable && cfg.tmux.enable) {
+  #     programs.tmux.extraConfig = ''
+  #       set -gq @tinted-tmux-modulepane-right-outer "󱃾 #( KUBE_TMUX_NS_ENABLE=false KUBE_TMUX_SYMBOL_ENABLE=false ${kube-tmux}/kube.tmux )"
+  #       set -gqa @tinted-tmux-modulepane-right-outer "  "
+  #       set -gqa @tinted-tmux-modulepane-right-outer "󰥔 #( ${clockifyd}/bin/clockifyd-get-current )"
+  #       set -gqF @tinted-tmux-modulepane-right-inner "%H:%M"
+  #
+  #       source ${config.xdg.configHome}/chroma/active/tmux/tinted-tmux-statusline.conf
+  #     '';
+  #   })
+  # ];
 }

@@ -5,6 +5,8 @@
   accent ? "red",
   accent2 ? "green",
   accent3 ? "blue",
+  accent4 ? "pink",
+  accent5 ? "teal",
   neovimOverrides ? p: {},
   makeDesktop,
   ...
@@ -114,6 +116,8 @@
       accent1 = accents.${accent};
       accent2 = accents.${accent2};
       accent3 = accents.${accent3};
+      accent4 = accents.${accent4};
+      accent5 = accents.${accent5};
     };
     accents = {
       inherit (colors) red green blue yellow;

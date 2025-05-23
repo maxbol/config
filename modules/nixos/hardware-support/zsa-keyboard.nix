@@ -3,7 +3,7 @@
   origin,
   ...
 }:
-lib-mine.mkFeature "features.custom-udev-rules.zsa-keyboard" {
+lib-mine.mkFeature "features.hardware-support.zsa-keyboard" {
   imports = [
     origin.inputs.custom-udev-rules.nixosModule
   ];

@@ -4,6 +4,7 @@
     ./dynawall
     ./firefox
     ./hyprland
+    ./hyprpanel
     ./jankyborders
     ./kitty
     ./obsidian

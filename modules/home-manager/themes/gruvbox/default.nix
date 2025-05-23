@@ -5,8 +5,10 @@
   accent ? "aqua",
   accent2 ? "orange",
   accent3 ? "blue",
-  hyprlandOverrides ? p: {
-  },
+  accent4 ? "red",
+  accent5 ? "purple",
+  hyprlandOverrides ? p: {},
+  hyprpanelTheme ? "gruvbox",
   waybarOverrides ? p: {},
   rofiOverrides ? p: {},
   tmuxOverrides ? p: {},
@@ -88,6 +90,8 @@
       accent1 = accents.${accent};
       accent2 = accents.${accent2};
       accent3 = accents.${accent3};
+      accent4 = accents.${accent4};
+      accent5 = accents.${accent5};
     };
   };
 
@@ -118,6 +122,8 @@
       accent1 = accents.${accent};
       accent2 = accents.${accent2};
       accent3 = accents.${accent3};
+      accent4 = accents.${accent4};
+      accent5 = accents.${accent5};
     };
   };
 
@@ -174,6 +180,11 @@ in rec {
       overlay = palette.semantic.background;
     }
     // (waybarOverrides palette);
+
+  hyprpanel.theme = {
+    package = self.hyprpanel-themes;
+    name = hyprpanelTheme;
+  };
 
   rofi.colorOverrides =
     {

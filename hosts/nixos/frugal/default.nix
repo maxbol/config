@@ -20,10 +20,14 @@
     trusted-users = ["max"];
   };
 
+  # systemd.tmpfiles.rules = [
+  #   "f /var/lib/systemd/linger/max"
+  # ];
+
   features.application-config.enable = true;
   features.core-services.enable = true;
-  features.custom-udev-rules.enable = true;
   features.desktop-config.enable = true;
+  features.hardware-support.enable = true;
   features.graphics-config.enable = true;
   features.localisation.enable = true;
   features.nix-registry.enable = true;

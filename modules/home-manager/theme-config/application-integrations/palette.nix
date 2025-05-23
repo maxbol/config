@@ -52,6 +52,8 @@ in {
             accent1 = mkColorOption "primary accent";
             accent2 = mkColorOption "secondary accent";
             accent3 = mkColorOption "tertiary accent";
+            accent4 = mkColorOption "quaternary accent";
+            accent5 = mkColorOption "quinary accent";
           };
 
           colors = mkOption {

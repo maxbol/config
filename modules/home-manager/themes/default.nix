@@ -98,6 +98,8 @@ in {
         inactive2 = palette.accents.teal;
       };
 
+      hyprpanelTheme = "catppuccin_latte";
+
       rofiOverrides = palette: {
         main-background = palette.all.crust;
         highlight = palette.accents.flamingo;
@@ -128,6 +130,8 @@ in {
         inactive1 = palette.accents.lavender;
         inactive2 = "6c7086";
       };
+
+      hyprpanelTheme = "catppuccin_mocha";
 
       rofiOverrides = palette: {
         main-background = palette.all.crust;
@@ -200,6 +204,7 @@ in {
     makeTheme ./rose-pine
     {
       variant = "eclipse";
+      hyprpanelTheme = "rose_pine_moon";
       neovimOverrides = palette: {
         colorscheme = "rose-pine-moon";
         background = "dark";
@@ -222,6 +227,7 @@ in {
     makeTheme ./rose-pine
     {
       variant = "moon";
+      hyprpanelTheme = "rose_pine_moon";
       neovimOverrides = palette: {
         colorscheme = "rose-pine-moon";
         background = "dark";

@@ -1,9 +1,12 @@
 {
   pkgs,
   variant ? "pine",
+  hyprpanelTheme ? "rose_pine",
   accent ? "rose",
   accent2 ? "pine",
   accent3 ? "foam",
+  accent4 ? "love",
+  accent5 ? "iris",
   hyprlandOverrides ? p: {},
   waybarOverrides ? p: {},
   rofiOverrides ? p: {},
@@ -117,6 +120,8 @@
       accent1 = accents.${accent};
       accent2 = accents.${accent2};
       accent3 = accents.${accent3};
+      accent4 = accents.${accent4};
+      accent5 = accents.${accent5};
     };
   };
 
@@ -192,6 +197,11 @@ in rec {
   hyprland.colorOverrides = hyprlandOverrides palette;
 
   waybar.colorOverrides = waybarOverrides palette;
+
+  hyprpanel.theme = {
+    package = self.hyprpanel-themes;
+    name = hyprpanelTheme;
+  };
 
   rofi.colorOverrides = rofiOverrides palette;
 

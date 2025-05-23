@@ -1,5 +1,6 @@
 {
   lib-mine,
+  lib,
   pkgs,
   config,
   vendor,
@@ -24,6 +25,48 @@ in
   lib-mine.mkFeature "features.tmux-config" {
     impure-config-management.config."tmux/overrides.conf" = "config/tmux/overrides.conf";
 
+    systemd.user.services.clockifyd = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+      Unit = {
+        Description = "Clockify status daemon";
+        After = ["hyprland-session.target"];
+      };
+
+      Service = {
+        ExecStart = "/bin/sh -c \"${pkgs.coreutils}/bin/rm -f /tmp/clockifyd.sock && ${clockifyd}/bin/clockifyd\"";
+        Restart = "always";
+      };
+
+      Install.WantedBy = ["tmux.service"];
+    };
+
+    systemd.user.services.tmux = lib.mkIf pkgs.stdenv.hostPlatform.isLinux (let
+      execStartPre = "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_SESSION_TYPE XDG_SESSION_DESKTOP GPG_TTY XDG_CURRENT_DESKTOP TMUX_TMPDIR PATH";
+      execStop = pkgs.writeShellScript "tmux-exec-stop" ''
+        ${execStartPre}
+        ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh
+      '';
+    in {
+      Unit = {
+        Description = "tmux default session (detached)";
+        Documentation = "man:tmux(1)";
+        After = ["clockifyd.service"];
+      };
+
+      Service = {
+        Type = "forking";
+        ExecStartPre = execStartPre;
+        ExecStart = "${pkgs.zsh}/bin/zsh -l -i -c \"${pkgs.tmux}/bin/tmux new-session -d\"";
+        ExecStop = ["${execStop}" "${pkgs.tmux}/bin/tmux kill-server"];
+        KillMode = "control-group";
+        RestartSec = 2;
+        Restart = "always";
+        SetLoginEnvironment = true;
+        Environment = ["DISPLAY=:0" "TMUX_TMPDIR=/run/user/1000/" "WAYLAND_DISPLAY=wayland-1" "XDG_SESSION_TYPE=wayland"];
+      };
+
+      Install.WantedBy = ["default.target"];
+    });
+
     programs.tmux = {
       enable = true;
       mouse = true;
@@ -47,33 +90,33 @@ in
           set -gqa @tinted-tmux-modulepane-right-outer "󰥔 #( ${clockifyd}/bin/clockifyd-get-current )"
           set -gqF @tinted-tmux-modulepane-right-inner "%H:%M"
 
-          source-file ~/.config/tmux/overrides.conf
-          source ~/.config/chroma/active/tmux/tinted-tmux-statusline.conf
+          source-file ${config.xdg.configHome}/tmux/overrides.conf
+          source ${config.xdg.configHome}/chroma/active/tmux/tinted-tmux-statusline.conf
         '';
 
       plugins =
         (with pkgs; [
-          {
-            # https://github.com/nix-community/home-manager/issues/5952
-            plugin = tmuxPlugins.mkTmuxPlugin {
-              pluginName = "nix-shellfix";
-              version = "1";
-              src = writeTextFile {
-                name = "nix-shellfix-plugin";
-                destination = "/nix_shellfix.tmux";
-                executable = true;
-                text = '''';
-              };
-            };
-            extraConfig =
-              /*
-              bash
-              */
-              ''
-                set -gu default-command
-                set -g default-shell "$SHELL"
-              '';
-          }
+          # {
+          #   # https://github.com/nix-community/home-manager/issues/5952
+          #   plugin = tmuxPlugins.mkTmuxPlugin {
+          #     pluginName = "nix-shellfix";
+          #     version = "1";
+          #     src = writeTextFile {
+          #       name = "nix-shellfix-plugin";
+          #       destination = "/nix_shellfix.tmux";
+          #       executable = true;
+          #       text = '''';
+          #     };
+          #   };
+          #   extraConfig =
+          #     /*
+          #     bash
+          #     */
+          #     ''
+          #       set -gu default-command
+          #       set -g default-shell "$SHELL"
+          #     '';
+          # }
           {
             plugin = tmuxPlugins.yank;
           }

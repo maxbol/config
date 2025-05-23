@@ -9,7 +9,6 @@
   features.browser-config.enable = true;
   # features.secrets-management.enable = true;
   features.application-support.enable = true;
-  features.application-support.obsidian.enable = false;
   features.default-development-environment.enable = true;
   features.git-config.enable = true;
   features.linux-desktop.enable = true;

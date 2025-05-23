@@ -14,6 +14,8 @@
   accent ? "orange",
   accent2 ? "lightblue",
   accent3 ? "yellow",
+  accent4 ? "teal",
+  accent5 ? "mauve",
   hyprlandOverrides ? p: {},
   waybarOverrides ? p: {},
   rofiOverrides ? p: {},
@@ -108,6 +110,8 @@
       accent1 = accents.${accent};
       accent2 = accents.${accent2};
       accent3 = accents.${accent3};
+      accent4 = accents.${accent4};
+      accent5 = accents.${accent5};
     };
   };
 
