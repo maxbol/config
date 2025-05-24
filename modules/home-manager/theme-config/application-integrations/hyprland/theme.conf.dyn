@@ -35,5 +35,5 @@ decoration {
     }
 }
 
-layerrule = blur, bar-0
-layerrule = blur, bar-1
+# layerrule = blur, bar-0
+# layerrule = blur, bar-1

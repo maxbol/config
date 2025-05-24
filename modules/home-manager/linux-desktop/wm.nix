@@ -54,6 +54,8 @@ lib-mine.mkFeature "features.linux-desktop.wm" {
     hyprlock
     hypridle
     brightnessctl
+    swappy
+    kdePackages.plasma-workspace # necessary for xembedsniproxy, to get wine tray into hyprpanel
   ];
 
   systemd.user.services.polkit-authentication-agent = {

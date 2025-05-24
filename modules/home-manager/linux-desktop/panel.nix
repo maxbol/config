@@ -3,6 +3,7 @@
   pkgs,
   origin,
   config,
+  self,
   ...
 }:
 lib-mine.mkFeature "features.linux-desktop.panel" {
@@ -33,6 +34,15 @@ lib-mine.mkFeature "features.linux-desktop.panel" {
         menus.dashboard = {
           powermenu = {
             avatar.image = "${config.identity.userImage}";
+          };
+          shortcuts = {
+            right = {
+              shortcut3 = {
+                command = "${self.misc-scripts-hyprdots}/bin/screenshot.sh sf";
+                icon = "󰄀";
+                tooltip = "Screenshot";
+              };
+            };
           };
         };
         layout = {

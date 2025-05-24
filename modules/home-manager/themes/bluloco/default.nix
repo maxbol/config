@@ -158,7 +158,7 @@ in rec {
       pkgs
       .gruvbox-gtk-theme
       .overrideAttrs (prev: {propagatedUserEnvPkgs = prev.propagatedUserEnvPkgs ++ [pkgs.gnome-themes-extra];});
-    theme.name = "Gruvbox-Dark-BL";
+    theme.name = "Gruvbox-Dark";
     documentFont = desktop.font;
     colorScheme = "prefer-dark";
   };
