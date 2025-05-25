@@ -28,7 +28,8 @@ in
     systemd.user.services.clockifyd = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
       Unit = {
         Description = "Clockify status daemon";
-        After = ["hyprland-session.target"];
+        PartOf = ["graphical-session.target"];
+        After = ["graphical-session-pre.target"];
       };
 
       Service = {
@@ -40,31 +41,38 @@ in
     };
 
     systemd.user.services.tmux = lib.mkIf pkgs.stdenv.hostPlatform.isLinux (let
-      execStartPre = "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_SESSION_TYPE XDG_SESSION_DESKTOP GPG_TTY XDG_CURRENT_DESKTOP TMUX_TMPDIR PATH";
-      execStop = pkgs.writeShellScript "tmux-exec-stop" ''
-        ${execStartPre}
-        ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh
-      '';
+      shellWrap = flags: cmd: (lib.strings.concatStringsSep " " (["${lib.getExe pkgs.zsh}"] ++ flags ++ ["\"${cmd}\""]));
+      shellWrap' = shellWrap ["-l" "-i" "-c"];
+      # shellWrapNonInteractive = shellWrap ["-l" "-c"];
     in {
       Unit = {
         Description = "tmux default session (detached)";
         Documentation = "man:tmux(1)";
-        After = ["clockifyd.service"];
+        After = ["clockifyd.service" "graphical-session-pre.target"];
+        PartOf = ["graphical-session.target"];
       };
 
       Service = {
         Type = "forking";
-        ExecStartPre = execStartPre;
-        ExecStart = "${pkgs.zsh}/bin/zsh -l -i -c \"${pkgs.tmux}/bin/tmux new-session -d\"";
-        ExecStop = ["${execStop}" "${pkgs.tmux}/bin/tmux kill-server"];
+        ExecStart =
+          /*
+          shellWrap'
+          */
+          shellWrap' "${lib.getExe pkgs.tmux} new-session -d";
+        ExecStop = [
+          /*
+          shellWrap'
+          */
+          (shellWrap' "echo \\\"Saving TMUX session...\\\" && ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh && echo \\\"Saved TMUX session!\\\"")
+          (shellWrap' "echo \\\"Killing TMUX server\\\" && ${lib.getExe pkgs.tmux} kill-server && echo \\\"Killed TMUX server\\\"")
+        ];
         KillMode = "control-group";
         RestartSec = 2;
-        Restart = "always";
-        SetLoginEnvironment = true;
-        Environment = ["DISPLAY=:0" "TMUX_TMPDIR=/run/user/1000/" "WAYLAND_DISPLAY=wayland-1" "XDG_SESSION_TYPE=wayland"];
+        Restart = "on-failure";
+        Environment = ["DISPLAY=:0" "WAYLAND_DISPLAY=wayland-1" "XDG_SESSION_TYPE=wayland"];
       };
 
-      Install.WantedBy = ["default.target"];
+      Install.WantedBy = ["graphical-session.target"];
     });
 
     programs.tmux = {
@@ -96,27 +104,6 @@ in
 
       plugins =
         (with pkgs; [
-          # {
-          #   # https://github.com/nix-community/home-manager/issues/5952
-          #   plugin = tmuxPlugins.mkTmuxPlugin {
-          #     pluginName = "nix-shellfix";
-          #     version = "1";
-          #     src = writeTextFile {
-          #       name = "nix-shellfix-plugin";
-          #       destination = "/nix_shellfix.tmux";
-          #       executable = true;
-          #       text = '''';
-          #     };
-          #   };
-          #   extraConfig =
-          #     /*
-          #     bash
-          #     */
-          #     ''
-          #       set -gu default-command
-          #       set -g default-shell "$SHELL"
-          #     '';
-          # }
           {
             plugin = tmuxPlugins.yank;
           }
@@ -134,8 +121,8 @@ in
                 set -g @resurrect-capture-pane-contents 'on'
 
                 set -g @resurrect-dir ${resurrectDirPath}
-                # set -g @resurrect-hook-post-save-all 'sed "s| --cmd .*-vim-pack-dir||g; s|/etc/profiles/per-user/${usr}/bin/||g; s|/home/${usr}/.nix-profile/bin/||g" ${resurrectDirPath}/last | sponge ${resurrectDirPath}/last'
-                set -g @resurrect-hook-post-save-all "sed 's/--cmd[^ ]* [^ ]* [^ ]*//g; s|' $resurrect_dir/last | sponge $resurrect_dir/last"
+                set -g @resurrect-hook-post-save-all '${lib.getExe pkgs.gnused} "s| --cmd .*-vim-pack-dir||g; s|/etc/profiles/per-user/${usr}/bin/||g; s|/home/${usr}/.nix-profile/bin/||g" ${resurrectDirPath}/last | ${pkgs.moreutils}/bin/sponge ${resurrectDirPath}/last'
+                # set -g @resurrect-hook-post-save-all "${lib.getExe pkgs.gnused} 's/--cmd[^ ]* [^ ]* [^ ]*//g; s|' $resurrect_dir/last | ${pkgs.moreutils}/bin/sponge $resurrect_dir/last"
                 set -g @resurrect-processes '"~htop->htop" "~nv->nv" "~ranger->ranger" "~less->less" "~bat->bat" "~man->man" "~yazi->yazi"'
               '';
           }

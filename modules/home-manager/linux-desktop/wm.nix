@@ -55,6 +55,7 @@ lib-mine.mkFeature "features.linux-desktop.wm" {
     hypridle
     brightnessctl
     swappy
+    uwsm
     kdePackages.plasma-workspace # necessary for xembedsniproxy, to get wine tray into hyprpanel
   ];
 

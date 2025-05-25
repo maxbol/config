@@ -58,7 +58,8 @@ in {
       enable = true;
       settings = rec {
         initial_session = {
-          command = lib.getExe pkgs.hyprland;
+          command = "${lib.getExe pkgs.uwsm} start -S -F /run/current-system/sw/bin/Hyprland";
+          # command = lib.getExe pkgs.hyprland;
           user = cfg.defaultUser;
         };
         default_session = initial_session;

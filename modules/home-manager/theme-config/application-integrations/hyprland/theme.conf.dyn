@@ -11,7 +11,6 @@ general {
     border_size = 2
     col.active_border = rgba(⟨active1:hex⟩ff) rgba(⟨active2:hex⟩ff) 45deg
     col.inactive_border = rgba(⟨inactive1:hex⟩cc) rgba(⟨inactive2:hex⟩cc) 45deg
-    layout = scroller
     resize_on_border = true
 }
 

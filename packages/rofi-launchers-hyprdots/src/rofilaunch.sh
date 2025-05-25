@@ -38,5 +38,5 @@ icon_override="configuration {icon-theme: \"${icon_override}\";}"
 
 
 # launch rofi
-rofi -show $r_mode -theme-str "${fnt_override}" -theme-str "${r_override}" -theme-str "${icon_override}" -config "${roconf}"
+rofi -show $r_mode -theme-str "${fnt_override}" -theme-str "${r_override}" -theme-str "${icon_override}" -config "${roconf}" -run-command "uwsm app -- {cmd}"
 
