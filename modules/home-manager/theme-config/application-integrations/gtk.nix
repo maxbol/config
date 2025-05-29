@@ -182,6 +182,10 @@ in {
     theme-config.programs.gtk = {
       themeOptions = {
         theme = options.gtk.theme;
+        hasGtk4Theme = mkOption {
+          type = types.bool;
+          default = false;
+        };
         colorScheme = mkOption {
           type = types.enum ["default" "prefer-light" "prefer-dark"];
           default = "default";
@@ -221,9 +225,10 @@ in {
           toGtk3Ini {Settings = gtkIniForTheme cfg.gtk.gtk3.extraConfig (config // opts.desktop) // {gtk-application-prefer-dark-theme = config.colorScheme == "prefer-dark";};};
 
         file."gtk-4.0/settings.ini".text =
-          toGtk3Ini {Settings = gtkIniForTheme cfg.gtk.gtk4.extraConfig (config // opts.desktop) // {gtk-application-prefer-dark-theme = config.colorScheme == "prefer-dark";};};
+          mkIf config.hasGtk4Theme
+          (toGtk3Ini {Settings = gtkIniForTheme cfg.gtk.gtk4.extraConfig (config // opts.desktop) // {gtk-application-prefer-dark-theme = config.colorScheme == "prefer-dark";};});
 
-        file."gtk-4.0/gtk.css".text = mkIf (cfg.gtk.gtk4.libadwaitaSupport == "import") ''
+        file."gtk-4.0/gtk.css".text = mkIf (config.hasGtk4Theme && cfg.gtk.gtk4.libadwaitaSupport == "import") ''
           @import url("file://${config.theme.package}/share/themes/${config.theme.name}/gtk-4.0/gtk.css");
         '';
 

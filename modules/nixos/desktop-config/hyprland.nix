@@ -1,9 +1,6 @@
 {
-  lib,
   lib-mine,
   pkgs,
-  origin,
-  vendor,
   ...
 }:
 lib-mine.mkFeature "features.desktop-config.hyprland" {
@@ -14,6 +11,7 @@ lib-mine.mkFeature "features.desktop-config.hyprland" {
   config = {
     programs.hyprland = {
       enable = true;
+      withUWSM = true;
       package = pkgs.hyprland;
       portalPackage = pkgs.xdg-desktop-portal-hyprland;
     };

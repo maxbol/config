@@ -43,6 +43,7 @@ in {
             confirm_os_window_close = 0;
             placement_strategy = "top-left";
             cursor_trail = 3;
+            open_url_with = "default";
           };
           keybindings = {
             "cmd+h" = "";

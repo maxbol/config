@@ -13,7 +13,14 @@ lib-mine.mkFeature "features.core-services" {
     #   support32Bit = true;
     # };
 
-    bluetooth.enable = true;
+    bluetooth = {
+      enable = true;
+      settings = {
+        General = {
+          DiscoverableTimeout = 0;
+        };
+      };
+    };
     i2c.enable = true;
 
     opentabletdriver = {

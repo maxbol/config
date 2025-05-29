@@ -107,7 +107,8 @@ in rec {
       inherit variant;
       accents = [accent];
     };
-    theme.name = "Catppuccin-${Variant}-Standard-${Accent}-${Luminance}";
+    theme.name = "catppuccin-${variant}-${accent}-standard";
+    hasGtk4Theme = true;
     documentFont = desktop.font;
     colorScheme = "prefer-${luminance}";
   };

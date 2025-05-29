@@ -33,6 +33,16 @@ in
         ripgrep
         luajit
         luajitPackages.tiktoken_core
+
+        # Language tooling - migration from Mason
+        typescript-language-server
+        deno
+        prettierd
+        eslint_d
+        eslint
+        shfmt
+        sqlfluff
+        sql-formatter
       ];
       extraLuaPackages = ps: [ps.magick];
     };

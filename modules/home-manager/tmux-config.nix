@@ -25,6 +25,17 @@ in
   lib-mine.mkFeature "features.tmux-config" {
     impure-config-management.config."tmux/overrides.conf" = "config/tmux/overrides.conf";
 
+    features.linux-desktop.shutdown.hooks = [
+      {
+        name = "tmux-shutdown";
+        # beforeTargets = ["shutdown" "reboot" "poweroff" "soft-reboot"];
+        execStart = pkgs.writeShellScript "tmux-shutdown.sh" ''
+          export PATH=/home/$USER/.nix-profile/bin:/run/current-system/sw/bin:$PATH
+          ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh
+        '';
+      }
+    ];
+
     systemd.user.services.clockifyd = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
       Unit = {
         Description = "Clockify status daemon";
@@ -37,42 +48,40 @@ in
         Restart = "always";
       };
 
-      Install.WantedBy = ["tmux.service"];
+      Install.WantedBy = ["hyprland-session.target"];
     };
 
-    systemd.user.services.tmux = lib.mkIf pkgs.stdenv.hostPlatform.isLinux (let
-      shellWrap = flags: cmd: (lib.strings.concatStringsSep " " (["${lib.getExe pkgs.zsh}"] ++ flags ++ ["\"${cmd}\""]));
-      shellWrap' = shellWrap ["-l" "-i" "-c"];
-      # shellWrapNonInteractive = shellWrap ["-l" "-c"];
+    systemd.user.services.tmux-foo = lib.mkIf pkgs.stdenv.hostPlatform.isLinux (let
+      pathWrap = cmd:
+        pkgs.writeShellScript "wrapped-cmd" ''
+          export PATH="$PATH:/home/$USER/.nix-profile/bin:/run/current-system/sw/bin"
+          ${cmd}
+        '';
     in {
       Unit = {
         Description = "tmux default session (detached)";
         Documentation = "man:tmux(1)";
-        After = ["clockifyd.service" "graphical-session-pre.target"];
-        PartOf = ["graphical-session.target"];
+        After = ["hyprland-session.target"];
       };
 
       Service = {
         Type = "forking";
-        ExecStart =
-          /*
-          shellWrap'
-          */
-          shellWrap' "${lib.getExe pkgs.tmux} new-session -d";
-        ExecStop = [
-          /*
-          shellWrap'
-          */
-          (shellWrap' "echo \\\"Saving TMUX session...\\\" && ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh && echo \\\"Saved TMUX session!\\\"")
-          (shellWrap' "echo \\\"Killing TMUX server\\\" && ${lib.getExe pkgs.tmux} kill-server && echo \\\"Killed TMUX server\\\"")
-        ];
+        ExecStart = pathWrap "${lib.getExe pkgs.tmux} new-session -d -s scratch";
+        ExecStop = ["-${pathWrap "${lib.getExe pkgs.tmux} kill-server"}"];
+        GuessMainPID = true;
+        SetLoginEnvironment = true;
         KillMode = "control-group";
         RestartSec = 2;
         Restart = "on-failure";
-        Environment = ["DISPLAY=:0" "WAYLAND_DISPLAY=wayland-1" "XDG_SESSION_TYPE=wayland"];
+        Environment = [
+          "DISPLAY=:0"
+          "TMUX_TMPDIR=%t"
+          "WAYLAND_DISPLAY=wayland-1"
+          "XDG_SESSION_TYPE=wayland"
+        ];
       };
 
-      Install.WantedBy = ["graphical-session.target"];
+      Install.WantedBy = ["hyprland-session.target"];
     });
 
     programs.tmux = {
@@ -109,22 +118,29 @@ in
           }
           {
             plugin = tmuxPlugins.resurrect;
-            extraConfig =
+            extraConfig = let
+              resurrectHook = lib.strings.concatStringsSep " | " [
+                # Nix path shenanigans
+                ''${lib.getExe pkgs.gnused} "s| --cmd .*-vim-pack-dir||g; s|/etc/profiles/per-user/${usr}/bin/||g; s|/home/${usr}/.nix-profile/bin/||g" ${resurrectDirPath}/last''
+                # Never store the state of the scratch session, so we can always start tmux into it
+                ''${lib.getExe pkgs.gnused} -E "/^(pane|window)\s*scratch/d"''
+                ''${lib.getExe pkgs.gnused} -E "s/\s*scratch//"''
+                ''${pkgs.moreutils}/bin/sponge ${resurrectDirPath}/last''
+              ];
               /*
               bash
               */
-              ''
-                set -g allow-passthrough on
-                set -g @resurrect-strategy-vim 'session'
-                set -g @resurrect-strategy-nvim 'session'
+            in ''
+              set -g allow-passthrough on
+              set -g @resurrect-strategy-vim 'session'
+              set -g @resurrect-strategy-nvim 'session'
 
-                set -g @resurrect-capture-pane-contents 'on'
+              set -g @resurrect-capture-pane-contents 'on'
 
-                set -g @resurrect-dir ${resurrectDirPath}
-                set -g @resurrect-hook-post-save-all '${lib.getExe pkgs.gnused} "s| --cmd .*-vim-pack-dir||g; s|/etc/profiles/per-user/${usr}/bin/||g; s|/home/${usr}/.nix-profile/bin/||g" ${resurrectDirPath}/last | ${pkgs.moreutils}/bin/sponge ${resurrectDirPath}/last'
-                # set -g @resurrect-hook-post-save-all "${lib.getExe pkgs.gnused} 's/--cmd[^ ]* [^ ]* [^ ]*//g; s|' $resurrect_dir/last | ${pkgs.moreutils}/bin/sponge $resurrect_dir/last"
-                set -g @resurrect-processes '"~htop->htop" "~nv->nv" "~ranger->ranger" "~less->less" "~bat->bat" "~man->man" "~yazi->yazi"'
-              '';
+              set -g @resurrect-dir ${resurrectDirPath}
+              set -g @resurrect-hook-post-save-all '${resurrectHook}'
+              set -g @resurrect-processes '"~htop->htop" "~nv->nv" "~ranger->ranger" "~less->less" "~bat->bat" "~man->man" "~yazi->yazi"'
+            '';
           }
           {
             plugin = tmuxPlugins.continuum;
@@ -134,8 +150,8 @@ in
               */
               ''
                 set -g @continuum-restore 'on'
-                set -g @continuum-boot 'on'
-                set -g @continuum-boot-options 'kitty'
+                # set -g @continuum-boot 'on'
+                # set -g @continuum-boot-options 'kitty'
                 set -g @continuum-save-interval '5'
               '';
           }

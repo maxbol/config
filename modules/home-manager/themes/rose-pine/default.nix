@@ -164,7 +164,7 @@
   gtkThemeName =
     if variant == "eclipse"
     then "rose-pine"
-    else normalizedThemeName;
+    else "${normalizedThemeName}";
 
   kittyThemeFileName = "${normalizedThemeName}.conf";
 
@@ -222,7 +222,7 @@ in rec {
       .rose-pine-gtk-theme;
     theme.name = gtkThemeName;
     documentFont = desktop.font;
-    colorScheme = "prefer-dark";
+    colorScheme = "prefer-light"; # A quirk of the GTK theme
   };
 
   qt = {

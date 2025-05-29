@@ -11,4 +11,7 @@ lib-mine.mkFeature "features.application-config.password-management" ({config, .
     enable = true;
     polkitPolicyOwners = lib.attrNames config.users.users;
   };
+  # environment.variables = {
+  #   ELECTRON_OZONE_PLATFORM_HINT = "auto";
+  # };
 })

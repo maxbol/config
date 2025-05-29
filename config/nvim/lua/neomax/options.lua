@@ -18,13 +18,13 @@ g.markdown_recommended_style = 0
 opt.foldenable = true
 opt.foldmethod = "syntax"
 opt.cursorline = true
-opt.guicursor = "n-v-c-i:block-Cursor/lCursor"
+opt.guicursor = "n-v-c-i:block-blinkon500-blinkwait3000-blinkoff500-Cursor/lCursor"
 
 -- Hide mode notation in cmdline
 opt.showmode = false
 
 -- Cmdline options
-opt.cmdheight = 0
+-- opt.cmdheight = 0
 
 -- Session options
 opt.sessionoptions = "curdir,folds,globals,help,tabpages,terminal,winsize"
@@ -98,7 +98,7 @@ vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin" .. (is_windows and ";" or 
 
 -- Neovide settings
 if vim.g.neovide then
-	require("neomax.neovide")
+  require("neomax.neovide")
 end
 
 -- Vimgrep options
@@ -118,7 +118,7 @@ vim.cmd([[autocmd! BufNewFile,BufRead *.vs,*.fs,*.frag,*.vert set ft=glsl]])
 -- Diagnostics as virtual text
 vim.diagnostic.config({ virtual_text = true })
 
-require("vim._extui").enable({})
+-- require("vim._extui").enable({})
 
 require("neomax.configs.make")
 require("neomax.modules.obsidian")

@@ -8,6 +8,7 @@ lib-mine.barrelGroup {
     "lockscreen"
     "panel"
     "rofi"
+    "shutdown"
     "swim"
     "ui-toolkits"
     "wlogout"

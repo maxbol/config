@@ -13,7 +13,7 @@ in {
     theme-config.firefox = {
       enable = lib.mkOption {
         type = lib.types.bool;
-        default = config.programs.firefox.enable;
+        default = config.programs.firefox.enable && config.textfox.enable;
         example = false;
         description = ''
           Whether to enable Firefox settings as part of Chroma.
@@ -40,7 +40,7 @@ in {
 
       copyOnActivation = lib.mkOption {
         type = lib.types.bool;
-        default = pkgs.stdenv.hostPlatform.isDarwin;
+        default = config.textfox.copyOnActivation;
       };
 
       vimiumFontFamily = lib.mkOption {

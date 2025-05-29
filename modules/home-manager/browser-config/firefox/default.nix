@@ -11,17 +11,32 @@
 
   profileName = "default";
 
-  firefox-unmodified =
-    if pkgs.stdenv.hostPlatform.isDarwin == true
-    then unstable-pkgs.firefox-unwrapped
-    else pkgs.firefox;
-
   customJsForFx = pkgs.fetchFromGitHub {
     owner = "Aris-t2";
     repo = "CustomJSForFx";
     rev = "4218e39d802d5852563d4da6e4c88ae91645b5cb";
     hash = "sha256-2Y9wso3nz3kdbfzl8Fk/qhL/v0epitrHUhHCjCKYsQ4=";
   };
+
+  firefox-unwrapped = let
+    src =
+      if pkgs.stdenv.hostPlatform.isDarwin
+      then unstable-pkgs.firefox-unwrapped
+      else pkgs.firefox-unwrapped;
+  in
+    (pkgs.runCommand "firefox-with-customjs" {} ''
+      RESOURCES="$out${resourcesPath}"
+
+      cp -RL ${src} $out
+      chmod -R u+w $RESOURCES
+      cp -L ${customJsForFx}/script_loader/firefox/config.js "$RESOURCES/config.js"
+      rm -R "$RESOURCES/defaults"
+      cp -RL ${customJsForFx}/script_loader/firefox/defaults "$RESOURCES/defaults"
+      chmod -R u-w $RESOURCES
+    '')
+    // {
+      inherit (src) applicationName binaryName ffmpegSupport gssSupport alsaSupport pipewireSupport sndioSupport jackSupport requireSigning allowAddonSideload gtk3 meta version;
+    };
 
   resourcesPath =
     if pkgs.stdenv.hostPlatform.isDarwin == true
@@ -33,29 +48,32 @@
     then "${config.home.homeDirectory}/Library/Caches/Firefox/Profiles/${profileName}/startupCache"
     else "${config.home.homeDirectory}/.cache/mozilla/firefox/${profileName}/startupCache";
 
-  firefox = lib.makeOverridable (attrs: let
-    f =
-      if pkgs.stdenv.hostPlatform.isDarwin == true
-      then firefox-unmodified
-      else
-        (
-          if attrs != {}
-          then firefox-unmodified.override attrs
-          else firefox-unmodified
-        );
-  in (pkgs.runCommand "firefox-with-customjs" {} ''
-    RESOURCES="$out${resourcesPath}"
-
-    cp -R ${f} $out
-    chmod -R u+w $RESOURCES
-    cp ${customJsForFx}/script_loader/firefox/config.js "$RESOURCES/config.js"
-    rm -R "$RESOURCES/defaults"
-    cp -R ${customJsForFx}/script_loader/firefox/defaults "$RESOURCES/defaults"
-    chmod -R u-w $RESOURCES
-  '')) {};
+  package =
+    if pkgs.stdenv.hostPlatform.isDarwin == true
+    then firefox-unwrapped
+    else
+      (pkgs.wrapFirefox firefox-unwrapped {
+        pname = "firefox-cjsfx-wrapped";
+      })
+      .overrideAttrs (prev: {
+        buildCommand = let
+        in
+          prev.buildCommand
+          + ''
+            # RESOURCES="$out${resourcesPath}"
+            # chmod -R u+w $RESOURCES
+            # cp -L ${customJsForFx}/script_loader/firefox/config.js "$RESOURCES/config.js"
+            # rm -R "$RESOURCES/defaults"
+            # cp -RL ${customJsForFx}/script_loader/firefox/defaults "$RESOURCES/defaults"
+            # chmod -R u-w $RESOURCES
+            cat > $out/foo.txt << _EOF
+            ${prev.buildCommand}
+            _EOF
+          '';
+      });
 
   firefoxMacOSCmd = pkgs.writeShellScriptBin "firefox" ''
-    cd ${firefox}/Applications/Firefox.app/Contents/MacOS
+    cd ${package}/Applications/Firefox.app/Contents/MacOS
     ./firefox $@
   '';
 
@@ -76,7 +94,7 @@ in
     config = {
       programs.firefox = {
         enable = true;
-        package = firefox;
+        inherit package;
         profiles = {
           ${profileName} = {
             isDefault = true;
@@ -90,6 +108,7 @@ in
               # "general.config.obscure_value" = 0;
               "devtools.chrome.enabled" = true;
               "devtools.debugger.remote-enabled" = true;
+              "browser.urlbar.showSearchSuggestionsFirst" = false;
               # "general.config.obscure_value" = 0;
               # "general.config.filename" = "config.js";
               # "general.config.sandbox_enabled" = false;

@@ -36,7 +36,7 @@
     enable = true;
     defaultUser = "max";
   };
-  features.vpn-config.enable = true;
+  # features.vpn-config.enable = true;
 
   system.stateVersion = "24.11";
 }

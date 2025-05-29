@@ -31,14 +31,39 @@ lib-mine.mkFeature "features.linux-desktop.panel" {
         bar.clock = {
           format = "%a %b %d  %H:%M";
         };
+        bar.launcher = {
+          icon = "";
+        };
         menus.dashboard = {
           powermenu = {
             avatar.image = "${config.identity.userImage}";
+
+            logout = "shutdownctl logout";
+            reboot = "shutdownctl reboot";
+            shutdown = "shutdownctl poweroff";
+            sleep = "shutdownctl suspend";
           };
           shortcuts = {
+            left = {
+              shortcut1 = {
+                command = "uwsm app -- firefox";
+                icon = "󰈹";
+                tooltip = "Firefox";
+              };
+              shortcut2 = {
+                command = "uwsm app -- kitty";
+                icon = "󰄛";
+                tooltip = "Kitty";
+              };
+              shortcut3 = {
+                command = "uwsm app -- slack";
+                icon = "󰒱";
+                tooltip = "Slack";
+              };
+            };
             right = {
               shortcut3 = {
-                command = "${self.misc-scripts-hyprdots}/bin/screenshot.sh sf";
+                command = "uwsm app -- ${self.misc-scripts-hyprdots}/bin/screenshot.sh sf";
                 icon = "󰄀";
                 tooltip = "Screenshot";
               };
@@ -50,7 +75,7 @@ lib-mine.mkFeature "features.linux-desktop.panel" {
             "*" = {
               left = ["dashboard" "workspaces" "windowtitle"];
               middle = ["media"];
-              right = ["volume" "network" "bluetooth" "battery" "systray" "clock" "notifications"];
+              right = ["volume" "network" "bluetooth" "battery" "systray" "clock" "hypridle" "notifications"];
             };
           };
         };
@@ -64,6 +89,7 @@ lib-mine.mkFeature "features.linux-desktop.panel" {
             unit = "metric";
           };
         };
+        scalingPriority = "hyprland";
         theme.font = {
           name = "Iosevka";
           size = "14px";
@@ -80,8 +106,7 @@ lib-mine.mkFeature "features.linux-desktop.panel" {
       Unit = {
         Description = "A Bar/Panel for Hyprland with extensive customizability.";
         Documentation = "https://hyprpanel.com";
-        PartOf = ["graphical-session.target"];
-        After = ["graphical-session-pre.target"];
+        After = ["hyprland-session.target"];
       };
       Service = {
         ExecStart = "${pkgs.hyprpanel}/bin/hyprpanel";
@@ -89,7 +114,6 @@ lib-mine.mkFeature "features.linux-desktop.panel" {
         Restart = "on-failure";
         KillMode = "mixed";
       };
-      Install = {WantedBy = ["hyprland-session.target"];};
     };
   };
 }

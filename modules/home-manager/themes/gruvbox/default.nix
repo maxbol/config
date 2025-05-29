@@ -219,7 +219,13 @@ in rec {
     }
     // (neovimOverrides palette);
 
-  desktop = makeDesktop {inherit accent telaMap;};
+  desktop = makeDesktop {
+    inherit accent;
+    iconTheme = {
+      package = pkgs.gruvbox-plus-icons;
+      name = "Gruvbox-Plus-Dark";
+    };
+  };
 
   gtk = {
     theme.package =
@@ -227,6 +233,7 @@ in rec {
       .gruvbox-gtk-theme
       .overrideAttrs (prev: {propagatedUserEnvPkgs = prev.propagatedUserEnvPkgs ++ [pkgs.gnome-themes-extra];});
     theme.name = "Gruvbox-${Luminance}";
+    hasGtk4Theme = true;
     documentFont = desktop.font;
     colorScheme = "prefer-${luminance}";
   };

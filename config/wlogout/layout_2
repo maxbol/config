@@ -1,27 +1,27 @@
 {
     "label" : "lock",
-    "action" : "loginctl lock-session",
+    "action" : "shutdownctl lock-session",
     "text" : "Lock",
     "keybind" : "l"
 }
 
 {
     "label" : "logout",
-    "action" : "hyprctl dispatch exit 0",
+    "action" : "shutdownctl logout",
     "text" : "Logout",
     "keybind" : "e"
 }
 
 {
     "label" : "shutdown",
-    "action" : "systemctl poweroff",
+    "action" : "shutdownctl poweroff",
     "text" : "Shutdown",
     "keybind" : "s"
 }
 
 {
     "label" : "reboot",
-    "action" : "systemctl reboot",
+    "action" : "shutdownctl reboot",
     "text" : "Reboot",
     "keybind" : "r"
 }

@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  suspendEnabled = true;
+  suspendEnabled = false;
 in
   lib-mine.mkFeature "features.linux-desktop.lockscreen" {
     assertions = [

@@ -3,29 +3,18 @@
   specialArgs,
   ...
 }: let
-  # telaMap = {
-  #   "blue" = "blue";
-  #   "flamingo" = "pink";
-  #   "green" = "green";
-  #   "lavender" = "blue";
-  #   "maroon" = "brown";
-  #   "mauve" = "purple";
-  #   "peach" = "orange";
-  #   "pink" = "pink";
-  #   "red" = "red";
-  #   "rosewater" = "pink";
-  #   "sapphire" = "blue";
-  #   "sky" = "blue";
-  #   "teal" = "blue";
-  #   "yellow" = "yellow";
-  # };
   makeDesktop = {
     accent,
-    telaMap,
+    telaMap ? {},
+    iconTheme ? {
+      package = pkgs.tela-icon-theme.overrideAttrs (final: prev: {
+        propagatedBuildInputs = prev.propagatedBuildInputs ++ [pkgs.adwaita-icon-theme pkgs.libsForQt5.breeze-icons];
+      });
+      name = "Tela-${telaMap.${accent} or "blue"}";
+    },
   }: {
     # Note: this propagatedInputs override should be upstreamed to nixpkgs
-    iconTheme.package = pkgs.tela-icon-theme.overrideAttrs (final: prev: {propagatedBuildInputs = prev.propagatedBuildInputs ++ [pkgs.adwaita-icon-theme pkgs.libsForQt5.breeze-icons];});
-    iconTheme.name = "Tela-${telaMap.${accent} or "blue"}";
+    inherit iconTheme;
     cursorTheme.package = pkgs.apple-cursor;
     cursorTheme.name = "macOS";
     cursorTheme.size = 28;

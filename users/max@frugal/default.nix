@@ -28,8 +28,7 @@
   };
 
   home.packages = with pkgs; [
-    xfce.thunar
-    dolphin
     nautilus
+    slack
   ];
 }
