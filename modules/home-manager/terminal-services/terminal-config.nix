@@ -7,6 +7,7 @@
 }: let
   cfg = config.features;
   nixpkgs-unstable = origin.inputs.nixpkgs-unstable.legacyPackages.${pkgs.system};
+  nerdfonts = origin.inputs.nixpkgs-legacy.legacyPackages.${pkgs.system}.nerdfonts;
 in {
   options = with lib; {
     features.terminal-services.terminal-config = {
@@ -22,7 +23,7 @@ in {
       (cfg.terminal-services.terminal-config.enable)
       {
         home.packages = [
-          pkgs.nerdfonts
+          nerdfonts
           # Necessary for Nautilus and other GNOME apps to correctly use kitty to open .desktop files with Terminal=true
           pkgs.xdg-terminal-exec
         ];

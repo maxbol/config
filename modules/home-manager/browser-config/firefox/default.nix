@@ -113,7 +113,7 @@ in
               # "general.config.filename" = "config.js";
               # "general.config.sandbox_enabled" = false;
             };
-            extensions = with extensions; [
+            extensions.packages = with extensions; [
               vimium
               ublock-origin
               brotab

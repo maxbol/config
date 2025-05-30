@@ -1,6 +1,7 @@
 {
   lib-mine,
   pkgs,
+  origin,
   ...
 }:
 lib-mine.mkFeature "features.desktop-config.hyprland" {
@@ -21,10 +22,6 @@ lib-mine.mkFeature "features.desktop-config.hyprland" {
     xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gtk];
 
     programs.dconf.enable = true;
-
-    environment.systemPackages = with pkgs; [
-      nerdfonts
-    ];
 
     # Required to allow swaylock/hyprlock to unlock.
     security.pam.services.swaylock = {};

@@ -7,9 +7,7 @@
     accent,
     telaMap ? {},
     iconTheme ? {
-      package = pkgs.tela-icon-theme.overrideAttrs (final: prev: {
-        propagatedBuildInputs = prev.propagatedBuildInputs ++ [pkgs.adwaita-icon-theme pkgs.libsForQt5.breeze-icons];
-      });
+      package = pkgs.tela-icon-theme;
       name = "Tela-${telaMap.${accent} or "blue"}";
     },
   }: {

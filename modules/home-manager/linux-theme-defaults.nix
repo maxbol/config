@@ -7,6 +7,7 @@
 }:
 lib-mine.mkFeature "features.linux-theme-defaults" {
   systemd.user.startServices = "sd-switch";
+
   theme-config = lib.mkMerge [
     {
       enable = true;
@@ -17,7 +18,8 @@ lib-mine.mkFeature "features.linux-theme-defaults" {
       desktop.enable = true;
       gtk = {
         enable = true;
-        gtk4.libadwaitaSupport = "patch-binary";
+        # gtk4.libadwaitaSupport = "patch-binary";
+        gtk4.libadwaitaSupport = "import";
       };
       qt.enable = true;
     }

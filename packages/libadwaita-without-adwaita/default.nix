@@ -16,4 +16,3 @@ libadwaita.overrideAttrs (prev: final: {
     '';
   doCheck = false;
 })
-

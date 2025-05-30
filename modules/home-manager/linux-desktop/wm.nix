@@ -31,8 +31,9 @@ in
 
     wayland.windowManager.hyprland = {
       enable = true;
-      plugins = with pkgs.hyprlandPlugins; [
-        hyprscroller
+      package = pkgs.hyprland;
+      plugins = [
+        # hyprscroller
       ];
       # TODO: this also installs a hyprland package, how does this conflict with the global install
       # package = vendor.hyprland.default;
@@ -56,13 +57,11 @@ in
     home.packages = with pkgs; [
       self.systemctl-toggle
       self.misc-scripts-hyprdots
-      xwaylandvideobridge
+      kdePackages.xwaylandvideobridge
       procps
       wl-clipboard
       wl-clipboard-x11
       cliphist
-      hyprlock
-      hypridle
       brightnessctl
       swappy
       uwsm

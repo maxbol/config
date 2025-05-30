@@ -14,5 +14,5 @@ lib-mine.mkFeature "features.graphics-config" {
     ];
   };
 
-  environment.systemPackages = with pkgs; [mesa-demos glxinfo nvtop];
+  environment.systemPackages = with pkgs; [mesa-demos glxinfo nvtopPackages.amd];
 }
