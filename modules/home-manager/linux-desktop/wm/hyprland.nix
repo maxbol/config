@@ -4,7 +4,6 @@
   lib,
   lib-mine,
   options,
-  # vendor,
   self,
   ...
 }: let
@@ -17,7 +16,7 @@
   #   };
   # };
 in
-  lib-mine.mkFeature "features.linux-desktop.wm" {
+  lib-mine.mkFeature "features.linux-desktop.wm.hyprland" {
     impure-config-management.config = lib.genAttrs [
       # "hypr/hypridle.conf"
       # "hypr/hyprlock.conf"
@@ -32,7 +31,9 @@ in
     wayland.windowManager.hyprland = {
       enable = true;
       package = pkgs.hyprland;
-      plugins = [
+      plugins = with pkgs.hyprlandPlugins; [
+        hyprscrolling
+        # self.hyprscroller
         # hyprscroller
       ];
       # TODO: this also installs a hyprland package, how does this conflict with the global install
@@ -85,23 +86,6 @@ in
 
       Install.WantedBy = ["hyprland-session.target"];
     };
-
-    systemd.user.services.chroma-launch = {
-      Unit = {
-        Description = "Set up theming scripts";
-        After = ["graphical-session-pre.target"];
-      };
-
-      Service = {
-        Type = "oneshot";
-        ExecStart = "${config.theme-config.themeDirectory}/active/activate";
-        Restart = "no";
-      };
-
-      Install.WantedBy = ["hyprland-session.target"];
-    };
-
-    theme-config.systemdTarget = "hyprland-session.target";
 
     services.network-manager-applet.enable = true;
     services.blueman-applet.enable = true;

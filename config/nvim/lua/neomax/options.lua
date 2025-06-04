@@ -18,7 +18,7 @@ g.markdown_recommended_style = 0
 opt.foldenable = true
 opt.foldmethod = "syntax"
 opt.cursorline = true
-opt.guicursor = "n-v-c-i:block-blinkon500-blinkwait3000-blinkoff500-Cursor/lCursor"
+opt.guicursor = "n-v-c:block-blinkon500-blinkwait3000-blinkoff500-Cursor/lCursor,i-ci:ver25"
 
 -- Hide mode notation in cmdline
 opt.showmode = false

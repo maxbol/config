@@ -401,9 +401,9 @@ in {
       };
 
       systemdTarget = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr (types.listOf types.str);
         default = null;
-        example = "hyprland-session.target";
+        example = ["hyprland-session.target"];
         description = ''
           A systemd (user) target as part of which the activation script should
           be run.
@@ -474,7 +474,7 @@ in {
         RemainAfterExit = true;
       };
 
-      Install.WantedBy = mkIf (cfg.systemdTarget != null) [cfg.systemdTarget];
+      Install.WantedBy = mkIf (cfg.systemdTarget != null) cfg.systemdTarget;
     };
 
     launchd.agents.chroma = {

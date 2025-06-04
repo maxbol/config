@@ -76,7 +76,11 @@ in
         bear
         meson
         ninja
+        cmake
         # gdb ## Only available on linux
+
+        # Vala
+        vala
 
         #OCaml
         ocaml

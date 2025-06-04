@@ -4,8 +4,8 @@
   ...
 }:
 lib-mine.mkFeature "features.linux-desktop.gaming" {
-  # Lutris Setup
   home.packages = with pkgs; [
+    steam
     # Lutris Setup
     (lutris.override {
       extraLibraries = pkgs: [
@@ -24,6 +24,7 @@ lib-mine.mkFeature "features.linux-desktop.gaming" {
         mangohud
       ];
     })
+    vulkan-tools
   ];
   home.sessionVariables = {
     MESA_GL_VERSION_OVERRIDE = "4.5";

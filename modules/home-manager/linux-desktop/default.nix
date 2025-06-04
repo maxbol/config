@@ -12,9 +12,8 @@ lib-mine.barrelGroup {
     "swim"
     "ui-toolkits"
     "wlogout"
+    "waybar"
     "wm"
-    /*
     "notifications"
-    */
   ];
 }

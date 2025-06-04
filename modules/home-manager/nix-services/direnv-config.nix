@@ -31,6 +31,7 @@ in
       };
 
       home.sessionVariables.DIRENV_LOG_FORMAT = "";
+
       launchd.agents.clearDirenv = {
         enable = true;
         config = {
@@ -38,6 +39,21 @@ in
           ProgramArguments = ["-c" ''rm -rf ${tmpDir}''${UID}/direnv/*''];
           RunAtLoad = true;
         };
+      };
+
+      systemd.user.services.clear-direnv = {
+        Unit = {
+          Description = "clear direnv roots";
+          Before = ["default.target"];
+        };
+
+        Service = {
+          Type = "oneshot";
+          Restart = "no";
+          ExecStart = ''/bin/sh -c "${pkgs.coreutils}/bin/rm -rf %t/direnv/*"'';
+        };
+
+        Install.WantedBy = ["default.target"];
       };
     }
   ])

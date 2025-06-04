@@ -9,10 +9,10 @@ fi
 # set file variables
 export CONF_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/wlogout"
 wLayout="$CONF_DIR/layout_$1"
-# wlTmplt="$CONF_DIR/style_$1.css"
+wlTmplt="$CONF_DIR/style_$1.css"
 
-# if [ ! -f "$wLayout" ] || [ ! -f "$wlTmplt" ]; then
-if [ ! -f "$wLayout" ]; then
+if [ ! -f "$wLayout" ] || [ ! -f "$wlTmplt" ]; then
+  # if [ ! -f "$wLayout" ]; then
   echo "ERROR: Config $1 not found..."
   exit 1
 fi
@@ -61,8 +61,8 @@ export active_rad=$((hypr_border * 5))
 export button_rad=$((hypr_border * 8))
 
 # eval config files
-# wlStyle=$(envsubst <"$wlTmplt")
+wlStyle=$(envsubst <"$wlTmplt")
 
 # launch wlogout
-# wlogout -b "$wlColms" -c 0 -r 0 -m 0 --layout "$wLayout" --css <(echo "$wlStyle") --protocol layer-shell
-wlogout -b "$wlColms" -c 0 -r 0 -m 0 --layout "$wLayout" --protocol layer-shell
+wlogout -b "$wlColms" -c 0 -r 0 -m 0 --layout "$wLayout" --css <(echo "$wlStyle") --protocol layer-shell
+# wlogout -b "$wlColms" -c 0 -r 0 -m 0 --layout "$wLayout" --protocol layer-shell

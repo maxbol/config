@@ -23,6 +23,7 @@
     ./palette.nix
     ./qt
     ./starship.nix
+    ./wlogout
     ./vscode.nix
     ./wezterm.nix
   ];

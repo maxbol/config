@@ -18,7 +18,7 @@ lib-mine.mkFeature "features.linux-desktop.notifications" {
       urgency_critical.icon = "${config.xdg.configHome}/dunst/icons/critical.svg";
     };
   };
-  systemd.user.services.dunst.Install.WantedBy = ["hyprland-session.target"];
+  systemd.user.services.dunst.Install.WantedBy = ["niri.service"];
 
   impure-config-management.config."dunst/dunstrc.d/00-hyprdots" = "config/dunst/dunstrc.d/00-hyprdots";
   # TODO: some icons, in particular volume icons are needed by the volumecontrol script and should maybe be colocated with that

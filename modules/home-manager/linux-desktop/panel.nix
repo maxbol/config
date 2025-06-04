@@ -25,6 +25,7 @@ lib-mine.mkFeature "features.linux-desktop.panel" {
     programs.hyprpanel = {
       enable = true;
       config.enable = false;
+      hyprland.enable = false;
       themeingIntegration.enable = true;
 
       settings = {
@@ -73,7 +74,13 @@ lib-mine.mkFeature "features.linux-desktop.panel" {
         layout = {
           "bar.layouts" = {
             "*" = {
-              left = ["dashboard" "workspaces" "windowtitle"];
+              left = [
+                "dashboard"
+                /*
+                "workspaces"
+                */
+                "windowtitle"
+              ];
               middle = ["media"];
               right = ["volume" "network" "bluetooth" "battery" "systray" "clock" "hypridle" "notifications"];
             };

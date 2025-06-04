@@ -5,11 +5,12 @@
   ...
 }:
 lib-mine.mkFeature "features.linux-desktop.swim" {
+  # services.swww.enable = true;
   programs.swww = {
     enable = true;
     systemd = {
       enable = true;
-      installTarget = "hyprland-session.target";
+      installTarget = ["hyprland-session.target" "niri.service"];
     };
   };
 

@@ -228,8 +228,7 @@ in rec {
   };
 
   gtk = {
-    theme.package =
-      pkgs
+    theme.package = pkgs
       .gruvbox-gtk-theme
       .overrideAttrs (prev: {propagatedUserEnvPkgs = prev.propagatedUserEnvPkgs ++ [pkgs.gnome-themes-extra];});
     theme.name = "Gruvbox-${Luminance}";

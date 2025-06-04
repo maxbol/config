@@ -30,5 +30,7 @@
   home.packages = with pkgs; [
     nautilus
     slack
+    discord
+    spotify
   ];
 }

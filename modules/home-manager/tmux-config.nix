@@ -31,7 +31,10 @@ in
         # beforeTargets = ["shutdown" "reboot" "poweroff" "soft-reboot"];
         execStart = pkgs.writeShellScript "tmux-shutdown.sh" ''
           export PATH=/home/$USER/.nix-profile/bin:/run/current-system/sw/bin:$PATH
-          ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh
+
+          if [[ ! -z $(pidof tmux) ]]; then
+            ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh
+          fi
         '';
       }
     ];
@@ -61,7 +64,9 @@ in
       Unit = {
         Description = "tmux default session (detached)";
         Documentation = "man:tmux(1)";
-        After = ["hyprland-session.target"];
+        # PartOf = ["graphical-session.target"];
+        After = ["clockifyd.service" "graphical-session-pre.target"];
+        # After = ["niri.service"];
       };
 
       Service = {
@@ -72,6 +77,7 @@ in
         SetLoginEnvironment = true;
         KillMode = "control-group";
         RestartSec = 2;
+        # Restart = "always";
         Restart = "on-failure";
         Environment = [
           "DISPLAY=:0"
@@ -81,7 +87,7 @@ in
         ];
       };
 
-      Install.WantedBy = ["hyprland-session.target"];
+      Install.WantedBy = ["niri.service" "hyprland-session.target"];
     });
 
     programs.tmux = {

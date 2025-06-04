@@ -13,9 +13,9 @@ in {
       package = mkPackageOption pkgs "swww" {};
       systemd.enable = mkEnableOption "swww systemd user service";
       systemd.installTarget = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr (types.listOf types.str);
         default = null;
-        example = "hyprland-session.target";
+        example = ["hyprland-session.target"];
         description = ''
           The systemd target to install the user service to. If null, the
           service will not be installed.
@@ -29,7 +29,7 @@ in {
     systemd.user.services.swww = mkIf cfg.systemd.enable {
       Unit = {
         Description = "swww wallpaper daemon";
-        After = ["graphical-session-pre.target"];
+        After = ["graphical-session.target"] ++ cfg.systemd.installTarget;
         PartOf = ["graphical-session.target"];
       };
 
@@ -43,7 +43,7 @@ in {
         ExecStop = "${cfg.package}/bin/swww kill";
       };
 
-      Install.WantedBy = mkIf (cfg.systemd.installTarget != null) [cfg.systemd.installTarget];
+      Install.WantedBy = mkIf (cfg.systemd.installTarget != null) cfg.systemd.installTarget;
     };
   };
 }

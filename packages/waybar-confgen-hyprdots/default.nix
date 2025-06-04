@@ -7,7 +7,7 @@
   systemd,
   procps,
   lib,
-  vendor,
+  hyprland,
   ...
 }:
 pkgs.writeShellApplication {
@@ -17,7 +17,7 @@ pkgs.writeShellApplication {
     dconf
     gawk
     gnused
-    vendor.hyprland.default
+    hyprland
     systemd
     procps
   ];

@@ -3,7 +3,7 @@
     font-size: ${fntSize}px;
 }
 
-@import "$HOME/.config/chroma/active/waybar/theme.css";
+@import "$HOME/.config/chroma/active/wlogout/theme.css";
 
 window {
     background-color: ${WindBg};

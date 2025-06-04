@@ -131,6 +131,7 @@ local servers = {
   "glsl_analyzer",
   "denols",
   "ols",
+  "vala_ls",
 }
 
 for _, lsp in ipairs(servers) do

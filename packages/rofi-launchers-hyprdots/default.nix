@@ -1,6 +1,7 @@
 {
   symlinkJoin,
   writeShellApplication,
+  bc,
   gnused,
   gawk,
   rofi-wayland,
@@ -26,6 +27,7 @@ symlinkJoin {
         rofi-wayland
         dunst
         dconf
+        bc
         cliphist
         self.chromactl
         self.nailgun

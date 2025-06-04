@@ -43,6 +43,7 @@ in
         shfmt
         sqlfluff
         sql-formatter
+        vala-language-server
       ];
       extraLuaPackages = ps: [ps.magick];
     };

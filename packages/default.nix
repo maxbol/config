@@ -8,6 +8,7 @@ packageArgs @ {pkgs, ...}: {
   hyprdots-kvantum = pkgs.callPackage ./hyprdots-kvantum packageArgs;
   hyprdots-qt5ct = pkgs.callPackage ./hyprdots-qt5ct packageArgs;
   hyprpanel-themes = pkgs.callPackage ./hyprpanel-themes packageArgs;
+  hyprscroller = pkgs.callPackage ./hyprscroller packageArgs;
   libadwaita-without-adwaita = pkgs.callPackage ./libadwaita-without-adwaita packageArgs;
   misc-scripts-hyprdots = pkgs.callPackage ./misc-scripts-hyprdots packageArgs;
   nailgun = pkgs.callPackage ./nailgun packageArgs;

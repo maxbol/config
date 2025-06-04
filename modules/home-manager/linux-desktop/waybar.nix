@@ -6,12 +6,12 @@
   ...
 }:
 lib-mine.mkFeature "features.linux-desktop.waybar" {
-  systemd.user.services.waybar = let
-    confgen = "${lib.getExe self.waybar-confgen-hyprdots}";
-  in {
-    Service.ExecStartPre = confgen;
-    Service.ExecReload = lib.mkForce confgen;
-  };
+  # systemd.user.services.waybar = let
+  #   confgen = "${lib.getExe self.waybar-confgen-hyprdots}";
+  # in {
+  #   Service.ExecStartPre = confgen;
+  #   Service.ExecReload = lib.mkForce confgen;
+  # };
 
   home.packages = [self.waybar-confgen-hyprdots];
 
@@ -20,7 +20,7 @@ lib-mine.mkFeature "features.linux-desktop.waybar" {
   programs.waybar = {
     enable = true;
     systemd.enable = true;
-    systemd.target = "hyprland-session.target";
+    systemd.target = "niri.service";
   };
 
   programs.waybar.style = ''

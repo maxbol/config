@@ -32,6 +32,10 @@ defines:
   :root, html, [dark] {
     --yt-spec-base-background: var(--site-bg) !important;
   }
+
+  #cinematics > div > div {
+    display: none;
+  }
 }
 
 @-moz-document domain(neovim.io) {

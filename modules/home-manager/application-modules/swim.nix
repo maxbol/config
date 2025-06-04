@@ -66,9 +66,9 @@ in {
         enable = mkEnableOption "swim systemd service";
 
         installTarget = mkOption {
-          type = types.nullOr types.str;
+          type = types.nullOr (types.listOf types.str);
           default = null;
-          example = "hyprland-session.target";
+          example = ["hyprland-session.target"];
           description = ''
             The target to install the systemd service to.
           '';
@@ -167,7 +167,7 @@ in {
         ExecStart = "${self.swimctl}/bin/swimctl activate";
       };
 
-      Install.WantedBy = mkIf (cfg.systemd.installTarget != null) [cfg.systemd.installTarget];
+      Install.WantedBy = mkIf (cfg.systemd.installTarget != null) cfg.systemd.installTarget;
     };
   };
 

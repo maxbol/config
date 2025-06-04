@@ -7,7 +7,7 @@
    TODO: instead of relying on some variables from waybar config, can we generate the relevant file directly?
    (same in style_2)
 */
-@import "$HOME/.config/chroma/active/waybar/theme.css";
+@import "$HOME/.config/chroma/active/wlogout/theme.css";
 
 window {
     background-color: ${WindBg};
