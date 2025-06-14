@@ -49,11 +49,11 @@
         "zig2nix": "zig2nix"
       },
       "locked": {
-        "lastModified": 1747422536,
-        "narHash": "sha256-fLiyqeRv/SkIpwR407J2eF0lF0AU6nijMNQ0aMDX/18=",
+        "lastModified": 1749919616,
+        "narHash": "sha256-Y2DeATP9ACSaQKMVZhGm/Ont73/Rl4Qwx7HjgSjMTcQ=",
         "owner": "maxbol",
         "repo": "clockifyd",
-        "rev": "114ebfb08211ef248442d3834f0a6b2ffaf06c29",
+        "rev": "3cbad447a42c78d828090b8b8bceff7a9adef851",
         "type": "github"
       },
       "original": {
@@ -546,6 +546,28 @@
         "type": "github"
       }
     },
+    "kmonad": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "dir": "nix",
+        "lastModified": 1746742173,
+        "narHash": "sha256-kid5CnnkWXjd6fkn+ckBVnLs9pTvlkacV5Ohual4UxM=",
+        "owner": "kmonad",
+        "repo": "kmonad",
+        "rev": "e716fb08a734e68eac3dd6ace784d4d8dd1c017a",
+        "type": "github"
+      },
+      "original": {
+        "dir": "nix",
+        "owner": "kmonad",
+        "repo": "kmonad",
+        "type": "github"
+      }
+    },
     "neovim-nightly-overlay": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -1015,11 +1037,11 @@
         "zig2nix": "zig2nix_3"
       },
       "locked": {
-        "lastModified": 1747420933,
-        "narHash": "sha256-fpmVXbOnNOfe+GqJ8lJfOkw7urH9ztfKeC9vhyx1Pag=",
+        "lastModified": 1749244663,
+        "narHash": "sha256-y/AEOp0AsJjeb9R38IKOd+bgMWip3RqF+hls48gwI6c=",
         "owner": "maxbol",
         "repo": "obsidian-remote",
-        "rev": "59d5f179749a84b7fc9fcd2e9487bcf144fff293",
+        "rev": "b72918c59dfdde83ac2ec45398021bacc081ee8e",
         "type": "github"
       },
       "original": {
@@ -1036,6 +1058,7 @@
         "home-manager": "home-manager",
         "hyprcursor": "hyprcursor",
         "hyprpanel": "hyprpanel",
+        "kmonad": "kmonad",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "niri": "niri",
         "nix-darwin": "nix-darwin",

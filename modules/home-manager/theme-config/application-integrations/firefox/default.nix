@@ -124,7 +124,7 @@ in {
 
               cp ${colorsCss} "$chrome_dir/colors.css"
               chown -R $USER "$chrome_dir/colors.css"
-              chmod 177 "$chrome_dir/colors.css"
+              chmod 644 "$chrome_dir/colors.css"
             '');
           };
       };

@@ -9,7 +9,7 @@ with lib; let
   cfg = config.programs.swim;
 
   wallpaperDir =
-    if cfg.chromaIntegration.enable
+    if cfg.themeingIntegration.enable
     then "${config.theme-config.themeDirectory}/active/swim/wallpapers"
     else cfg.wallpaperDirectory;
 
@@ -18,7 +18,7 @@ with lib; let
     mkdir -p "$SWIM_STATE_DIR/${name}"
     ln -sfn "$SWIM_STATE_DIR/${name}" "$SWIM_STATE_DIR/active"
     if ! [ -e "$SWIM_STATE_DIR/active/wallpaper" ]; then
-      ln -sfn "$(find "${wallpaperDir}/" -type f | head -1)" "$SWIM_STATE_DIR/active/wallpaper"
+      ln -sfn "$(realpath $(find "${wallpaperDir}/" -type f | head -1))" "$SWIM_STATE_DIR/active/wallpaper"
     fi
     ${self.swimctl}/bin/swimctl activate
   '';
@@ -49,7 +49,7 @@ in {
         '';
       };
 
-      chromaIntegration = {
+      themeingIntegration = {
         enable = mkOption {
           type = types.bool;
           default = true;
@@ -102,19 +102,19 @@ in {
       mkEnableOption "Chroma integration for Swim"
       // {
         readonly = true;
-        default = config.programs.swim.chromaIntegration.enable;
+        default = config.programs.swim.themeingIntegration.enable;
       };
   };
 
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.wallpaperDirectory != null || cfg.chromaIntegration.enable;
+        assertion = cfg.wallpaperDirectory != null || cfg.themeingIntegration.enable;
         message = "You must specify a wallpaper directory or enable chroma integration.";
       }
     ];
 
-    theme-config.programs.swim = mkIf cfg.chromaIntegration.enable {
+    theme-config.programs.swim = mkIf cfg.themeingIntegration.enable {
       themeOptions = {
         wallpaperDirectory = mkOption {
           type = with types; nullOr (oneOf [str path]);
@@ -138,7 +138,7 @@ in {
     home.file."${cfg.configurationDirectory}/config.json".text = builtins.toJSON {
       inherit (cfg) extraSwwwArgs;
       wallpaperDirectory =
-        if cfg.chromaIntegration.enable
+        if cfg.themeingIntegration.enable
         then "${config.theme-config.themeDirectory}/active/swim/wallpapers"
         else cfg.wallpaperDirectory;
     };
@@ -153,7 +153,7 @@ in {
 
     home.packages = [self.swimctl];
 
-    home.activation.swim = mkIf (!cfg.chromaIntegration.enable) (lib.hm.dag.entryAfter ["writeBoundary"] (mkSwimActivation {name = "no-chroma";}));
+    home.activation.swim = mkIf (!cfg.themeingIntegration.enable) (lib.hm.dag.entryAfter ["writeBoundary"] (mkSwimActivation {name = "no-chroma";}));
 
     systemd.user.services.swim-activation = mkIf cfg.systemd.enable {
       Unit = {

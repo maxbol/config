@@ -5,7 +5,7 @@
   ...
 }: let
   obsidian-remote-cli = vendor.obsidian-remote.default;
-  monoFont = "Iosevka";
+  monoFont = "Aporetic Sans Mono";
 in
   lib-mine.mkFeature "features.application-support.obsidian" {
     config = {

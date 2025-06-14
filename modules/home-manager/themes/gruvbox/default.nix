@@ -196,6 +196,10 @@ in rec {
     }
     // (rofiOverrides palette);
 
+  niri.colorOverrides = {
+    inactive-border = palette.accents.blue;
+  };
+
   tmux.colorOverrides = tmuxOverrides palette;
   sketchybar.colorOverrides = sketchybarOverrides palette;
 

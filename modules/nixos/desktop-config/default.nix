@@ -2,5 +2,5 @@
 lib-mine.barrelGroup {
   here = ./.;
   path = "features.desktop-config";
-  submodules = ["core-desktop" "hyprland" "niri" "ui-toolkits"];
+  submodules = ["appimage" "core-desktop" "flatpak" "hyprland" "niri" "ui-toolkits"];
 }

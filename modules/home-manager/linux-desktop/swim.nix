@@ -16,7 +16,7 @@ lib-mine.mkFeature "features.linux-desktop.swim" {
 
   programs.swim = {
     enable = true;
-    chromaIntegration = {
+    themeingIntegration = {
       enable = true;
     };
     wallpaperDirectory = lib.mkDefault "${config.home.homeDirectory}/wallpapers";

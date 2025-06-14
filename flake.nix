@@ -43,6 +43,11 @@
 
     hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
 
+    kmonad = {
+      url = "github:kmonad/kmonad?dir=nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     custom-udev-rules.url = "github:MalteT/custom-udev-rules";
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
@@ -210,6 +215,9 @@
               modules = [
                 hmModuleRoot
                 userModule
+                {
+                  programs.home-manager.enable = true;
+                }
                 ({lib, ...}: {
                   home.username = username;
                   home.homeDirectory =

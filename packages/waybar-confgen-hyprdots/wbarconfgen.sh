@@ -161,7 +161,8 @@ envsubst < $in_file > $out_file
 
 # override rounded couners
 
-hypr_border=`hyprctl -j getoption decoration:rounding | jq '.int'`
+# hypr_border=`hyprctl -j getoption decoration:rounding | jq '.int'`
+hypr_border=12
 if [ "$hypr_border" == "0" ] ; then
     sed -i "/border-radius: /c\    border-radius: 0px;" $out_file
 fi

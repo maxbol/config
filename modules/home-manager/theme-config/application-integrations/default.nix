@@ -7,6 +7,7 @@
     ./hyprpanel
     ./jankyborders
     ./kitty
+    ./niri
     ./obsidian
     ./rofi
     ./sketchybar

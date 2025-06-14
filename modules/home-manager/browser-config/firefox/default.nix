@@ -6,7 +6,6 @@
   lib-mine,
   ...
 }: let
-  unstable-pkgs = origin.inputs.nixpkgs-unstable.legacyPackages.${pkgs.system};
   extensions = config.nur.repos.rycee.firefox-addons;
 
   profileName = "default";
@@ -18,30 +17,22 @@
     hash = "sha256-2Y9wso3nz3kdbfzl8Fk/qhL/v0epitrHUhHCjCKYsQ4=";
   };
 
-  firefox-unwrapped = let
-    src =
-      if pkgs.stdenv.hostPlatform.isDarwin
-      then unstable-pkgs.firefox-unwrapped
-      else pkgs.firefox-unwrapped;
-  in
-    (pkgs.runCommand "firefox-with-customjs" {} ''
-      RESOURCES="$out${resourcesPath}"
-
-      cp -RL ${src} $out
-      chmod -R u+w $RESOURCES
-      cp -L ${customJsForFx}/script_loader/firefox/config.js "$RESOURCES/config.js"
-      rm -R "$RESOURCES/defaults"
-      cp -RL ${customJsForFx}/script_loader/firefox/defaults "$RESOURCES/defaults"
-      chmod -R u-w $RESOURCES
-    '')
-    // {
-      inherit (src) applicationName binaryName ffmpegSupport gssSupport alsaSupport pipewireSupport sndioSupport jackSupport requireSigning allowAddonSideload gtk3 meta version;
-    };
+  firefox-unwrapped = pkgs.firefox-bin-unwrapped.overrideAttrs (prev: {
+    installPhase =
+      prev.installPhase
+      + ''
+        resourceDir="$out${resourcesPath}"
+        cp ${./config.js} "$resourceDir/config.js"
+        rm -R "$resourceDir/defaults"
+        mkdir -p "$resourceDir/defaults/pref"
+        cp ${./config-prefs.js} "$resourceDir/defaults/pref/config-prefs.js"
+      '';
+  });
 
   resourcesPath =
     if pkgs.stdenv.hostPlatform.isDarwin == true
     then "/Applications/Firefox.app/Contents/Resources"
-    else "/lib/firefox";
+    else "/lib/firefox-bin-${lib.getVersion firefox-unwrapped}";
 
   startupCachePath =
     if pkgs.stdenv.hostPlatform.isDarwin == true
@@ -56,20 +47,16 @@
         pname = "firefox-cjsfx-wrapped";
       })
       .overrideAttrs (prev: {
-        buildCommand = let
-        in
-          prev.buildCommand
-          + ''
-            # RESOURCES="$out${resourcesPath}"
-            # chmod -R u+w $RESOURCES
-            # cp -L ${customJsForFx}/script_loader/firefox/config.js "$RESOURCES/config.js"
-            # rm -R "$RESOURCES/defaults"
-            # cp -RL ${customJsForFx}/script_loader/firefox/defaults "$RESOURCES/defaults"
-            # chmod -R u-w $RESOURCES
-            cat > $out/foo.txt << _EOF
-            ${prev.buildCommand}
-            _EOF
-          '';
+        buildCommand =
+          lib.strings.replaceStrings [
+            ''echo 'pref("general.config.filename", "mozilla.cfg");' > "$prefsDir/autoconfig.js"''
+          ] [
+            ''
+              echo 'pref("general.config.filename", "config.js");' > "$prefsDir/autoconfig.js"
+              echo 'pref("general.config.sandbox_enabled", false);' >> "$prefsDir/autoconfig.js"
+            ''
+          ]
+          prev.buildCommand;
       });
 
   firefoxMacOSCmd = pkgs.writeShellScriptBin "firefox" ''
@@ -104,14 +91,9 @@ in
               "shyfox.enable.ext.mono.context.icons" = true;
               "shyfox.enable.context.menu.icons" = true;
               "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-              # "general.config.filename" = "mozilla.cfg";
-              # "general.config.obscure_value" = 0;
               "devtools.chrome.enabled" = true;
               "devtools.debugger.remote-enabled" = true;
               "browser.urlbar.showSearchSuggestionsFirst" = false;
-              # "general.config.obscure_value" = 0;
-              # "general.config.filename" = "config.js";
-              # "general.config.sandbox_enabled" = false;
             };
             extensions.packages = with extensions; [
               vimium
@@ -127,17 +109,18 @@ in
         enable = true;
         profile = profileName;
         flattenCss = true;
-        # copyOnActivation = true;
         config = {
           displayNavButtons = true;
           displaySidebarTools = true;
           displayTitles = false;
           font = {
-            family = "Iosevka";
+            family = "Aporetic Sans Mono";
             size = "18px";
           };
         };
       };
+
+      theme-config.firefox.copyOnActivation = true;
 
       home.packages = with pkgs; [
         brotab
@@ -165,8 +148,6 @@ in
           chmod u+w "$CHROME_DIR/userChrome/autoReloadCss.uc.js"
           cp ${userChromeJS} "$CHROME_DIR/userChrome.js"
           chmod u+w "$CHROME_DIR/userChrome.js"
-          cp ${customJsForFx}/script_loader/firefox/config.js "$CHROME_DIR/config.js"
-          chmod u+w "$PROFILE_DIR/config.js"
         '';
 
       home.activation.clearFirefoxStartupCache =

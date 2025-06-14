@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  self,
   lib,
   lib-mine,
   ...
@@ -52,10 +53,16 @@ in {
           #   size = 18;
           # };
           default = {
-            name = "Iosevka";
+            name = "Aporetic Sans Mono";
             size = 14;
-            package = pkgs.iosevka;
+            # package = pkgs.aporetic;
+            package = self.aporetic-kitty;
           };
+          # default = {
+          #   name = "Iosevka";
+          #   size = 14;
+          #   package = pkgs.iosevka;
+          # };
           description = ''
             The font to use in kitty.
           '';

@@ -1,20 +1,20 @@
-vim.o.guifont = "Iosevka:h18" -- text below applies for VimScript
+vim.o.guifont = "Aporetic Sans Mono:h18" -- text below applies for VimScript
 vim.g.neovide_window_blurred = true
 vim.g.neovide_opacity = 0.8
 vim.g.neovide_normal_opacity = 0.8
 
 vim.g.neovide_scale_factor = 1.0
 local change_scale_factor = function(delta)
-	vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta
+  vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta
 end
 print("setting neovide specific keymaps")
 vim.keymap.set("n", "<D-=>", function()
-	print("zoom in")
-	change_scale_factor(1.10)
+  print("zoom in")
+  change_scale_factor(1.10)
 end)
 vim.keymap.set("n", "<D-->", function()
-	print("zoom out")
-	change_scale_factor(1 / 1.10)
+  print("zoom out")
+  change_scale_factor(1 / 1.10)
 end)
 
 vim.keymap.set({ "n", "v", "i", "x", "c" }, "<D-n>", ":silent exec '!neovide'<CR>")

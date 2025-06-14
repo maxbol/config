@@ -222,7 +222,8 @@ in rec {
       .rose-pine-gtk-theme;
     theme.name = gtkThemeName;
     documentFont = desktop.font;
-    colorScheme = "prefer-light"; # A quirk of the GTK theme
+    # colorScheme = "prefer-light"; # A quirk of the GTK theme
+    colorScheme = "prefer-dark";
   };
 
   qt = {

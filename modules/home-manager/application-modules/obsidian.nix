@@ -25,6 +25,11 @@ in
         config = mkOption {
           type = types.submodule {
             options = {
+              plugins = mkOption {
+                type = types.listOf types.path;
+                default = [];
+              };
+
               appearance = mkOption {
                 type = types.submodule {
                   options = {
@@ -75,6 +80,21 @@ in
       in {
         home = foldl' (acc: vaultDir: mkDebug vaultDir // acc) {} cfg.vaults;
       }))
+      (
+        mkIf (cfg.enable) (let
+          mkPlugin = vaultDir: source: let
+            pluginName = lib.getName source;
+          in {
+            "${vaultDir}/.obsidian/plugins/${pluginName}" = {
+              inherit source;
+            };
+          };
+
+          mkVaultPlugins = vaultDir: foldl' (acc: plugin: acc // (mkPlugin vaultDir plugin)) {} cfg.config.plugins;
+        in {
+          home.file = foldl' (acc: vaultDir: acc // (mkVaultPlugins vaultDir)) {} cfg.vaults;
+        })
+      )
       # Appearance settings
       (
         mkIf (cfg.enable && cfg.config.appearance.enable) (let

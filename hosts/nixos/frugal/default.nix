@@ -38,5 +38,10 @@
   };
   # features.vpn-config.enable = true;
 
+  programs.nh = {
+    enable = true;
+    flake = "/home/max/src/config";
+  };
+
   system.stateVersion = "24.11";
 }

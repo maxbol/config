@@ -22,7 +22,8 @@ lib-mine.mkFeature "features.linux-desktop.rofi" {
       enable = true;
       package = pkgs.rofi-wayland;
       terminal = "${kitty}/bin/kitty";
-      font = "Iosevka Nerd Font 14";
+      font = "Aporetic Sans Mono 14";
+      # font = "Iosevka Nerd Font 14";
       # font = "JetBrainsMono Nerd Font 10";
       # FIXME: by default location, xoffset, yoffset are set; we probably don't want these set here
       imports = ["${config.xdg.configHome}/rofi/config.style.rasi"];
@@ -40,6 +41,7 @@ lib-mine.mkFeature "features.linux-desktop.rofi" {
       self.rofi-launchers-hyprdots
       self.nailgun
       pkgs.iosevka
+      self.aporetic-kitty
     ];
 
     theme-config.extraActivationCommands = theme: ''

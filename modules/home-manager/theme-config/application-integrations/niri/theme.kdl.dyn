@@ -1,0 +1,15 @@
+---
+defines:
+  active-border-color: accent1
+  inactive-border-color: accent2
+---
+
+layout {
+  focus-ring {
+    off;
+  }
+  border {
+    active-color "#⟨active-border-color:hex⟩"
+    inactive-color "#⟨inactive-border-color:hex⟩"
+  }
+}

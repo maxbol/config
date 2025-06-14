@@ -77,7 +77,7 @@ in
         meson
         ninja
         cmake
-        # gdb ## Only available on linux
+        # clang
 
         # Vala
         vala
@@ -146,6 +146,9 @@ in
         lsof
         # netcat-openbsd
         # procps
+
+        # QMK keyboard firmware
+        qmk
       ])
       ++ [
         # Wrappers, custom and non-nixpkgs packages
@@ -156,5 +159,8 @@ in
         synp
         zig
         zls
-      ];
+      ]
+      ++ (
+        lib.optionals (pkgs.stdenv.hostPlatform.isLinux) [pkgs.gdb]
+      );
   }

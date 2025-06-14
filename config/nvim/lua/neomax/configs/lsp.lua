@@ -132,6 +132,7 @@ local servers = {
   "denols",
   "ols",
   "vala_ls",
+  "mesonlsp",
 }
 
 for _, lsp in ipairs(servers) do

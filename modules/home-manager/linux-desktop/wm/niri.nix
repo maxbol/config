@@ -4,29 +4,32 @@
   lib,
   origin,
   pkgs,
+  self,
   ...
 }:
 lib-mine.mkFeature "features.linux-desktop.wm.niri" {
   imports = [
     origin.inputs.niri.homeModules.niri
   ];
+
   config = {
     systemd.user.services.xembedsniproxy = {
       Unit = {
         ConditionEnvironment = "WAYLAND_DISPLAY";
         Description = "display windows application tray icons in system tray";
-        After = ["niri.service" "graphical-session.target"];
+        After = ["niri.service" "xwayland-satellite.service" "graphical-session.target"];
       };
 
       Service = {
-        ExecStart = "${pkgs.kdePackages.plasma-workspace}/bin/xembedsniproxy";
+        ExecStart = "${lib.getExe pkgs.zsh} -c \"${pkgs.kdePackages.plasma-workspace}/bin/xembedsniproxy\"";
+        Restart = "on-failure";
+        Environment = [
+          "DISPLAY=:0"
+          "PATH=${config.home.profileDirectory}/bin"
+        ];
       };
 
       Install.WantedBy = ["niri.service"];
-
-      Environment = {
-        DISPLAY = ":0";
-      };
     };
 
     systemd.user.services.xwayland-satellite = {
@@ -45,7 +48,8 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
 
     programs.niri.enable = true;
     programs.niri.package = pkgs.niri-unstable;
-    programs.niri.settings = {
+
+    theme-config.niri.baseConfig = {
       outputs = {
         "DP-1" = {
           # mode = "preferred";
@@ -75,8 +79,8 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         "Ctrl+Alt+M".action = set-column-width "100%";
 
         "Ctrl+Mod+H".action = move-column-left-or-to-monitor-left;
-        "Ctrl+Mod+J".action = move-window-down;
-        "Ctrl+Mod+K".action = move-window-up;
+        "Ctrl+Mod+J".action = move-window-down-or-to-workspace-down;
+        "Ctrl+Mod+K".action = move-window-up-or-to-workspace-up;
         "Ctrl+Mod+L".action = move-column-right-or-to-monitor-right;
 
         "Shift+Mod+H".action = consume-or-expel-window-left;
@@ -84,10 +88,16 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         "Shift+Mod+K".action = move-window-up-or-to-workspace-up;
         "Shift+Mod+L".action = consume-or-expel-window-right;
 
+        "Ctrl+Shift+Mod+H".action = focus-monitor-left;
+        "Ctrl+Shift+Mod+L".action = focus-monitor-right;
+
+        "Ctrl+Alt+Shift+H".action = move-window-to-monitor-left;
+        "Ctrl+Alt+Shift+L".action = move-window-to-monitor-right;
+
         "Shift+Mod+F".action = fullscreen-window;
         "Ctrl+Shift+F".action = toggle-overview;
 
-        "Ctrl+Space".action = spawn ["rofi" "-show" "drun"];
+        "Ctrl+Space".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "d"];
         "Ctrl+Mod+Space".action = spawn ["1password" "--quick-access"];
 
         "Mod+Q".action = close-window;
@@ -95,6 +105,13 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         "Ctrl+Shift+T".action = spawn "kitty";
         "Ctrl+Shift+M".action = spawn "nautilus";
         "Ctrl+Shift+B".action = spawn "firefox";
+
+        "Shift+Mod+W".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "w"];
+        "Shift+Mod+E".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "f"];
+        "Shift+Mod+R".action = spawn "${self.rofi-launchers-hyprdots}/bin/rofiselect.sh";
+        "Shift+Mod+T".action = spawn "${self.rofi-launchers-hyprdots}/bin/themeselect.sh";
+        "Shift+Mod+V".action = spawn ["${self.rofi-launchers-hyprdots}/bin/cliphist.sh" "c"];
+        "Shift+Mod+C".action = center-window;
 
         "XF86AudioMute".action = spawn ["volumecontrol.sh" "-o" "m"];
         "XF86AudioMicMute".action = spawn ["volumecontrol.sh" "-i" "m"];
@@ -108,7 +125,8 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         "Mod+Shift+Return".action = spawn "wlogout";
       };
       layout = {
-        default-column-display = "tabbed";
+        default-column-display = "normal";
+
         preset-column-widths = [
           {proportion = 2. / 3.;}
           {proportion = 1. / 3.;}
@@ -122,13 +140,33 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         default-column-width = {
           proportion = 1. / 2.;
         };
+
+        border.enable = true;
+        border.width = 2;
+        focus-ring.enable = false;
       };
+      window-rules = [
+        {
+          geometry-corner-radius = let
+            radius = 12.;
+          in {
+            bottom-left = radius;
+            bottom-right = radius;
+            top-left = radius;
+            top-right = radius;
+          };
+          clip-to-geometry = true;
+          default-column-display = "normal";
+          draw-border-with-background = false;
+        }
+      ];
       input = {
-        # keyboard = {
-        #   xkb = {
-        #     options = "caps:escape,ctrl:swap_lalt_lctl,ctrl:swap_ralt_rctl";
-        #   };
-        # };
+        keyboard = {
+          xkb = {
+            layout = "us,se";
+            options = "grp:shift_caps_toggle";
+          };
+        };
         mouse = {
           natural-scroll = true;
         };
@@ -152,6 +190,10 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         DISPLAY = ":0"; #Needed for xwayland-satellite apps
       };
     };
+
     home.packages = with pkgs; [xwayland-satellite];
+
+    services.network-manager-applet.enable = true;
+    services.blueman-applet.enable = true;
   };
 }

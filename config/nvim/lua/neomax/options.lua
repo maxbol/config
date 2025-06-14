@@ -116,7 +116,7 @@ augroup END
 vim.cmd([[autocmd! BufNewFile,BufRead *.vs,*.fs,*.frag,*.vert set ft=glsl]])
 
 -- Diagnostics as virtual text
-vim.diagnostic.config({ virtual_text = true })
+vim.diagnostic.config({ virtual_lines = true })
 
 -- require("vim._extui").enable({})
 

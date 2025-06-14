@@ -98,7 +98,7 @@ lib-mine.mkFeature "features.linux-desktop.panel" {
         };
         scalingPriority = "hyprland";
         theme.font = {
-          name = "Iosevka";
+          name = "Aporetic Sans Mono";
           size = "14px";
         };
         terminal = "$TERMINAL";

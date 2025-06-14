@@ -4,6 +4,7 @@
   lib,
   origin,
   lib-mine,
+  vendor,
   ...
 }: let
   cfg = config.theme-config;
@@ -67,6 +68,9 @@ in
         mkIf (cfg.enable && cfg.obsidian.enable) {
           programs.obsidian = {
             config = {
+              plugins = [
+                vendor.obsidian-remote.plugin
+              ];
               appearance = {
                 enable = true;
                 cssTheme = config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/chroma/active/obsidian/obsidianChroma";

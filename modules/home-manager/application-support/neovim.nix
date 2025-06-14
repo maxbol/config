@@ -44,6 +44,8 @@ in
         sqlfluff
         sql-formatter
         vala-language-server
+        clang-tools
+        mesonlsp
       ];
       extraLuaPackages = ps: [ps.magick];
     };

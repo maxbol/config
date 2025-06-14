@@ -19,9 +19,13 @@
     font.name = "Cantarell";
     font.size = 14;
     font.package = pkgs.cantarell-fonts;
-    monospaceFont.name = "Iosevka";
+    monospaceFont.name = "Aporetic Sans Mono";
     monospaceFont.size = 12;
-    monospaceFont.package = pkgs.iosevka;
+    # monospaceFont.package = pkgs.aporetic;
+    monospaceFont.package = specialArgs.self.aporetic-kitty;
+    # monospaceFont.name = "Iosevka";
+    # monospaceFont.size = 12;
+    # monospaceFont.package = pkgs.iosevka;
   };
 
   makeTheme = path: args: (pkgs.callPackage path (specialArgs // args // {inherit makeDesktop;}));

@@ -28,33 +28,33 @@ map("n", "<leader>qq", "<cmd>cope<CR>", { desc = "Open quickfix list" })
 map("n", "<leader>qc", "<cmd>cexpr []<CR>", { desc = "Clear quickfix list" })
 
 map("n", "<leader>fm", function()
-	require("conform").format({ lsp_fallback = true })
+  require("conform").format({ lsp_fallback = true })
 end, { desc = "Format Files" })
 
 -- Copilot
 vim.keymap.set("i", "<C-l>", function()
-	local copilot_fn = vim.fn["copilot#Accept"]
-	if copilot_fn then
-		local copilot_keys = vim.fn["copilot#Accept"]()
-		if copilot_keys ~= "" then
-			vim.api.nvim_feedkeys(copilot_keys, "i", true)
-			return
-		end
-	end
-	local keys = vim.api.nvim_replace_termcodes("<Right>", true, true, true)
-	vim.api.nvim_feedkeys(keys, "i", false)
+  local copilot_fn = vim.fn["copilot#Accept"]
+  if copilot_fn then
+    local copilot_keys = vim.fn["copilot#Accept"]()
+    if copilot_keys ~= "" then
+      vim.api.nvim_feedkeys(copilot_keys, "i", true)
+      return
+    end
+  end
+  local keys = vim.api.nvim_replace_termcodes("<Right>", true, true, true)
+  vim.api.nvim_feedkeys(keys, "i", false)
 end, { expr = true, silent = true })
 
 -- Comment
 map("n", "<leader>/", function()
-	require("Comment.api").toggle.linewise.current()
+  require("Comment.api").toggle.linewise.current()
 end, { desc = "Comment Toggle" })
 
 map(
-	"v",
-	"<leader>/",
-	"<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>",
-	{ desc = "Comment Toggle" }
+  "v",
+  "<leader>/",
+  "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>",
+  { desc = "Comment Toggle" }
 )
 
 -- Extra incremente/decrement mappings to allow me to keep C-A as my tmux leader :)
@@ -62,34 +62,34 @@ map({ "n", "x" }, "<M-a>", "<C-a>", { noremap = true, silent = true })
 map({ "n", "x" }, "<M-x>", "<C-x>", { noremap = true, silent = true })
 
 map("n", "<leader><leader>", function()
-	require("telescope.builtin").find_files({
-		find_command = { "rg", "--ignore", "--files", "--sortr", "accessed" },
-		cwd = vim.fn.getcwd(-1),
-	})
+  require("telescope.builtin").find_files({
+    find_command = { "rg", "--ignore", "--files", "--sortr", "accessed" },
+    cwd = vim.fn.getcwd(-1),
+  })
 end, { desc = "Telescope find (based on access time)" })
 
 map("n", "<leader>ff", function()
-	require("telescope.builtin").find_files({
-		cwd = vim.fn.getcwd(-1),
-	})
+  require("telescope.builtin").find_files({
+    cwd = vim.fn.getcwd(-1),
+  })
 end, { desc = "Telescope find files" })
 
 map("n", "<leader>fa", function()
-	require("telescope.builtin").find_files({
-		follow = true,
-		no_ignore = true,
-		hidden = true,
-	})
+  require("telescope.builtin").find_files({
+    follow = true,
+    no_ignore = true,
+    hidden = true,
+  })
 end, { desc = "Telescope Find all files" })
 
 map("n", "<leader>fw", function()
-	require("telescope.builtin").live_grep({
-		cwd = vim.fn.getcwd(-1),
-	})
+  require("telescope.builtin").live_grep({
+    cwd = vim.fn.getcwd(-1),
+  })
 end, { desc = "Telescope Live grep" })
 
 map("n", "<leader>fo", function()
-	require("telescope.builtin").oldfiles({ cwd = vim.fn.getcwd(-1), cwd_only = true })
+  require("telescope.builtin").oldfiles({ cwd = vim.fn.getcwd(-1), cwd_only = true })
 end, { desc = "Telescope Find oldfiles" })
 
 map("n", "<leader>fb", "<cmd>Telescope buffers<CR>", { desc = "Telescope Find buffers" })
@@ -97,9 +97,9 @@ map("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", { desc = "Telescope Help 
 map("n", "<leader>f/", "<cmd>Telescope current_buffer_fuzzy_find<CR>", { desc = "Telescope Find in current buffer" })
 map("n", "<leader>fs", "<cmd>Telescope lsp_document_symbols<CR>", { desc = "Telescope Find symbol in document" })
 map("n", "<leader>fS", function()
-	require("telescope.builtin").lsp_dynamic_workspace_symbols({
-		symbols = { "function", "class", "interface", "method", "enum" },
-	})
+  require("telescope.builtin").lsp_dynamic_workspace_symbols({
+    symbols = { "function", "class", "interface", "method", "enum" },
+  })
 end, { desc = "Telescope Find symbol in workspace" })
 
 -- Telescope Obsidian commands
@@ -145,7 +145,7 @@ map({ "n", "x" }, "gm", "<cmd>vertical Man<cr>", { desc = "Goto manpage" })
 map("n", "<leader>wK", "<cmd>WhichKey <CR>", { desc = "Whichkey all keymaps" })
 
 map("n", "<leader>wk", function()
-	vim.cmd("WhichKey " .. vim.fn.input("WhichKey: "))
+  vim.cmd("WhichKey " .. vim.fn.input("WhichKey: "))
 end, { desc = "Whichkey query lookup" })
 
 -- custom surround mappings, so that we can have both s and S dedicated to leap in
@@ -170,12 +170,12 @@ map("n", "<leader>=", "<cmd>NoNeckPain<CR>", { desc = "Toggle no neck pain mode"
 
 -- toggle conceallevel for buffer
 map("n", "<leader>-", function()
-	local current = vim.wo.conceallevel
-	if current == 0 then
-		vim.wo.conceallevel = 2
-	else
-		vim.wo.conceallevel = 0
-	end
+  local current = vim.wo.conceallevel
+  if current == 0 then
+    vim.wo.conceallevel = 2
+  else
+    vim.wo.conceallevel = 0
+  end
 end, { desc = "Toggle conceallevel" })
 
 vim.api.nvim_create_autocmd("BufReadPost", { pattern = "quickfix", command = "nnoremap <buffer> <CR> <CR>" })
@@ -185,11 +185,13 @@ map("n", "<C-p>", "<cmd>cp<CR>", { desc = "Prev quickfix" })
 
 -- Math stuff
 map({ "n", "x" }, "<leader>m", function()
-	vim.api.nvim_input(":s/\\d\\+/\\=submatch(0)/<Left>")
+  vim.api.nvim_input(":s/\\d\\+/\\=submatch(0)/<Left>")
 end, { desc = "Multiply cword" })
 
 -- Undotree
 map("n", "<leader>u", "<Cmd>UndotreeToggle<CR>", { desc = "Toggle undotree" })
+
+vim.keymap.del({ "i", "s" }, "<Tab>")
 
 -- Live preview of qflist buffers
 -- vim.api.nvim_create_autocmd("FileType", {

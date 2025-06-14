@@ -10,6 +10,8 @@
   # features.secrets-management.enable = true;
   features.application-support.enable = true;
   features.default-development-environment.enable = true;
+  features.office-suite.enable = true;
+  features.streaming.enable = true;
   features.git-config.enable = true;
   features.linux-desktop.enable = true;
   features.nix-services.enable = true;

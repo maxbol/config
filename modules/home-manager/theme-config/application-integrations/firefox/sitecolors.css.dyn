@@ -51,3 +51,9 @@ defines:
     --AppHeader-bg: var(--site-bg) !important;
   }
 }
+
+@-moz-document domain(noogle.dev) {
+  body {
+    background-color: var(--site-bg) !important;
+  }
+}

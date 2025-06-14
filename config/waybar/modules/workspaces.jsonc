@@ -1,9 +1,4 @@
-    "hyprland/workspaces": {
-        "disable-scroll": true,
-        "all-outputs": true,
-        "active-only": false,
-        "on-click": "activate",
-        "persistent-workspaces": {
-            "1": []
-        }
+    "niri/workspaces": {
+      "all-outputs": false,
+      "current-only": false,
     },

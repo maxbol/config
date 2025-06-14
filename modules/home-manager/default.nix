@@ -11,8 +11,10 @@
     ./linux-desktop
     ./linux-theme-defaults.nix
     ./nix-services
+    ./office-suite.nix
     ./replace-runtime-dependencies.nix
     ./secrets-management.nix
+    ./streaming.nix
     ./terminal-services
     ./theme-config
     ./theme-defaults.nix

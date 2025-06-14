@@ -1,5 +1,6 @@
 {
   lib-mine,
+  self,
   pkgs,
   ...
 }:
@@ -9,6 +10,7 @@ lib-mine.mkFeature "features.linux-desktop.fonts" {
   };
 
   home.packages = [
+    self.aporetic-kitty
     pkgs.iosevka
     pkgs.font-manager
   ];

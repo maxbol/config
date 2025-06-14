@@ -1,4 +1,9 @@
+const POLL_INTERVAL = 1000;
+
 (function () {
+
+  console.log("[userChrome.js] Loading autoReloadCss.uc.js")
+
   const { classes: Cc, interfaces: Ci } = Components;
 
   const dirSvc = Cc["@mozilla.org/file/directory_service;1"]
@@ -76,8 +81,8 @@
     }
   }
 
-  // Poll every 3 seconds
-  setInterval(checkForChanges, 3000);
+  // Poll intermittently
+  setInterval(checkForChanges, POLL_INTERVAL);
 
   console.log("[userChrome.js] Loaded autoReloadCss.uc.js")
 })();

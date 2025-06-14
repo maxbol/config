@@ -1,5 +1,6 @@
 packageArgs @ {pkgs, ...}: {
   aerospace-swipe = pkgs.callPackage ./aerospace-swipe packageArgs;
+  aporetic-kitty = pkgs.callPackage ./aporetic-kitty packageArgs;
   chromactl = pkgs.callPackage ./chromactl packageArgs;
   clockify-cli = pkgs.callPackage ./clockify-cli packageArgs;
   clockify-tmux = pkgs.callPackage ./clockify-tmux packageArgs;
