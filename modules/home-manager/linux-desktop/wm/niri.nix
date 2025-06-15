@@ -159,6 +159,14 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
           default-column-display = "normal";
           draw-border-with-background = false;
         }
+        {
+          matches = [
+            {
+              app-id = ".blueman-manager-wrapped";
+            }
+          ];
+          open-floating = true;
+        }
       ];
       input = {
         keyboard = {

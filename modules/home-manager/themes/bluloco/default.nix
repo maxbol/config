@@ -150,12 +150,17 @@ in rec {
     then palette_dark
     else palette_light;
 
-  desktop = makeDesktop {inherit accent telaMap;};
+  desktop = makeDesktop {
+    inherit accent;
+    iconTheme = {
+      package = pkgs.papirus-icon-theme;
+      name = "Papirus-Dark";
+    };
+  };
 
   # TODO(2025-05-19, Max Bolotin): Copying this from gruvbox for now, should be replace with theme specific
   gtk = {
-    theme.package =
-      pkgs
+    theme.package = pkgs
       .gruvbox-gtk-theme
       .overrideAttrs (prev: {propagatedUserEnvPkgs = prev.propagatedUserEnvPkgs ++ [pkgs.gnome-themes-extra];});
     theme.name = "Gruvbox-Dark";
@@ -168,6 +173,11 @@ in rec {
       package = self.hyprdots-kvantum;
       name = "Gruvbox-Retro";
     };
+  };
+
+  niri.colorOverrides = {
+    inactive-border = palette.accents.blue;
+    active-border = palette.accents.green;
   };
 
   hyprland.colorOverrides = hyprlandOverrides palette;
@@ -225,7 +235,7 @@ in rec {
   };
 
   macoswallpaper = {
-    wallpaper = ./wallpapers/wallpaper.png;
+    wallpaper = ./wallpapers/wallpaper.jpg;
   };
 
   swim.wallpaperDirectory = ./wallpapers;

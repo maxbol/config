@@ -33,6 +33,7 @@ if [ -n "${1+x}" ]; then
             num_files=$(wc -l < $conf_ctl)
             ACTIVE_IDX=$(( (ACTIVE_IDX + num_files - 1) % num_files ))
         ;;
+        r) ;; # Do nothing, just reload
         *)
             echo "Unrecognized argument" >&2
             exit 1

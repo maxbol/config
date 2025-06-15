@@ -3,6 +3,7 @@
   lib,
   lib-mine,
   pkgs,
+  self,
   ...
 }:
 with lib; let
@@ -31,8 +32,9 @@ in {
 
     theme-config.programs.waybar = {
       reloadCommand = ''
-        ${pkgs.procps}/bin/pkill -u $USER -USR2 waybar || true
+        ${lib.getExe self.waybar-confgen-hyprdots} r
       '';
+      # ${pkgs.procps}/bin/pkill -u $USER -USR2 waybar || true
 
       themeOptions = {
         colorOverrides = mkOption {

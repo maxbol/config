@@ -2,8 +2,6 @@
   config,
   lib,
   lib-mine,
-  pkgs,
-  origin,
   ...
 }:
 with lib; let
