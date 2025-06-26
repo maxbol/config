@@ -1,9 +1,9 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # compositor specific info
 if [[ ! -z "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
   compositor="hyprland"
-  focused_monitor=$(hyprctl -j monitors | jq '.[] | select(.focused=true)')
+  focused_monitor=$(hyprctl -j monitors | jq '.[] | select(.focused==true)')
   cursor_pos=$(hyprctl -j cursorpos)
   x_monres=$(echo $focused_monitor | jq '.width')
   y_monres=$(echo $focused_monitor | jq '.height')

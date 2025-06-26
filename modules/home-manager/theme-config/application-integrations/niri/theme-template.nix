@@ -2,12 +2,13 @@ lib: palette:
 with lib;
   {
     active-border ? palette.semantic.accent1,
-    inactive-border ? palette.semantic.accent2,
+    inactive-border ? palette.semantic.text2,
+    screencast-border ? palette.colors.green,
   }: {
     layout = {
       border = {
         enable = mkForce true;
-        width = mkForce 2;
+        width = mkForce 3;
         active = mkForce {
           color = "#${active-border}";
         };
@@ -17,4 +18,17 @@ with lib;
       };
       focus-ring.enable = mkForce false;
     };
+    window-rules = [
+      {
+        matches = [
+          {
+            is-window-cast-target = true;
+          }
+        ];
+        border = {
+          active.color = "#${screencast-border}";
+          inactive.color = "#${screencast-border}";
+        };
+      }
+    ];
   }

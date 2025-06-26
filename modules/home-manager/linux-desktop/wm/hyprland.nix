@@ -31,8 +31,7 @@ in
     wayland.windowManager.hyprland = {
       enable = true;
       package = pkgs.hyprland;
-      plugins = with pkgs.hyprlandPlugins; [
-        hyprscrolling
+      plugins = [
         # self.hyprscroller
         # hyprscroller
       ];

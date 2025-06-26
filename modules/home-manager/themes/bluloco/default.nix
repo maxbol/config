@@ -29,15 +29,16 @@
   palette_ = {
     fg = "b9c0cb";
     bg = "282c34";
-    bg_float = "21242D";
+    # bg = "21242D"; #21242D
+    bg_float = "21242D"; #21242D
     cursor = "ffcc00";
     cursor_text = "282c34";
     black = "41444d";
     red = "fc2f52";
     green = "25a45c";
     yellow = "ff936a";
-    blue = "3476ff";
-    magenta = "7a82da";
+    blue = "3476ff"; #3476ff
+    magenta = "7a82da"; #7a82da
     cyan = "4483aa";
     white = "cdd4e0";
     bright_black = "8f9aae";
@@ -63,6 +64,7 @@
       magenta = palette_.bright_magenta;
       cyan = palette_.bright_cyan;
       orange = palette_.yellow;
+      black = palette_.black;
     };
 
     semantic = {
@@ -93,6 +95,7 @@
       magenta = palette_.magenta;
       cyan = palette_.cyan;
       orange = palette_.yellow;
+      black = palette_.black;
     };
 
     semantic = {
@@ -106,16 +109,6 @@
       accent2 = accents.${accent2};
       accent3 = accents.${accent3};
     };
-  };
-
-  telaMap = {
-    "blue" = "blue";
-    "red" = "red";
-    "green" = "green";
-    "yellow" = "yellow";
-    "magenta" = "purple";
-    "cyan" = "green";
-    "orange" = "orange";
   };
 
   mkStarshipPalette = name: palette: ''
@@ -175,11 +168,6 @@ in rec {
     };
   };
 
-  niri.colorOverrides = {
-    inactive-border = palette.accents.blue;
-    active-border = palette.accents.green;
-  };
-
   hyprland.colorOverrides = hyprlandOverrides palette;
 
   waybar.colorOverrides = waybarOverrides palette;
@@ -221,7 +209,28 @@ in rec {
   };
 
   kitty = {
-    file."theme.conf".source = "${bluloco_pkg}/terminal-themes/kitty/Bluloco${Luminance}.conf";
+    autoGenerate = {
+      enable = true;
+      colorOverrides = {
+        color0 = palette.semantic.background;
+        color1 = palette.accents.red;
+        color2 = palette.accents.green;
+        color3 = palette.accents.blue;
+        color4 = palette.accents.yellow;
+        color5 = palette.accents.magenta;
+        color6 = palette.accents.cyan;
+        color7 = palette.accents.orange;
+        color8 = palette.semantic.overlay;
+        color9 = palette.accents.red;
+        color10 = palette.accents.green;
+        color11 = palette.accents.blue;
+        color12 = palette.accents.yellow;
+        color13 = palette.accents.magenta;
+        color14 = palette.accents.cyan;
+        color15 = palette.semantic.text2;
+      };
+    };
+    # file."theme.conf".source = "${bluloco_pkg}/terminal-themes/kitty/Bluloco${Luminance}.conf";
   };
 
   starship.palette = {

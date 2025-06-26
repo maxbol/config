@@ -1,4 +1,8 @@
-{pkgs, ...}: rec {
+{
+  pkgs,
+  config,
+  ...
+}: rec {
   home.stateVersion = "24.11";
   home.username = "max";
   home.homeDirectory = "/home/max/";
@@ -29,10 +33,22 @@
     userEmail = "maks.bolotin@gmail.com";
   };
 
+  home.sessionVariables = {
+    NH_HOME_FLAKE = "${config.home.homeDirectory}/src/config";
+  };
+
+  xdg.mimeApps.defaultApplications = {
+    "model/gltf-binary" = ["f3d.desktop"];
+    "model/gltf+json" = ["f3d.desktop"];
+  };
+
   home.packages = with pkgs; [
     nautilus
     slack
     discord
     spotify
+    f3d
+    zenity
+    file
   ];
 }

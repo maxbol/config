@@ -26,6 +26,7 @@ in {
           nerdfonts
           # Necessary for Nautilus and other GNOME apps to correctly use kitty to open .desktop files with Terminal=true
           pkgs.xdg-terminal-exec
+          pkgs.imagemagick
         ];
         programs.kitty = {
           enable = true;

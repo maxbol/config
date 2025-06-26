@@ -11,5 +11,10 @@ lib-mine.mkFeature "features.desktop-config.niri" {
   config = {
     programs.niri.enable = true;
     programs.niri.package = pkgs.niri-unstable;
+
+    xdg.portal = {
+      enable = true;
+      extraPortals = [pkgs.xdg-desktop-portal-gtk pkgs.gnome-keyring]; # Gnome portal already added by `programs.niri`
+    };
   };
 }

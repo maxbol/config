@@ -8,12 +8,16 @@
   users.users.max = {
     isNormalUser = true;
     description = "Max Bolotin";
-    extraGroups = ["networkmanager" "wheel" "docker" "plugdev"];
+    extraGroups = ["networkmanager" "wheel" "docker" "plugdev" "input"];
     packages = [];
     shell = pkgs.zsh;
   };
 
-  environment.systemPackages = with pkgs; [vim];
+  environment.systemPackages = with pkgs; [vim openssl];
+
+  environment.variables = {
+    NH_OS_FLAKE = "/home/max/src/config";
+  };
 
   nix.settings = {
     experimental-features = "nix-command flakes";
@@ -31,6 +35,7 @@
   features.graphics-config.enable = true;
   features.localisation.enable = true;
   features.nix-registry.enable = true;
+  features.nix-store-tooling.enable = true;
   features.secrets-management.enable = true;
   features.system-start = {
     enable = true;
@@ -38,10 +43,8 @@
   };
   # features.vpn-config.enable = true;
 
-  programs.nh = {
-    enable = true;
-    flake = "/home/max/src/config";
-  };
+  # services.timesyncd.enable = false;
+  systemd.watchdog.rebootTime = "45s";
 
   system.stateVersion = "24.11";
 }

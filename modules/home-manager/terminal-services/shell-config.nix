@@ -94,6 +94,7 @@ in
         shellAliases = {
           vim = "nv";
           vi = "nv";
+          icat = "kitten icat";
           # zb = "zig build";
           # zbr = "zig build run";
         };

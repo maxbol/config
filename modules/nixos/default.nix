@@ -7,6 +7,7 @@
     ./hardware-support
     ./localisation.nix
     ./nix-registry.nix
+    ./nix-store-tooling.nix
     ./secrets-management.nix
     ./system-start.nix
     ./vpn-config

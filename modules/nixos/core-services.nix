@@ -15,9 +15,15 @@ lib-mine.mkFeature "features.core-services" {
 
     bluetooth = {
       enable = true;
+      input = {
+        General = {
+          UserspaceHID = true;
+        };
+      };
       settings = {
         General = {
           DiscoverableTimeout = 0;
+          MaxConnections = 10;
         };
       };
     };

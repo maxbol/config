@@ -60,6 +60,10 @@
     clockifyd.url = "github:maxbol/clockifyd";
     nvim-colorctl.url = "github:maxbol/nvim-colorctl";
     obsidian-remote.url = "github:maxbol/obsidian-remote";
+
+    astal.url = "git+file:///home/max/src/astal?ref=bugfix/mkluapackage-copies-entire-src-into-bin&shallow=1";
+    astal-bar.url = "github:linuxmobile/astal-bar";
+    astal-bar.inputs.astal.follows = "astal";
   };
 
   outputs = inputs @ {

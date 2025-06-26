@@ -107,8 +107,7 @@ in rec {
 
   # TODO(2025-05-19, Max Bolotin): Copying this from gruvbox for now, should be replace with theme specific
   gtk = {
-    theme.package =
-      pkgs
+    theme.package = pkgs
       .gruvbox-gtk-theme
       .overrideAttrs (prev: {propagatedUserEnvPkgs = prev.propagatedUserEnvPkgs ++ [pkgs.gnome-themes-extra];});
     theme.name = "Gruvbox-Dark";
@@ -124,6 +123,10 @@ in rec {
   };
 
   hyprland.colorOverrides = hyprlandOverrides palette;
+
+  niri.colorOverrides = {
+    inactive-border = palette.accents.wisteria;
+  };
 
   waybar.colorOverrides = waybarOverrides palette;
 

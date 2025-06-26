@@ -57,50 +57,11 @@ map(
   { desc = "Comment Toggle" }
 )
 
+require("neomax.mappings-telescope")
+
 -- Extra incremente/decrement mappings to allow me to keep C-A as my tmux leader :)
 map({ "n", "x" }, "<M-a>", "<C-a>", { noremap = true, silent = true })
 map({ "n", "x" }, "<M-x>", "<C-x>", { noremap = true, silent = true })
-
-map("n", "<leader><leader>", function()
-  require("telescope.builtin").find_files({
-    find_command = { "rg", "--ignore", "--files", "--sortr", "accessed" },
-    cwd = vim.fn.getcwd(-1),
-  })
-end, { desc = "Telescope find (based on access time)" })
-
-map("n", "<leader>ff", function()
-  require("telescope.builtin").find_files({
-    cwd = vim.fn.getcwd(-1),
-  })
-end, { desc = "Telescope find files" })
-
-map("n", "<leader>fa", function()
-  require("telescope.builtin").find_files({
-    follow = true,
-    no_ignore = true,
-    hidden = true,
-  })
-end, { desc = "Telescope Find all files" })
-
-map("n", "<leader>fw", function()
-  require("telescope.builtin").live_grep({
-    cwd = vim.fn.getcwd(-1),
-  })
-end, { desc = "Telescope Live grep" })
-
-map("n", "<leader>fo", function()
-  require("telescope.builtin").oldfiles({ cwd = vim.fn.getcwd(-1), cwd_only = true })
-end, { desc = "Telescope Find oldfiles" })
-
-map("n", "<leader>fb", "<cmd>Telescope buffers<CR>", { desc = "Telescope Find buffers" })
-map("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", { desc = "Telescope Help page" })
-map("n", "<leader>f/", "<cmd>Telescope current_buffer_fuzzy_find<CR>", { desc = "Telescope Find in current buffer" })
-map("n", "<leader>fs", "<cmd>Telescope lsp_document_symbols<CR>", { desc = "Telescope Find symbol in document" })
-map("n", "<leader>fS", function()
-  require("telescope.builtin").lsp_dynamic_workspace_symbols({
-    symbols = { "function", "class", "interface", "method", "enum" },
-  })
-end, { desc = "Telescope Find symbol in workspace" })
 
 -- Telescope Obsidian commands
 map("n", "<leader>fn", "<cmd>ObsidianQuickSwitch<CR>", { desc = "Find notes" })

@@ -28,12 +28,16 @@ in
     features.linux-desktop.shutdown.hooks = [
       {
         name = "tmux-shutdown";
-        # beforeTargets = ["shutdown" "reboot" "poweroff" "soft-reboot"];
+        beforeTargets = ["shutdown" "reboot" "poweroff" "soft-reboot" "logout"];
         execStart = pkgs.writeShellScript "tmux-shutdown.sh" ''
           export PATH=/home/$USER/.nix-profile/bin:/run/current-system/sw/bin:$PATH
 
           if [[ ! -z $(pidof tmux) ]]; then
             ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh
+          fi
+
+          if systemctl --user is-active tmux-foo; then
+            systemctl --user stop tmux-foo
           fi
         '';
       }
@@ -51,7 +55,7 @@ in
         Restart = "always";
       };
 
-      Install.WantedBy = ["hyprland-session.target"];
+      Install.WantedBy = ["tmux-foo.service"];
     };
 
     systemd.user.services.tmux-foo = lib.mkIf pkgs.stdenv.hostPlatform.isLinux (let
@@ -71,6 +75,8 @@ in
 
       Service = {
         Type = "forking";
+        # ExecStart = "${lib.getExe pkgs.tmux} new-session d -s scratch";
+        # ExecStop = "-${lib.getExe pkgs.tmux} kill-server";
         ExecStart = pathWrap "${lib.getExe pkgs.tmux} new-session -d -s scratch";
         ExecStop = ["-${pathWrap "${lib.getExe pkgs.tmux} kill-server"}"];
         GuessMainPID = true;
@@ -80,6 +86,7 @@ in
         # Restart = "always";
         Restart = "on-failure";
         Environment = [
+          "TERM=xterm-kitty"
           "DISPLAY=:0"
           "TMUX_TMPDIR=%t"
           "WAYLAND_DISPLAY=wayland-1"

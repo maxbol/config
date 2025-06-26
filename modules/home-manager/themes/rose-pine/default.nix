@@ -219,8 +219,8 @@ in rec {
   gtk = {
     theme.package =
       pkgs
-      .rose-pine-gtk-theme;
-    theme.name = gtkThemeName;
+      .adw-gtk3;
+    theme.name = "adw-gtk3-dark";
     documentFont = desktop.font;
     # colorScheme = "prefer-light"; # A quirk of the GTK theme
     colorScheme = "prefer-dark";

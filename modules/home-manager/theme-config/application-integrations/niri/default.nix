@@ -75,7 +75,10 @@ in {
           else config.themeSettings;
       in {
         file."config.kdl".source = makeNiriConfig niri-cfg.package (
-          cfg.niri.baseConfig // themeSettings
+          lib.mkMerge [
+            cfg.niri.baseConfig
+            themeSettings
+          ]
         );
       };
     };

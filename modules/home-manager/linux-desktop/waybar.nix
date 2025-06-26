@@ -3,6 +3,7 @@
   lib-mine,
   lib,
   self,
+  pkgs,
   ...
 }:
 lib-mine.mkFeature "features.linux-desktop.waybar" {

@@ -17,29 +17,26 @@ if [ ! -f "$wLayout" ] || [ ! -f "$wlTmplt" ]; then
   exit 1
 fi
 
-# detect monitor res
-x_mon=$(hyprctl -j monitors | jq '.[] | select(.focused==true) | .width')
-y_mon=$(hyprctl -j monitors | jq '.[] | select(.focused==true) | .height')
-hypr_scale=$(hyprctl -j monitors | jq '.[] | select (.focused == true) | .scale' | sed 's/\.//')
+source compositor.sh
 
 # scale config layout and style
 case $1 in
 1)
   wlColms=6
-  export mgn=$((y_mon * 28 / hypr_scale))
-  export hvr=$((y_mon * 23 / hypr_scale))
+  export mgn=$(echo "$y_monres * 28 / $monitor_scale" | bc)
+  export hvr=$(echo "$y_monres * 23 / $monitor_scale" | bc)
   ;;
 2)
   wlColms=2
-  export x_mgn=$((x_mon * 35 / hypr_scale))
-  export y_mgn=$((y_mon * 25 / hypr_scale))
-  export x_hvr=$((x_mon * 32 / hypr_scale))
-  export y_hvr=$((y_mon * 20 / hypr_scale))
+  export x_mgn=$(echo "$x_monres * 35 / $monitor_scale" | bc)
+  export y_mgn=$(echo "$y_monres * 25 / $monitor_scale" | bc)
+  export x_hvr=$(echo "$x_monres * 32 / $monitor_scale" | bc)
+  export y_hvr=$(echo "$y_monres * 20 / $monitor_scale" | bc)
   ;;
 esac
 
 # scale font size
-export fntSize=$((y_mon * 2 / 100))
+export fntSize=$(echo "$y_monres * 2 / 100" | bc)
 
 # detect gtk system theme
 # TODO: can this be pre-computed in Nix?
@@ -49,16 +46,8 @@ WindBg=$(if [ "$gtkMode" == "dark" ]; then (echo "rgba(0,0,0,0.5)"); else (echo 
 export BtnCol
 export WindBg
 
-# TODO: does this need to be reenabled for Wallbash?
-#if [ "$EnableWallDcol" -eq 1 ] ; then
-#    export wbarTheme="Wall-Dcol"
-#else
-#    export wbarTheme="${gtkTheme}" fi
-
-# eval hypr border radius
-hypr_border=$(hyprctl -j getoption decoration:rounding | jq '.int')
-export active_rad=$((hypr_border * 5))
-export button_rad=$((hypr_border * 8))
+export active_rad=$(echo "$border_radius * 5" | bc)
+export button_rad=$(echo "$border_radius * 8" | bc)
 
 # eval config files
 wlStyle=$(envsubst <"$wlTmplt")

@@ -5,6 +5,7 @@
   origin,
   pkgs,
   self,
+  vendor,
   ...
 }:
 lib-mine.mkFeature "features.linux-desktop.wm.niri" {
@@ -13,9 +14,33 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
   ];
 
   config = {
+    systemd.user.services.xwayland-env-init = {
+      Unit = {
+        Before = ["app-org.kde.xwaylandvideobridge@autostart.service"];
+      };
+
+      Service = {
+        Type = "oneshot";
+        ExecStart = let
+          pathWrap = cmd:
+            pkgs.writeShellScript "xwayland-env-init.sh" ''
+              export PATH=${config.home.profileDirectory}/bin:/run/current-system/sw/bin:$PATH
+              ${cmd}
+            '';
+        in
+          pathWrap "systemctl --user import-environment DISPLAY PATH WAYLAND_DISPLAY";
+        Environment = [
+          "DISPLAY=:0"
+          "WAYLAND_DISPLAY=wayland-1"
+        ];
+      };
+
+      Install.WantedBy = ["niri.service"];
+    };
+
     systemd.user.services.xembedsniproxy = {
       Unit = {
-        ConditionEnvironment = "WAYLAND_DISPLAY";
+        ConditionEnvironment = ["WAYLAND_DISPLAY" "DISPLAY"];
         Description = "display windows application tray icons in system tray";
         After = ["niri.service" "xwayland-satellite.service" "graphical-session.target"];
       };
@@ -34,9 +59,9 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
 
     systemd.user.services.xwayland-satellite = {
       Unit = {
-        ConditionEnvironment = "WAYLAND_DISPLAY";
+        ConditionEnvironment = ["WAYLAND_DISPLAY" "DISPLAY"];
         Description = "runs rootless xwayland apps";
-        After = ["niri.service" "graphical-session.target"];
+        After = ["niri.service" "xwayland-env-init.service" "graphical-session.target"];
       };
 
       Service = {
@@ -54,9 +79,17 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         "DP-1" = {
           # mode = "preferred";
           scale = 1.25;
+          position = {
+            x = 2048;
+            y = 0;
+          };
         };
         "eDP-2" = {
           scale = 1.25;
+          position = {
+            x = 0;
+            y = 0;
+          };
           transform = {
             # flipped = true;
             # rotation = 90;
@@ -113,6 +146,9 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         "Shift+Mod+V".action = spawn ["${self.rofi-launchers-hyprdots}/bin/cliphist.sh" "c"];
         "Shift+Mod+C".action = center-window;
 
+        "Shift+Mod+A".action = set-dynamic-cast-window;
+        "Shift+Mod+S".action = set-dynamic-cast-monitor;
+
         "XF86AudioMute".action = spawn ["volumecontrol.sh" "-o" "m"];
         "XF86AudioMicMute".action = spawn ["volumecontrol.sh" "-i" "m"];
         "XF86AudioLowerVolume".action = spawn ["volumecontrol.sh" "-o" "d"];
@@ -122,7 +158,7 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         "XF86AudioNext".action = spawn ["playerctl" "next"];
         "XF86AudioPrev".action = spawn ["playerctl" "previous"];
 
-        "Mod+Shift+Return".action = spawn "wlogout";
+        "Mod+Shift+Return".action = spawn ["wlogout-launcher-hyprland" "1"];
       };
       layout = {
         default-column-display = "normal";
@@ -183,6 +219,7 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         };
       };
       cursor = {
+        theme = "macOS";
         size = 28;
       };
       spawn-at-startup = [
@@ -199,7 +236,11 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
       };
     };
 
-    home.packages = with pkgs; [xwayland-satellite];
+    home.packages = with pkgs; let
+      start-astal-bar = writeShellScriptBin "start-astal-bar.sh" ''
+        ${lib.getExe vendor.astal-bar.default}
+      '';
+    in [xwayland-satellite playerctl start-astal-bar];
 
     services.network-manager-applet.enable = true;
     services.blueman-applet.enable = true;
