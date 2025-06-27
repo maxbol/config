@@ -1,27 +1,30 @@
-packageArgs @ {pkgs, ...}: {
-  aerospace-swipe = pkgs.callPackage ./aerospace-swipe packageArgs;
-  aporetic-kitty = pkgs.callPackage ./aporetic-kitty packageArgs;
-  chromactl = pkgs.callPackage ./chromactl packageArgs;
-  clockify-cli = pkgs.callPackage ./clockify-cli packageArgs;
-  clockify-tmux = pkgs.callPackage ./clockify-tmux packageArgs;
-  dynachrome = pkgs.callPackage ./dynachrome packageArgs;
-  gtkrc-reload = pkgs.callPackage ./gtkrc-reload packageArgs;
-  hyprdots-kvantum = pkgs.callPackage ./hyprdots-kvantum packageArgs;
-  hyprdots-qt5ct = pkgs.callPackage ./hyprdots-qt5ct packageArgs;
-  hyprpanel-themes = pkgs.callPackage ./hyprpanel-themes packageArgs;
-  hyprscroller = pkgs.callPackage ./hyprscroller packageArgs;
-  libadwaita-without-adwaita = pkgs.callPackage ./libadwaita-without-adwaita packageArgs;
-  misc-scripts-hyprdots = pkgs.callPackage ./misc-scripts-hyprdots packageArgs;
-  nailgun = pkgs.callPackage ./nailgun packageArgs;
-  nancy = pkgs.callPackage ./nancy packageArgs;
-  rofi-launchers-hyprdots = pkgs.callPackage ./rofi-launchers-hyprdots packageArgs;
-  runcached = pkgs.callPackage ./runcached packageArgs;
-  sddm-theme-corners = pkgs.callPackage ./sddm-theme-corners.nix packageArgs;
-  swimctl = pkgs.callPackage ./swimctl packageArgs;
-  synp = pkgs.callPackage ./synp packageArgs;
-  systemctl-toggle = pkgs.callPackage ./systemctl-toggle packageArgs;
-  waybar-confgen-hyprdots = pkgs.callPackage ./waybar-confgen-hyprdots packageArgs;
-  wlogout-launcher-hyprdots = pkgs.callPackage ./wlogout-launcher-hyprdots packageArgs;
-  zathura-darwin = pkgs.callPackage ./zathura-darwin packageArgs;
-  zathura-darwin-app = pkgs.callPackage ./zathura-darwin-app packageArgs;
+packageArgs @ {pkgs, ...}: let
+  addPackage = pkg: pkgs.callPackage pkg packageArgs;
+in {
+  aerospace-swipe = addPackage ./aerospace-swipe;
+  aporetic-kitty = addPackage ./aporetic-kitty;
+  chromactl = addPackage ./chromactl;
+  clockify-cli = addPackage ./clockify-cli;
+  clockify-tmux = addPackage ./clockify-tmux;
+  dynachrome = addPackage ./dynachrome;
+  gtkrc-reload = addPackage ./gtkrc-reload;
+  hyprdots-kvantum = addPackage ./hyprdots-kvantum;
+  hyprdots-qt5ct = addPackage ./hyprdots-qt5ct;
+  hyprpanel-themes = addPackage ./hyprpanel-themes;
+  hyprscroller = addPackage ./hyprscroller;
+  libadwaita-without-adwaita = addPackage ./libadwaita-without-adwaita;
+  misc-scripts-hyprdots = addPackage ./misc-scripts-hyprdots;
+  nailgun = addPackage ./nailgun;
+  nancy = addPackage ./nancy;
+  openssl_1_0 = addPackage ./openssl_1_0;
+  rofi-launchers-hyprdots = addPackage ./rofi-launchers-hyprdots;
+  runcached = addPackage ./runcached;
+  sddm-theme-corners = addPackage ./sddm-theme-cornersnix packageArgs;
+  swimctl = addPackage ./swimctl;
+  synp = addPackage ./synp;
+  systemctl-toggle = addPackage ./systemctl-toggle;
+  waybar-confgen-hyprdots = addPackage ./waybar-confgen-hyprdots;
+  wlogout-launcher-hyprdots = addPackage ./wlogout-launcher-hyprdots;
+  zathura-darwin = addPackage ./zathura-darwin;
+  zathura-darwin-app = addPackage ./zathura-darwin-app;
 }

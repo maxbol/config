@@ -6,7 +6,7 @@ lib-mine.barrelGroup {
     "fonts"
     "gaming"
     "lockscreen"
-    "panel"
+    # "panel"
     "rofi"
     "shutdown"
     "swim"

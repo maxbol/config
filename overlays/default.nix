@@ -1,6 +1,7 @@
 overlayArgs @ {inputs, ...}: system:
 [
   (import ./azuredatastudio-fix.nix overlayArgs)
+  (import ./use-unstable-devenv.nix overlayArgs)
   inputs.hyprpanel.overlay
   inputs.niri.overlays.niri
 ]

@@ -1,7 +1,7 @@
 {
+  origin,
   lib-mine,
   pkgs,
-  origin,
   config,
   self,
   ...
