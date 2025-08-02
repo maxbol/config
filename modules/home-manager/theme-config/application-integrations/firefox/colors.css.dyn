@@ -87,19 +87,6 @@ defines:
   --uc-bg-color: #⟨bg_color:hex⟩ !important;
   --uc-tab-fg-color: #⟨tab_fg_color:hex⟩ !important;
   --urlbar-separator-color: transparent !important;
-  --vimium-border-color: #⟨vimium_border_color:hex⟩;
-  --vimium-hint-bg: #⟨vimium_hint_bg:hex⟩;
-  --vimium-hint-border: #⟨vimium_hint_border:hex⟩;
-  --vimium-hint-fg: #⟨vimium_hint_fg:hex⟩;
-  --vimium-search-area-bg: #⟨vimium_search_area_bg:hex⟩;
-  --vimium-search-area-input-bg: #⟨vimium_search_area_input_bg:hex⟩;
-  --vimium-search-area-input-fg: #⟨vimium_search_area_input_fg:hex⟩;
-  --vimium-search-result-bg: #⟨vimium_search_result_bg:hex⟩;
-  --vimium-search-result-fg: #⟨vimium_search_result_fg:hex⟩;
-  --vimium-search-result-source-fg: #⟨vimium_search_result_source_fg:hex⟩;
-  --vimium-search-result-url-fg: #⟨vimium_search_result_url_fg:hex⟩;
-  --vimium-search-result-active-bg: #⟨vimium_search_result_active_bg:hex⟩;
-  --vimium-font-family: Arial;
 }
 
 #back-button > .toolbarbutton-icon{
@@ -133,59 +120,5 @@ defines:
 .Tab[data-active="true"] .body {
   background-color: var(--active-el-bg) !important;
   color: var(--active-el-fg) !important;
-}
-
-/* VIMIUM */
-div > .vimiumHintMarker {
-  /* linkhint boxes */
-  background: var(--vimium-hint-bg) !important;
-  border: 1px solid var(--vimium-hint-border) !important;
-  border-radius: 0 !important;
-  padding: 3px !important;
-}
-
-div > .vimiumHintMarker span {
-  /* linkhint text */
-  color: var(--vimium-hint-fg) !important;
-  font-family: var(--vimium-font-family) !important;
-  font-weight: bold !important;
-  font-size: 18px !important;
-}
-
-div > .vimiumHintMarker > .matchingCharacter {
-}
-
-#vomnibar {
-  background-color: var(--vimium-search-area-bg) !important;
-  font-family: var(--vimium-font-family) !important;
-  border-radius: 0 !important;
-  border: 2px solid var(--vimium-border-color) !important;
-}
-
-.vomnibarSearchArea {
-  background-color: var(--vimium-search-area-bg) !important;
-}
-
-#vomnibar > ul > li {
-  background-color: var(--vimium-search-result-bg) !important;
-  color: var(--vimium-search-result-fg) !important;
-}
-
-#vomnibar > ul > li .vomnibarSource {
-  color: var(--vimium-search-result-source-fg) !important;
-}
-
-#vomnibar > ul > li .vomnibarUrl {
-  color: var(--vimium-search-result-url-fg) !important;
-}
-
-#vomnibar > ul > li.vomnibarSelected {
-  background-color: var(--vimium-search-result-active-bg) !important;
-}
-
-#vomnibar input {
-  font-family: var(--vimium-font-family) !important;
-  background-color: var(--vimium-search-area-input-bg) !important;
-  color: var(--vimium-search-area-input-fg) !important;
 }
 

@@ -1,52 +1,56 @@
 return {
-	defaults = { lazy = true },
-	install = { colorscheme = { "rose-pine" } },
+  defaults = { lazy = true },
+  install = { colorscheme = { "rose-pine" } },
 
-	change_detection = {
-		enabled = true,
-		notify = false,
-	},
+  change_detection = {
+    enabled = true,
+    notify = false,
+  },
 
-	ui = {
-		icons = {
-			ft = "",
-			lazy = "󰂠 ",
-			loaded = "",
-			not_loaded = "",
-		},
-	},
+  experimental = {
+    check_rtp_message = false,
+  },
 
-	performance = {
-		rtp = {
-			disabled_plugins = {
-				"2html_plugin",
-				"tohtml",
-				"getscript",
-				"getscriptPlugin",
-				"gzip",
-				"logipat",
-				-- "netrw",
-				-- "netrwPlugin",
-				-- "netrwSettings",
-				-- "netrwFileHandlers",
-				"matchit",
-				"tar",
-				"tarPlugin",
-				"rrhelper",
-				"spellfile_plugin",
-				"vimball",
-				"vimballPlugin",
-				"zip",
-				"zipPlugin",
-				"tutor",
-				"rplugin",
-				"syntax",
-				"synmenu",
-				"optwin",
-				"compiler",
-				"bugreport",
-				"ftplugin",
-			},
-		},
-	},
+  ui = {
+    icons = {
+      ft = "",
+      lazy = "󰂠 ",
+      loaded = "",
+      not_loaded = "",
+    },
+  },
+
+  performance = {
+    rtp = {
+      disabled_plugins = {
+        "2html_plugin",
+        "tohtml",
+        "getscript",
+        "getscriptPlugin",
+        "gzip",
+        "logipat",
+        -- "netrw",
+        -- "netrwPlugin",
+        -- "netrwSettings",
+        -- "netrwFileHandlers",
+        "matchit",
+        "tar",
+        "tarPlugin",
+        "rrhelper",
+        "spellfile_plugin",
+        "vimball",
+        "vimballPlugin",
+        "zip",
+        "zipPlugin",
+        "tutor",
+        "rplugin",
+        "syntax",
+        "synmenu",
+        "optwin",
+        "compiler",
+        "bugreport",
+        "ftplugin",
+      },
+    },
+  },
 }

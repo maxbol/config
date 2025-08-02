@@ -44,8 +44,10 @@ in {
             modify_font = "cell_height 120%";
             confirm_os_window_close = 0;
             placement_strategy = "top-left";
-            cursor_trail = 3;
+            # cursor_trail = 3;
             open_url_with = "default";
+            wheel_scroll_multiplier = 0.5;
+            touchpad_scroll_multiplier = 0.5;
           };
           keybindings = {
             "cmd+h" = "";

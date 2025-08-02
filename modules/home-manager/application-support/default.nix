@@ -2,5 +2,5 @@
 lib-mine.barrelGroup {
   here = ./.;
   path = "features.application-support";
-  submodules = ["neovim" "obsidian" "zathura"];
+  submodules = ["neovim" "obsidian" "zathura" "spotify"];
 }

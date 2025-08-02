@@ -43,7 +43,7 @@
   };
   # features.vpn-config.enable = true;
 
-  # services.timesyncd.enable = false;
+  services.timesyncd.enable = false;
   systemd.watchdog.rebootTime = "45s";
 
   system.stateVersion = "24.11";

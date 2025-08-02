@@ -16,6 +16,29 @@
   });
 
   nvim-colorctl = vendor.nvim-colorctl.default;
+
+  extraPackages = with pkgs; [
+    origin.inputs.nixpkgs-unstable.legacyPackages.${pkgs.system}.tree-sitter
+    imagemagick
+    fd
+    ripgrep
+    luajit
+    luajitPackages.tiktoken_core
+
+    # Language tooling - migration from Mason
+    typescript-language-server
+    deno
+    prettierd
+    eslint_d
+    eslint
+    shfmt
+    sqlfluff
+    sql-formatter
+    vala-language-server
+    clang-tools
+    mesonlsp
+  ];
+  extraLuaPackages = ps: [ps.magick];
 in
   lib-mine.mkFeature "features.application-support.neovim" {
     home.sessionVariables = {
@@ -26,28 +49,7 @@ in
     programs.neovim = {
       enable = true;
       package = neovim-unwrapped;
-      extraPackages = with pkgs; [
-        origin.inputs.nixpkgs-unstable.legacyPackages.${pkgs.system}.tree-sitter
-        imagemagick
-        fd
-        ripgrep
-        luajit
-        luajitPackages.tiktoken_core
-
-        # Language tooling - migration from Mason
-        typescript-language-server
-        deno
-        prettierd
-        eslint_d
-        eslint
-        shfmt
-        sqlfluff
-        sql-formatter
-        vala-language-server
-        clang-tools
-        mesonlsp
-      ];
-      extraLuaPackages = ps: [ps.magick];
+      inherit extraPackages extraLuaPackages;
     };
 
     programs.zsh.shellAliases = {
@@ -57,6 +59,7 @@ in
     home.packages = with pkgs; [
       neovim-remote
       nvim-colorctl
+      neovide
     ];
 
     impure-config-management.config."nvim" = "config/nvim";

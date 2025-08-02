@@ -40,15 +40,20 @@
   xdg.mimeApps.defaultApplications = {
     "model/gltf-binary" = ["f3d.desktop"];
     "model/gltf+json" = ["f3d.desktop"];
+    "video/x-matroska" = ["mpv.desktop"];
+    "image/jpeg" = ["vipsdisp.desktop"];
   };
 
   home.packages = with pkgs; [
+    discord
+    f3d
+    file
+    kooha
+    mpv
     nautilus
     slack
-    discord
-    spotify
-    f3d
+    vlc
     zenity
-    file
+    vipsdisp
   ];
 }

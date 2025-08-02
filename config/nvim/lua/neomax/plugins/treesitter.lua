@@ -4,7 +4,8 @@ vim.opt.runtimepath:append(parser_install_dir) ]]
 
 return {
   "nvim-treesitter/nvim-treesitter",
-  event = { "BufReadPost", "BufNewFile" },
+  lazy = false,
+  -- event = { "BufReadPost", "BufNewFile" },
   cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
   build = ":TSUpdate",
   opts = {
@@ -13,33 +14,35 @@ return {
       enable = true,
       keymaps = {
         init_selection = "<leader>,",
-        node_incremental = "<leader>,",
+        node_incremental = "g,",
         scope_incremental = "grc",
-        node_decremental = "<leader>.",
+        node_decremental = "g.",
       },
     },
     --[[ ensure_installed = {
-			"zig",
-			"typescript",
-			"javascript",
-			"go",
-			"html",
-			"lua",
-			"nix",
-			"markdown",
-			"dockerfile",
-			"c_sharp",
-			"json",
-			"gomod",
-			"gosum",
-		}, ]]
+  	"zig",
+  	"typescript",
+  	"javascript",
+  	"go",
+  	"html",
+  	"lua",
+  	"nix",
+  	"markdown",
+  	"dockerfile",
+  	"c_sharp",
+  	"json",
+  	"gomod",
+  	"gosum",
+  }, ]]
     auto_install = true,
     folds = {
       enable = false,
     },
     highlight = {
       enable = true,
-      use_languagetree = true,
+      disable = { "lua" },
+      -- use_languagetree = false,
+      additional_vim_regex_highlighting = false,
     },
     indent = {
       enable = false,
@@ -49,7 +52,8 @@ return {
         enable = true,
 
         disable = {
-          -- "odin",
+          "lua",
+          "odin",
           -- "typescript",
           -- "zig",
         },
@@ -108,6 +112,7 @@ return {
       },
       move = {
         enable = true,
+        disable = { "lua" },
 
         goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer" },
         goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer" },

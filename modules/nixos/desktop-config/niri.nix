@@ -14,7 +14,7 @@ lib-mine.mkFeature "features.desktop-config.niri" {
 
     xdg.portal = {
       enable = true;
-      extraPortals = [pkgs.xdg-desktop-portal-gtk pkgs.gnome-keyring]; # Gnome portal already added by `programs.niri`
+      extraPortals = [pkgs.xdg-desktop-portal-gtk pkgs.gnome-keyring pkgs.xdg-desktop-portal-wlr]; # Gnome portal already added by `programs.niri`
     };
   };
 }

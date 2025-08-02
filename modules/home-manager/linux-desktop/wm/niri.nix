@@ -5,7 +5,6 @@
   origin,
   pkgs,
   self,
-  vendor,
   ...
 }:
 lib-mine.mkFeature "features.linux-desktop.wm.niri" {
@@ -139,6 +138,9 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         "Ctrl+Shift+M".action = spawn "nautilus";
         "Ctrl+Shift+B".action = spawn "firefox";
 
+        "Ctrl+Shift+P".action = screenshot {show-pointer = false;};
+        "Ctrl+Shift+Alt+P".action = screenshot-window {write-to-disk = true;};
+
         "Shift+Mod+W".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "w"];
         "Shift+Mod+E".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "f"];
         "Shift+Mod+R".action = spawn "${self.rofi-launchers-hyprdots}/bin/rofiselect.sh";
@@ -164,10 +166,10 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         default-column-display = "normal";
 
         preset-column-widths = [
+          {proportion = 1.;}
           {proportion = 2. / 3.;}
           {proportion = 1. / 3.;}
           {proportion = 1. / 2.;}
-          {proportion = 1.;}
         ];
         preset-window-heights = [
           {proportion = 1. / 2.;}
@@ -176,21 +178,17 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         default-column-width = {
           proportion = 1. / 2.;
         };
-
-        border.enable = true;
-        border.width = 2;
-        focus-ring.enable = false;
       };
       window-rules = [
         {
-          geometry-corner-radius = let
-            radius = 12.;
-          in {
-            bottom-left = radius;
-            bottom-right = radius;
-            top-left = radius;
-            top-right = radius;
-          };
+          # geometry-corner-radius = let
+          #   radius = 12.;
+          # in {
+          #   bottom-left = radius;
+          #   bottom-right = radius;
+          #   top-left = radius;
+          #   top-right = radius;
+          # };
           clip-to-geometry = true;
           default-column-display = "normal";
           draw-border-with-background = false;
@@ -199,6 +197,12 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
           matches = [
             {
               app-id = ".blueman-manager-wrapped";
+            }
+            {
+              app-id = "org.stronnag.wayfarer";
+            }
+            {
+              app-id = "org.pulseaudio.pavucontrol";
             }
           ];
           open-floating = true;
@@ -212,11 +216,16 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
           };
         };
         mouse = {
+          accel-speed = -0.6;
           natural-scroll = true;
+          scroll-factor = 2.0;
         };
         touchpad = {
           click-method = "clickfinger";
         };
+      };
+      animations = {
+        horizontal-view-movement.enable = false;
       };
       cursor = {
         theme = "macOS";
@@ -229,18 +238,18 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         {
           command = ["1password" "--silent"];
         }
+        {
+          command = ["wl-paste" "--type" "text" "--watch" "cliphist" "store"];
+        }
+        {
+          command = ["wl-paste" "--type" "image" "--watch" "cliphist" "store"];
+        }
       ];
       prefer-no-csd = true;
       environment = {
         DISPLAY = ":0"; #Needed for xwayland-satellite apps
       };
     };
-
-    home.packages = with pkgs; let
-      start-astal-bar = writeShellScriptBin "start-astal-bar.sh" ''
-        ${lib.getExe vendor.astal-bar.default}
-      '';
-    in [xwayland-satellite playerctl start-astal-bar];
 
     services.network-manager-applet.enable = true;
     services.blueman-applet.enable = true;

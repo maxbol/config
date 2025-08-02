@@ -39,7 +39,7 @@ in {
         HLLineNum1 = "#" + palette.semantic.accent2;
         LineNr = "#" + palette.semantic.text2;
         IncSearch = "#" + palette.semantic.background;
-        Function = "#" + palette.semantic.text;
+        Function = "#" + palette.accents.mauve;
         BlinkCmpGhostText = "#" + palette.semantic.text1;
       };
       hlGroupsBg = {

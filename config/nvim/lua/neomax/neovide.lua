@@ -1,7 +1,7 @@
 vim.o.guifont = "Aporetic Sans Mono:h18" -- text below applies for VimScript
-vim.g.neovide_window_blurred = true
-vim.g.neovide_opacity = 0.8
-vim.g.neovide_normal_opacity = 0.8
+vim.g.neovide_window_blurred = false
+vim.g.neovide_opacity = 1.0
+vim.g.neovide_normal_opacity = 1.0
 
 vim.g.neovide_scale_factor = 1.0
 local change_scale_factor = function(delta)

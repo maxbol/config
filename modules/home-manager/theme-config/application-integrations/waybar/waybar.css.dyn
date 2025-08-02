@@ -1,15 +1,16 @@
 ---
 defines:
-    main-background: overlay
-    active-highlight: text1
+    main-background: background
+    main-text: accent1
+    active-highlight: accent1
     active-text: background
-    hover-highlight: accent1
-    hover-text: background
+    hover-highlight: overlay
+    hover-text: text
 ---
 @define-color bar-bg rgba(0, 0, 0, 0);
 
 @define-color main-bg #⟨main-background:hex⟩;
-@define-color main-fg #⟨text:hex⟩;
+@define-color main-fg #⟨main-text:hex⟩;
 
 @define-color wb-act-bg #⟨active-highlight:hex⟩;
 @define-color wb-act-fg #⟨active-text:hex⟩;

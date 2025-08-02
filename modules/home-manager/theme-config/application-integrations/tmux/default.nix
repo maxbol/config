@@ -54,7 +54,7 @@ in {
         };
       };
 
-      reloadCommand = "${lib.getExe pkgs.tmux} source ${config.xdg.configHome}/tmux/tmux.conf";
+      reloadCommand = "${lib.getExe config.programs.tmux.package} source ${config.xdg.configHome}/tmux/tmux.conf";
     };
   };
 

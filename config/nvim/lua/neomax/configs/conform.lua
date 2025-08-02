@@ -4,12 +4,12 @@ local options = {
 
     lua = { "stylua" },
 
-    typescriptreact = { "prettier" },
-    javascriptreact = { "prettier" },
-    typescript = { "prettier" },
-    javascript = { "prettier" },
-    css = { "prettier" },
-    graphql = { "prettier" },
+    typescriptreact = { "prettierd" },
+    javascriptreact = { "prettierd" },
+    typescript = { "prettierd" },
+    javascript = { "prettierd" },
+    css = { "prettierd" },
+    graphql = { "prettierd" },
     html = { "prettier_html" },
     vento = { "prettier_html" },
     templ = { "prettier_html" },

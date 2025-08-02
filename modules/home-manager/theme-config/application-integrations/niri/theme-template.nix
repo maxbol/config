@@ -8,7 +8,7 @@ with lib;
     layout = {
       border = {
         enable = mkForce true;
-        width = mkForce 3;
+        width = mkForce 2;
         active = mkForce {
           color = "#${active-border}";
         };

@@ -21,6 +21,10 @@
   ta = pkgs.writeShellScriptBin "ta" ''
     if [ "$TMUX" = "" ]; then tmux attach; fi
   '';
+
+  tmux-no-cgroups = pkgs.tmux.overrideAttrs (prevAttrs: {
+    configureFlags = prevAttrs.configureFlags ++ ["--disable-cgroups"];
+  });
 in
   lib-mine.mkFeature "features.tmux-config" {
     impure-config-management.config."tmux/overrides.conf" = "config/tmux/overrides.conf";
@@ -77,8 +81,8 @@ in
         Type = "forking";
         # ExecStart = "${lib.getExe pkgs.tmux} new-session d -s scratch";
         # ExecStop = "-${lib.getExe pkgs.tmux} kill-server";
-        ExecStart = pathWrap "${lib.getExe pkgs.tmux} new-session -d -s scratch";
-        ExecStop = ["-${pathWrap "${lib.getExe pkgs.tmux} kill-server"}"];
+        ExecStart = pathWrap "${lib.getExe tmux-no-cgroups} new-session -d -s scratch";
+        ExecStop = ["-${pathWrap "${lib.getExe tmux-no-cgroups} kill-server"}"];
         GuessMainPID = true;
         SetLoginEnvironment = true;
         KillMode = "control-group";
@@ -99,6 +103,7 @@ in
 
     programs.tmux = {
       enable = true;
+      package = tmux-no-cgroups;
       mouse = true;
       # shell = "${pkgs.zsh}/bin/zsh";
       terminal = "screen-256color";

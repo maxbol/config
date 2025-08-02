@@ -17,14 +17,11 @@ g.markdown_recommended_style = 0
 
 opt.foldenable = true
 opt.foldmethod = "syntax"
-opt.cursorline = true
+opt.cursorline = false
 opt.guicursor = "n-v-c:block-blinkon500-blinkwait3000-blinkoff500-Cursor/lCursor,i-ci:ver25"
 
 -- Hide mode notation in cmdline
 opt.showmode = false
-
--- Cmdline options
--- opt.cmdheight = 0
 
 -- Session options
 opt.sessionoptions = "curdir,folds,globals,help,tabpages,terminal,winsize"
@@ -35,7 +32,7 @@ opt.laststatus = 3
 g.completion_matching_strategy_list = { "exact", "substring" }
 g.completion_matching_ignore_case = 1
 
-opt.relativenumber = true
+-- opt.relativenumber = true
 
 -- Indenting
 o.expandtab = true
@@ -118,8 +115,11 @@ vim.cmd([[autocmd! BufNewFile,BufRead *.vs,*.fs,*.frag,*.vert set ft=glsl]])
 -- Diagnostics as virtual text
 vim.diagnostic.config({ virtual_lines = true })
 
--- require("vim._extui").enable({})
+-- Extui options
+opt.cmdheight = 0
+if vim.g.neovide == nil then
+  require("vim._extui").enable({})
+end
 
 require("neomax.configs.make")
 require("neomax.modules.obsidian")
-require("neomax.modules.sortgroup")

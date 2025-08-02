@@ -54,7 +54,7 @@ in {
           # };
           default = {
             name = "Aporetic Sans Mono";
-            size = 14;
+            size = 18;
             # package = pkgs.aporetic;
             package = self.aporetic-kitty;
           };

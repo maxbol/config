@@ -1,5 +1,6 @@
 {
   inputs = {
+    # Core packages
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-legacy.url = "github:NixOS/nixpkgs/nixos-24.11";
@@ -16,6 +17,7 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
 
+    # Core nix stuff
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -31,6 +33,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # NixOS desktop environment
     niri = {
       url = "github:sodiboo/niri-flake";
     };
@@ -50,20 +53,21 @@
 
     custom-udev-rules.url = "github:MalteT/custom-udev-rules";
 
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     nur.url = "github:nix-community/NUR";
-    textfox.url = "github:maxbol/textfox/copy-on-activation-mode@allow-custom-css@flatten-css";
 
+    # Application modules
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    textfox.url = "github:maxbol/textfox/copy-on-activation-mode@allow-custom-css@flatten-css";
+    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
+
+    # Languages
     zig-overlay.url = "github:mitchellh/zig-overlay";
     zls.url = "github:zigtools/zls";
 
+    # My own stuff
     clockifyd.url = "github:maxbol/clockifyd";
     nvim-colorctl.url = "github:maxbol/nvim-colorctl";
     obsidian-remote.url = "github:maxbol/obsidian-remote";
-
-    astal.url = "git+file:///home/max/src/astal?ref=bugfix/mkluapackage-copies-entire-src-into-bin&shallow=1";
-    astal-bar.url = "github:linuxmobile/astal-bar";
-    astal-bar.inputs.astal.follows = "astal";
   };
 
   outputs = inputs @ {

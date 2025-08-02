@@ -14,7 +14,7 @@ lib-mine.mkFeature "features.linux-desktop.waybar" {
   #   Service.ExecReload = lib.mkForce confgen;
   # };
 
-  home.packages = [self.waybar-confgen-hyprdots];
+  home.packages = [self.waybar-confgen-hyprdots pkgs.pavucontrol];
 
   impure-config-management.config = lib.genAttrs ["waybar/modules" "waybar/config.ctl"] (n: "config/${n}");
 
