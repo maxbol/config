@@ -11,6 +11,7 @@
     ./obsidian
     ./rofi
     ./sketchybar
+    ./swaync
     ./tmux
     ./waybar
     ./yazi

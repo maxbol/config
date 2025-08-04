@@ -4,6 +4,7 @@
   lib-mine,
   lib,
   self,
+  vendor,
   ...
 }:
 lib-mine.mkFeature "features.linux-desktop.rofi" {
@@ -41,7 +42,7 @@ lib-mine.mkFeature "features.linux-desktop.rofi" {
       self.rofi-launchers-hyprdots
       self.nailgun
       pkgs.iosevka
-      self.aporetic-kitty
+      vendor.aporetic-kitty.default
     ];
 
     theme-config.extraActivationCommands = theme: ''

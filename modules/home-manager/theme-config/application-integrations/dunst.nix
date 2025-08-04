@@ -45,7 +45,7 @@ with lib; {
       ];
       theme-config.desktop.enable = true;
 
-      xdg.configFile."dunst/dunstrc.d/50-chroma".source = config.lib.file.mkOutOfStoreSymlink "${config.theme-config.themeDirectory}/active/dunst/dunstrc";
+      xdg.configFile."dunst/dunstrc.d/50-chroma.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.theme-config.themeDirectory}/active/dunst/dunstrc";
     })
   ];
 }

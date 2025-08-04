@@ -2,7 +2,6 @@ packageArgs @ {pkgs, ...}: let
   addPackage = pkg: pkgs.callPackage pkg packageArgs;
 in {
   aerospace-swipe = addPackage ./aerospace-swipe;
-  aporetic-kitty = addPackage ./aporetic-kitty;
   chromactl = addPackage ./chromactl;
   clockify-cli = addPackage ./clockify-cli;
   clockify-tmux = addPackage ./clockify-tmux;

@@ -27,12 +27,12 @@ in {
   };
 
   imports = [
-    (lib.mkIf (cfg.systemd.enable) {
+    (lib.mkIf (cfg.enable && cfg.systemd.enable) {
       systemd.user.services.hyprpanel = {
         Install = {WantedBy = lib.mkForce [cfg.systemd.target];};
       };
     })
-    (lib.mkIf (cfg.themeingIntegration.enable) {
+    (lib.mkIf (cfg.enable && cfg.themeingIntegration.enable) {
       assertions = [
         {
           assertion = cfg.settings == {};

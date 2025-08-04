@@ -31,10 +31,10 @@ in {
     ];
 
     theme-config.programs.waybar = {
-      reloadCommand = ''
-        ${lib.getExe self.waybar-confgen-hyprdots} r
-      '';
-      # ${pkgs.procps}/bin/pkill -u $USER -USR2 waybar || true
+      # reloadCommand = ''
+      #   ${lib.getExe self.waybar-confgen-hyprdots} r
+      # '';
+      reloadCommand = "${pkgs.procps}/bin/pkill -u $USER -USR2 waybar || true";
 
       themeOptions = {
         colorOverrides = mkOption {

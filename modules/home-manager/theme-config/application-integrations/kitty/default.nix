@@ -1,9 +1,9 @@
 {
   config,
   pkgs,
-  self,
   lib,
   lib-mine,
+  vendor,
   ...
 }:
 with lib; let
@@ -56,7 +56,7 @@ in {
             name = "Aporetic Sans Mono";
             size = 18;
             # package = pkgs.aporetic;
-            package = self.aporetic-kitty;
+            package = vendor.aporetic-kitty.default;
           };
           # default = {
           #   name = "Iosevka";

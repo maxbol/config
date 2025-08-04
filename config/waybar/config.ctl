@@ -2,7 +2,7 @@
 0|30|top|( niri/workspaces niri/window )|( idle_inhibitor clock )|( cpu memory custom/gpuinfo ) ( backlight network bluetooth pulseaudio pulseaudio#microphone custom/updates ) ( tray battery ) ( custom/wallchange custom/mode custom/wbar custom/cliphist custom/power )
 0|30|top|( custom/power custom/cliphist custom/wbar custom/mode custom/wallchange ) ( wlr/taskbar mpris ) |( idle_inhibitor clock )|( tray battery ) ( backlight network bluetooth pulseaudio pulseaudio#microphone )
 0|30|top||( custom/power ) ( tray battery ) ( wlr/taskbar idle_inhibitor clock ) ( custom/cliphist ) ( custom/wbar ) ( custom/wallchange ) ( custom/mode )|
-0|30|top|( idle_inhibitor clock ) ( niri/workspaces ) ( cpu memory custom/gpuinfo )|( wlr/taskbar )|( backlight network bluetooth pulseaudio pulseaudio#microphone custom/updates ) ( tray battery ) ( custom/wallchange custom/mode custom/wbar custom/cliphist custom/power )
+0|30|top|( idle_inhibitor clock ) ( niri/workspaces ) ( cpu memory custom/gpuinfo )|( wlr/taskbar )|( network bluetooth pulseaudio pulseaudio#microphone custom/cliphist ) ( tray ) ( custom/notification ) ( backlight battery custom/power )
 0|30|top|( wlr/taskbar mpris )|( idle_inhibitor clock )|( backlight network bluetooth pulseaudio pulseaudio#microphone custom/updates ) ( tray battery ) ( custom/wallchange custom/mode custom/wbar custom/cliphist custom/power )
 0|30|top|( custom/power custom/cliphist custom/wbar custom/mode custom/wallchange ) ( idle_inhibitor clock mpris )|( wlr/taskbar )|( tray ) ( backlight network bluetooth pulseaudio pulseaudio#microphone )
 

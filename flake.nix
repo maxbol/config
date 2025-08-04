@@ -68,6 +68,7 @@
     clockifyd.url = "github:maxbol/clockifyd";
     nvim-colorctl.url = "github:maxbol/nvim-colorctl";
     obsidian-remote.url = "github:maxbol/obsidian-remote";
+    aporetic-kitty.url = "github:maxbol/aporetic-kitty";
   };
 
   outputs = inputs @ {

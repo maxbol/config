@@ -22,7 +22,7 @@
     monospaceFont.name = "Aporetic Sans Mono";
     monospaceFont.size = 12;
     # monospaceFont.package = pkgs.aporetic;
-    monospaceFont.package = specialArgs.self.aporetic-kitty;
+    monospaceFont.package = specialArgs.vendor.aporetic-kitty.default;
     # monospaceFont.name = "Iosevka";
     # monospaceFont.size = 12;
     # monospaceFont.package = pkgs.iosevka;

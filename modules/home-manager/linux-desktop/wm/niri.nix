@@ -78,13 +78,14 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         "DP-1" = {
           # mode = "preferred";
           scale = 1.25;
+          # scale = 1;
           position = {
-            x = 2048;
+            x = 2560;
             y = 0;
           };
         };
         "eDP-2" = {
-          scale = 1.25;
+          scale = 1;
           position = {
             x = 0;
             y = 0;
@@ -162,8 +163,14 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
 
         "Mod+Shift+Return".action = spawn ["wlogout-launcher-hyprland" "1"];
       };
+      overview = {
+        workspace-shadow = {
+          enable = false;
+        };
+      };
       layout = {
         default-column-display = "normal";
+        background-color = "transparent";
 
         preset-column-widths = [
           {proportion = 1.;}
@@ -179,6 +186,26 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
           proportion = 1. / 2.;
         };
       };
+      layer-rules = [
+        {
+          matches = [
+            {
+              namespace = "swaync-control-center";
+            }
+          ];
+          shadow = {
+            enable = true;
+          };
+        }
+        {
+          matches = [
+            {
+              namespace = "swww-daemon";
+            }
+          ];
+          place-within-backdrop = true;
+        }
+      ];
       window-rules = [
         {
           # geometry-corner-radius = let
