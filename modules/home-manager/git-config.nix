@@ -15,6 +15,11 @@ lib-mine.mkFeature "features.git-config" {
     };
 
     extraConfig = {
+      # url = {
+      #   "git@github.com".insteadOf = "https://github.com";
+      #   "git@gitlab.com".insteadOf = "https://gitlab.com";
+      # };
+
       credential.helper = "${
         pkgs.git.override {withLibsecret = true;}
       }";

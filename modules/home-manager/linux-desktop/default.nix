@@ -3,17 +3,18 @@ lib-mine.barrelGroup {
   here = ./.;
   path = "features.linux-desktop";
   submodules = [
+    "default-application-handling"
     "fonts"
     "gaming"
     "lockscreen"
+    "notifications"
     "panel"
     "rofi"
     "shutdown"
     "swim"
     "ui-toolkits"
-    "wlogout"
     "waybar"
+    "wlogout"
     "wm"
-    "notifications"
   ];
 }

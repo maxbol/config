@@ -2,6 +2,7 @@
 defines:
   control_center_background_color: background
   control_center_border_color: text2
+  control_center_shadow_color: overlay
   control_center_dnd_slider: overlay
   control_center_foreground_color: text
   control_center_notification_action_active_background: text2
@@ -173,13 +174,13 @@ defines:
 }
 
 .control-center {
-  opacity: 0.8;
   border-radius: 0;
   margin: 0.5rem 0rem;
   color: #⟨control_center_foreground_color:hex⟩;
   background-color: #⟨control_center_background_color:hex⟩;
   padding: 1rem;
   border: 1px solid #⟨control_center_border_color:hex⟩;
+  box-shadow: -5px 5px #⟨control_center_shadow_color:hex⟩;
 }
 
 .control-center .widget-title {

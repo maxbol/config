@@ -2,7 +2,9 @@
 defines:
     base: background
     text: text
+    text2: text2
     surface: surface
+    overlay: overlay
     blue: blue
     red: red
     green: green
@@ -13,7 +15,9 @@ defines:
 ---
 @define-color base #⟨base:hex⟩;
 @define-color text #⟨text:hex⟩;
+@define-color text2 #⟨text2:hex⟩;
 @define-color surface #⟨surface:hex⟩;
+@define-color overlay #⟨overlay:hex⟩;
 
 @define-color blue #⟨blue:hex⟩;
 @define-color red #⟨red:hex⟩;
@@ -26,10 +30,10 @@ defines:
 
 * {
   font-family:
-    "JetBrainsMono NF",
+    "Aporetic Sans Mono",
     "Symbols Nerd Font";
   font-weight: bolder;
-  font-size: 14px;
+  font-size: 18px;
 }
 
 window#waybar {
@@ -80,12 +84,12 @@ button {
 }
 
 #workspaces button.empty {
-  color: #44475a
+  color: @overlay;
 }
 
 #workspaces button {
   padding: 0 5px;
-  color: @surface;
+  color: @text2;
   margin: 4px 0 4px 0;
   transition: color 200ms ease-in-out;
 }
@@ -121,6 +125,7 @@ button {
 #tray,
 #mode,
 #idle_inhibitor,
+#custom-notification,
 #scratchpad,
 #mpd {
   padding: 0 6px;
@@ -152,7 +157,8 @@ button {
 }
 
 #clock {
-  color: @text;
+  color: @accent2;
+  margin: 0 15px;
 }
 
 #custom-pacman {
@@ -195,7 +201,7 @@ button {
 #bluetooth {
   margin-right: 10px;
   font-size: 17px;
-  color: white;
+  color: @text;
 }
 
 #keyboard-state>label {
@@ -218,21 +224,19 @@ button {
   background-color: @base;
   border-radius: 10px;
   padding-right: 10px;
-  margin: 5px 0 0 10px;
+  margin: 10px 0 0 18px;
 }
 
 .modules-center {
-  background-color: @base;
-  border-radius: 10px;
-  padding: 0 10px;
-  margin-top: 5px;
+  background-color: transparent;
+  margin: 10px 0 0 0;
 }
 
 .modules-right {
   background-color: @base;
   border-radius: 10px;
   padding: 0 10px;
-  margin: 5px 10px 0 0;
+  margin: 10px 18px 0 0;
 }
 
 #custom-spotify {
@@ -241,8 +245,32 @@ button {
 }
 
 #custom-notification {
-  color: white;
+  color: @text;
   padding-right: 10px;
+}
+
+#custom-notification.notification {
+  font-size: 16px;
+}
+
+#mpris {
+  color: @accent3;
+  background-color: @base;
+  border-radius: 10px;
+  padding: 5px 10px;
+  margin-top: 0px;
+}
+
+#mpris.stopped {
+  background-color: transparent;
+}
+
+#backlight {
+  color: @accent2;
+}
+
+#custom-cliphist {
+  margin-right: 10px;
 }
 
 /* vim: ft=sass */

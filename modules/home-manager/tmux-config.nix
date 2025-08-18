@@ -86,6 +86,7 @@ in
         GuessMainPID = true;
         SetLoginEnvironment = true;
         KillMode = "control-group";
+        TimeoutStopSec = 1;
         RestartSec = 2;
         # Restart = "always";
         Restart = "on-failure";

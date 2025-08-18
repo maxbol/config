@@ -113,6 +113,7 @@ in
           displayNavButtons = true;
           displaySidebarTools = true;
           displayTitles = false;
+          rounding = "10px";
           font = {
             family = "Aporetic Sans Mono";
             size = "18px";
@@ -124,9 +125,6 @@ in
 
       home.packages = with pkgs; [
         brotab
-        # firefox
-        # TODO(2025-05-10, Max Bolotin): Reactivate iosevka again once nodejs_20 builds on mac os
-        # iosevka
         (lib.mkIf
           (pkgs.stdenv.hostPlatform.isDarwin == true)
           firefoxMacOSCmd)

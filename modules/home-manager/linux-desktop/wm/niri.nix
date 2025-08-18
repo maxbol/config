@@ -73,12 +73,50 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
     programs.niri.enable = true;
     programs.niri.package = pkgs.niri-unstable;
 
+    services.kanshi = {
+      enable = true;
+      systemdTarget = "niri.service";
+      profiles = {
+        backDocked = {
+          exec = "${self.swimctl}/bin/swimctl activate";
+          outputs = [
+            {
+              criteria = "eDP-2";
+            }
+            {
+              criteria = "DP-1";
+            }
+          ];
+        };
+        sideDocked = {
+          exec = "${self.swimctl}/bin/swimctl activate";
+          outputs = [
+            {
+              criteria = "eDP-2";
+            }
+            {
+              criteria = "DP-3";
+            }
+          ];
+        };
+      };
+    };
+
     theme-config.niri.baseConfig = {
       outputs = {
         "DP-1" = {
           # mode = "preferred";
-          scale = 1.25;
-          # scale = 1;
+          # scale = 1.25;
+          scale = 1;
+          position = {
+            x = 2560;
+            y = 0;
+          };
+        };
+        "DP-3" = {
+          # mode = "preferred";
+          # scale = 1.25;
+          scale = 1;
           position = {
             x = 2560;
             y = 0;
@@ -97,10 +135,10 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         };
       };
       binds = with config.lib.niri.actions; {
-        "Ctrl+Shift+H".action = focus-column-or-monitor-left;
-        "Ctrl+Shift+J".action = focus-window-or-workspace-down;
-        "Ctrl+Shift+K".action = focus-window-or-workspace-up;
-        "Ctrl+Shift+L".action = focus-column-or-monitor-right;
+        "Ctrl+Shift+H".action = focus-column-or-monitor-left {skip-animation = true;};
+        "Ctrl+Shift+J".action = focus-window-or-workspace-down {skip-animation = true;};
+        "Ctrl+Shift+K".action = focus-window-or-workspace-up {skip-animation = true;};
+        "Ctrl+Shift+L".action = focus-column-or-monitor-right {skip-animation = true;};
 
         "Ctrl+Alt+H".action = set-column-width "-5%";
         "Ctrl+Alt+J".action = set-window-height "+5%";
@@ -110,6 +148,10 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         "Ctrl+Alt+Period".action = switch-preset-column-width;
         "Ctrl+Alt+Comma".action = expand-column-to-available-width;
         "Ctrl+Alt+M".action = set-column-width "100%";
+
+        "Ctrl+Shift+Period".action = focus-floating;
+        "Ctrl+Shift+Comma".action = focus-tiling;
+        "Ctrl+Shift+Slash".action = toggle-window-floating;
 
         "Ctrl+Mod+H".action = move-column-left-or-to-monitor-left;
         "Ctrl+Mod+J".action = move-window-down-or-to-workspace-down;
@@ -139,6 +181,9 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         "Ctrl+Shift+M".action = spawn "nautilus";
         "Ctrl+Shift+B".action = spawn "firefox";
 
+        "Shift+Mod+B".action = spawn ["kitty" "--app-id" "bluetui" "bluetui"];
+        "Ctrl+Mod+N".action = spawn ["kitty" "--app-id" "impala" "impala"];
+
         "Ctrl+Shift+P".action = screenshot {show-pointer = false;};
         "Ctrl+Shift+Alt+P".action = screenshot-window {write-to-disk = true;};
 
@@ -162,6 +207,8 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
         "XF86AudioPrev".action = spawn ["playerctl" "previous"];
 
         "Mod+Shift+Return".action = spawn ["wlogout-launcher-hyprland" "1"];
+
+        "MouseMiddle".action = toggle-overview;
       };
       overview = {
         workspace-shadow = {
@@ -193,9 +240,6 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
               namespace = "swaync-control-center";
             }
           ];
-          shadow = {
-            enable = true;
-          };
         }
         {
           matches = [
@@ -208,14 +252,14 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
       ];
       window-rules = [
         {
-          # geometry-corner-radius = let
-          #   radius = 12.;
-          # in {
-          #   bottom-left = radius;
-          #   bottom-right = radius;
-          #   top-left = radius;
-          #   top-right = radius;
-          # };
+          geometry-corner-radius = let
+            radius = 10.;
+          in {
+            bottom-left = radius;
+            bottom-right = radius;
+            top-left = radius;
+            top-right = radius;
+          };
           clip-to-geometry = true;
           default-column-display = "normal";
           draw-border-with-background = false;
@@ -231,8 +275,37 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
             {
               app-id = "org.pulseaudio.pavucontrol";
             }
+            {
+              app-id = "bluetui";
+            }
+            {
+              app-id = "impala";
+            }
+            {
+              app-id = "org.gnome.FileRoller";
+            }
           ];
           open-floating = true;
+        }
+        {
+          matches = [
+            {
+              app-id = "bluetui";
+            }
+            {
+              app-id = "impala";
+            }
+          ];
+          default-window-height.proportion = 2. / 3.;
+          default-column-width.proportion = 2. / 3.;
+        }
+        {
+          matches = [
+            {
+              is-floating = true;
+            }
+          ];
+          tiled-state = false;
         }
       ];
       input = {
@@ -248,11 +321,10 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
           scroll-factor = 2.0;
         };
         touchpad = {
+          accel-speed = 0.5;
           click-method = "clickfinger";
+          middle-emulation = false;
         };
-      };
-      animations = {
-        horizontal-view-movement.enable = false;
       };
       cursor = {
         theme = "macOS";
@@ -272,6 +344,10 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
           command = ["wl-paste" "--type" "image" "--watch" "cliphist" "store"];
         }
       ];
+      hotkey-overlay = {
+        skip-at-startup = true;
+      };
+      clipboard.disable-primary = true;
       prefer-no-csd = true;
       environment = {
         DISPLAY = ":0"; #Needed for xwayland-satellite apps
@@ -280,5 +356,12 @@ lib-mine.mkFeature "features.linux-desktop.wm.niri" {
 
     services.network-manager-applet.enable = true;
     services.blueman-applet.enable = true;
+    services.playerctld.enable = true;
+
+    home.packages = with pkgs; [
+      playerctl
+      bluetui
+      impala
+    ];
   };
 }

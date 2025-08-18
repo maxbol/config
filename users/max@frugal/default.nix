@@ -1,6 +1,8 @@
 {
+  lib-mine,
   pkgs,
   config,
+  vendor,
   ...
 }: rec {
   home.stateVersion = "24.11";
@@ -37,23 +39,46 @@
     NH_HOME_FLAKE = "${config.home.homeDirectory}/src/config";
   };
 
-  xdg.mimeApps.defaultApplications = {
-    "model/gltf-binary" = ["f3d.desktop"];
-    "model/gltf+json" = ["f3d.desktop"];
-    "video/x-matroska" = ["mpv.desktop"];
-    "image/jpeg" = ["vipsdisp.desktop"];
+  xdg.mimeApps = let
+    apps =
+      lib-mine.mime.bindImageTypes ["org.libvips.vipsdisp.desktop"]
+      // lib-mine.mime.bindVideoTypes ["io.github.celluloid_player.Celluloid.desktop"]
+      // lib-mine.mime.bindTextTypes ["nvim.desktop"]
+      // lib-mine.mime.bindBrowserTypes ["firefox.desktop"]
+      // {
+        "model/obj" = ["blender.desktop"];
+        "model/gltf-binary" = ["f3d.desktop"];
+        "model/gltf+json" = ["f3d.desktop"];
+        "inode/directory" = ["org.gnome.Nautilus.desktop"];
+        "inode/symlink" = ["org.gnome.Nautilus.desktop"];
+      };
+  in {
+    associations.added = apps;
+    defaultApplications = apps;
   };
 
+  # Various application packages that can be "stupidly" added,
+  # that this specific user is interested in, and that doesn't
+  # need/gain anything from having a separate feature module
   home.packages = with pkgs; [
+    blender
+    celluloid
     discord
+    emacs
     f3d
     file
+    file-roller
+    jetbrains.datagrip
     kooha
+    krita
     mpv
     nautilus
     slack
-    vlc
-    zenity
+    thunderbird
+    vendor.zen-browser.default
     vipsdisp
+    vlc
+    zed-editor
+    zenity
   ];
 }

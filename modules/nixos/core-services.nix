@@ -97,6 +97,7 @@ lib-mine.mkFeature "features.core-services" {
 
   networking = {
     networkmanager.enable = true;
+    wireless.iwd.enable = true;
   };
 
   programs.seahorse.enable = true;
@@ -106,11 +107,11 @@ lib-mine.mkFeature "features.core-services" {
   programs.zsh.enable = true;
 
   environment.systemPackages = with pkgs; [
-    pulseaudio
-    wireplumber
-    seahorse
-    opentabletdriver
     docker-compose
+    opentabletdriver
+    pulseaudio
+    seahorse
+    wireplumber
   ];
 
   environment.etc."wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''

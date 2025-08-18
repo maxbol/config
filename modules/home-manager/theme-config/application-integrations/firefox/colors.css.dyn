@@ -79,6 +79,7 @@ defines:
   --s-frame-bg: var(--mff-bg) !important;
   --s-frame-fg: #⟨frame_fg:hex⟩ !important;
   --s-toolbar-bg: var(--mff-bg) !important;
+  --toolbar-bg: var(--mff-bg) !important;
   --s-toolbar-fg: #⟨toolbar_fg:hex⟩ !important;
   --tf-accent: #⟨accent_primary:hex⟩ !important;
   --tf-border: #⟨border_color:hex⟩ !important;
@@ -114,7 +115,6 @@ defines:
 }
 .urlbar-icon {
   color: var(--mff-icon-color)  !important;
-
 }
 
 .Tab[data-active="true"] .body {

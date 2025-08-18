@@ -177,7 +177,7 @@ in rec {
 
   waybar.colorOverrides =
     {
-      overlay = palette.semantic.background;
+      accent4 = palette.semantic.accent5;
     }
     // (waybarOverrides palette);
 

@@ -135,7 +135,7 @@ in
 
         # Package management, virtualisation, environments, etc
         # origin.inputs.devenv.packages.${pkg.system}.devenv
-        # devenv
+        devenv
 
         # Global libs/tooling
         openssl

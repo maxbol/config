@@ -35,7 +35,8 @@
 
     # NixOS desktop environment
     niri = {
-      url = "github:sodiboo/niri-flake";
+      # url = "github:sodiboo/niri-flake";
+      url = "git+file:///home/max/src/niri-flake";
     };
 
     hyprcursor = {
@@ -59,6 +60,7 @@
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     textfox.url = "github:maxbol/textfox/copy-on-activation-mode@allow-custom-css@flatten-css";
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
+    zen-browser.url = "github:youwen5/zen-browser-flake";
 
     # Languages
     zig-overlay.url = "github:mitchellh/zig-overlay";

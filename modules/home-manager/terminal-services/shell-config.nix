@@ -148,15 +148,19 @@ in
                       export LLDB_USE_NATIVE_PDB_READER="yes"
                       if [[ $(uname -s) == "Darwin" ]]; then
                         export LLDB_DEBUGSERVER_PATH="/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
-                          fi
+                      fi
 
-                          export ZIG_BLEEDING_EDGE_BIN="${zig-bleeding-edge}/bin/zig"
+                      if [[ -f "$HOME/.anthropic-key" ]] then
+                        export AVANTE_ANTHROPIC_API_KEY=$(cat "$HOME/.anthropic-key")
+                      fi
 
-                          export MANPAGER='nvim +Man!'
+                      export ZIG_BLEEDING_EDGE_BIN="${zig-bleeding-edge}/bin/zig"
 
-                          setopt PUSHDSILENT
+                      export MANPAGER='nvim +Man!'
 
-                          alias time="/usr/bin/time"
+                      setopt PUSHDSILENT
+
+                      alias time="/usr/bin/time"
             ''
           ]
           ++ initExtra
