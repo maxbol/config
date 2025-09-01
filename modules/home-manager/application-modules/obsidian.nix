@@ -63,6 +63,11 @@ in
                 };
                 default = {};
               };
+
+              vimrc = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+              };
             };
           };
           default = {};
@@ -71,15 +76,6 @@ in
     };
 
     imports = [
-      (mkIf cfg.enable (let
-        mkDebug = vaultDir: {
-          file."${vaultDir}/.obsidian/test" = {
-            source = pkgs.writeText "test" "test";
-          };
-        };
-      in {
-        home = foldl' (acc: vaultDir: mkDebug vaultDir // acc) {} cfg.vaults;
-      }))
       (
         mkIf (cfg.enable) (let
           mkPlugin = vaultDir: source: let
@@ -133,6 +129,14 @@ in
         in {
           home = foldl' (acc: vaultDir: mkVaultConfig vaultDir // acc) {} cfg.vaults;
         })
+      )
+      # VimRC
+      (
+        mkIf (cfg.enable && cfg.config.vimrc != null) {
+          home.file.".obsidian.vimrc" = {
+            text = cfg.config.vimrc;
+          };
+        }
       )
     ];
   }

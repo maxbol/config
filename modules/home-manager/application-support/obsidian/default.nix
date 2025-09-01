@@ -28,6 +28,10 @@ in
             monospaceFontFamily = monoFont;
             baseFontSize = 18;
           };
+          vimrc = ''
+            exmap followlink :obcommand editor:follow-link
+            nmap gd :followlink
+          '';
         };
       };
     };

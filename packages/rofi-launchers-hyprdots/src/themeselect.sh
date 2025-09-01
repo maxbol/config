@@ -16,21 +16,25 @@ export icon_border_radius=$((elem_border_radius - 5))
 
 export r_override="element{border-radius:${elem_border_radius}px;} element-icon{border-radius:${icon_border_radius}px;size:${size}px;}"
 
-# launch rofi menu
-ThemeSel=$(jq -r '.[]' "$CONF/chroma/themes.json" | while read THEME; do
+get_theme_wallpaper_thumb() {
+  THEME=$1
   if [ -e "$STATE/swim/$THEME/wallpaper" ]; then
     WP=$(readlink "$STATE/swim/$THEME/wallpaper")
   else
     WP=$(find "$CONF/chroma/themes/$THEME/swim/wallpapers/" -type f | head -n 1)
   fi
+  echo "$(nailgun thumbnail-for-wp "$WP")/thumb"
+}
 
-  CACHE_DIR="$(nailgun thumbnail-for-wp "$WP")"
-
-  echo -en "$THEME\x00icon\x1f$CACHE_DIR/thumb\n"
+# launch rofi menu
+ThemeSel=$(jq -r '.[]' "$CONF/chroma/themes.json" | while read THEME; do
+  THUMB=$(get_theme_wallpaper_thumb $THEME)
+  echo -en "$THEME\x00icon\x1f$THUMB\n"
 done | rofi -dmenu -theme-str "${r_override}" -config $RofiConf -select "$(jq -r ".name" "$CONF/chroma/active/info.json")")
 
 # apply theme
 if [ ! -z $ThemeSel ]; then
+  THUMB=$(get_theme_wallpaper_thumb $ThemeSel)
   chromactl activate-theme "$ThemeSel"
-  dunstify "t1" -a " ${ThemeSel}" -i "$CONF/dunst/icons/hyprdots.png" -r 91190 -t 2200
+  dunstify "Changed theme: $ThemeSel" -a " ${ThemeSel}" -i "$THUMB" -r 91190 -t 2200
 fi

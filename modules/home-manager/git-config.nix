@@ -6,6 +6,14 @@
 lib-mine.mkFeature "features.git-config" {
   home.packages = [pkgs.gh];
 
+  programs.jujutsu = {
+    enable = true;
+  };
+
+  programs.mergiraf = {
+    enable = true;
+  };
+
   programs.git = {
     enable = true;
     package = pkgs.gitAndTools.gitFull;
@@ -15,10 +23,10 @@ lib-mine.mkFeature "features.git-config" {
     };
 
     extraConfig = {
-      # url = {
-      #   "git@github.com".insteadOf = "https://github.com";
-      #   "git@gitlab.com".insteadOf = "https://gitlab.com";
-      # };
+      url = {
+        "https://maxbol:xyz@github.com/volvo-cars-se".insteadOf = "https://github.com/volvo-cars-se";
+        "https://maxbol:xyz@github.com/ourstudio-se".insteadOf = "https://github.com/ourstudio-se";
+      };
 
       credential.helper = "${
         pkgs.git.override {withLibsecret = true;}

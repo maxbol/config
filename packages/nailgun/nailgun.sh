@@ -19,7 +19,7 @@ convertWallpaper() {
   WP_CACHE_DIR="$(cacheDir "$1")"
 
   if [ ! -f "$WP_CACHE_DIR/png" ]; then
-    convert "$1" "PNG:$WP_CACHE_DIR/png"
+    convert "$1" -strip "PNG:$WP_CACHE_DIR/png"
   fi
 
   # The following convert commands are originally from prasanthrangan's hyprdots, available under the terms of GPLv3

@@ -1,5 +1,4 @@
 return {
-
   "chrishrb/gx.nvim",
   keys = { { "gx", "<cmd>Browse<cr>", mode = { "n", "x" } } },
   cmd = { "Browse" },
@@ -18,7 +17,7 @@ return {
     local sysname = vim.loop.os_uname().sysname
 
     if sysname == "Linux" then
-      open_browser_app = "mimeo"
+      open_browser_app = "xdg-open"
     elseif sysname == "Darwin" then
       open_browser_app = "open"
       open_browser_args = { "--background" }

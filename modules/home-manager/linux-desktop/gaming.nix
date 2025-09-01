@@ -6,15 +6,18 @@
 }: let
 in
   lib-mine.mkFeature "features.linux-desktop.gaming" (let
-    gamescope-patched = pkgs.gamescope.overrideAttrs {
-      src = pkgs.fetchFromGitHub {
-        owner = "zlice";
-        repo = "gamescope";
-        rev = "fa900b0694ffc8b835b91ef47a96ed90ac94823b";
-        fetchSubmodules = true;
-        hash = "sha256-8KT/YEDFOyUiCAqPxuCc0SzJuwquyo/mxYMx0LBiyHM=";
-      };
-    };
+    # gamescope-patched = pkgs.gamescope.overrideAttrs {
+    #   src = pkgs.fetchFromGitHub {
+    #     owner = "zlice";
+    #     repo = "gamescope";
+    #     rev = "fa900b0694ffc8b835b91ef47a96ed90ac94823b";
+    #     fetchSubmodules = true;
+    #     hash = "sha256-8KT/YEDFOyUiCAqPxuCc0SzJuwquyo/mxYMx0LBiyHM=";
+    #   };
+    # };
+    # gamescope = self.gamescope-reaperpatch;
+    gamescope = pkgs.gamescope;
+
     extraPkgs = _:
       with pkgs; [
         wineWowPackages.stableFull

@@ -23,9 +23,9 @@ local options = {
       "goimports",
     },
 
-    cs = {
-      "csharpier",
-    },
+    -- cs = {
+    --   "csharpier",
+    -- },
 
     -- sql = {
     -- 	"sqlfluff",

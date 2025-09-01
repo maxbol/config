@@ -107,6 +107,7 @@ div > .vimiumHintMarker > .matchingCharacter {
 }
 
 #vomnibar {
+  zoom: reset;
   background-color: var(--vimium-search-area-bg) !important;
   font-family: var(--vimium-font-family) !important;
   border-radius: 0 !important;

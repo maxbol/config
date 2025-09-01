@@ -26,17 +26,18 @@
     luajitPackages.tiktoken_core
 
     # Language tooling - migration from Mason
-    typescript-language-server
-    deno
-    prettierd
-    eslint_d
-    eslint
-    shfmt
-    sqlfluff
-    sql-formatter
-    vala-language-server
     clang-tools
+    deno
+    eslint
+    eslint_d
+    html-tidy
     mesonlsp
+    prettierd
+    shfmt
+    sql-formatter
+    sqlfluff
+    typescript-language-server
+    vala-language-server
   ];
   extraLuaPackages = ps: [ps.magick];
 in

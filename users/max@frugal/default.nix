@@ -46,6 +46,7 @@
       // lib-mine.mime.bindTextTypes ["nvim.desktop"]
       // lib-mine.mime.bindBrowserTypes ["firefox.desktop"]
       // {
+        "application/pdf" = ["org.pwmt.zathura.desktop"];
         "model/obj" = ["blender.desktop"];
         "model/gltf-binary" = ["f3d.desktop"];
         "model/gltf+json" = ["f3d.desktop"];
@@ -69,6 +70,7 @@
     file
     file-roller
     jetbrains.datagrip
+    jetbrains.rider
     kooha
     krita
     mpv

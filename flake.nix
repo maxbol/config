@@ -56,6 +56,16 @@
 
     nur.url = "github:nix-community/NUR";
 
+    # For virtual machines, servers, etc
+    disko = {
+      url = "github:nix-community/disko";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+    };
+
     # Application modules
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     textfox.url = "github:maxbol/textfox/copy-on-activation-mode@allow-custom-css@flatten-css";
@@ -269,6 +279,10 @@
               host = "frugal";
               system = "x86_64-linux";
             }
+            {
+              host = "whitebox";
+              system = "x86_64-linux";
+            }
           ];
 
           darwinConfigurations = mkDarwinConfigurations [
@@ -311,12 +325,14 @@
     extra-substituters = [
       "https://cache.garnix.io"
       "https://nix-community.cachix.org"
+      "https://maxbol.cachix.org"
       "https://hyprland.cachix.org"
     ];
 
     extra-trusted-public-keys = [
       "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "maxbol.cachix.org-1:Rlo1/Hw2jg0bxRoB/w1d9PXAc0kpyJ2uKFAdLkVygU0="
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
     ];
   };

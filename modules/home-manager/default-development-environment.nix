@@ -92,10 +92,11 @@ in
         sourcekit-lsp
 
         # CSharp
-        dotnet-sdk_8
+        dotnet-sdk_9
         omnisharp-roslyn
         csharpier
         netcoredbg
+        roslyn-ls
 
         # Nix
         alejandra
@@ -141,6 +142,10 @@ in
         openssl
         silicon
         mdcat
+
+        # Shell scripting
+        nushellFull
+        nufmt
 
         # Low level tools
         lsof

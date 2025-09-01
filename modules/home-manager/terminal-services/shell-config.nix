@@ -86,18 +86,25 @@ in
       };
     };
 
-    config = {
+    config = let
+      shellAliases = {
+        vim = "nv";
+        vi = "nv";
+        icat = "kitten icat";
+
+        genpasswd = "tr -dc 'A-Za-z0-9!?%=' < /dev/urandom | head -c 10";
+      };
+    in {
+      programs.nushell = {
+        enable = true;
+        inherit shellAliases;
+      };
+
       programs.zsh = {
         enable = true;
         autosuggestion.enable = true;
         enableCompletion = true;
-        shellAliases = {
-          vim = "nv";
-          vi = "nv";
-          icat = "kitten icat";
-          # zb = "zig build";
-          # zbr = "zig build run";
-        };
+        inherit shellAliases;
 
         history = {
           ignoreDups = true;

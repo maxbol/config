@@ -231,7 +231,7 @@ in
           "Ctrl+Alt+Shift+L".action = move-window-to-monitor-right;
 
           "Shift+Mod+F".action = fullscreen-window;
-          "Ctrl+Shift+F".action = toggle-overview;
+          "Ctrl+Up".action = toggle-overview;
 
           "Ctrl+Space".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "d"];
           "Ctrl+Mod+Space".action = spawn ["1password" "--quick-access"];
@@ -239,7 +239,7 @@ in
           "Mod+Q".action = close-window;
 
           "Ctrl+Shift+T".action = spawn "kitty";
-          "Ctrl+Shift+M".action = spawn "nautilus";
+          "Ctrl+Shift+F".action = spawn "nautilus";
           "Ctrl+Shift+B".action = spawn "firefox";
 
           "Shift+Mod+B".action = spawn ["kitty" "--app-id" "bluetui" "bluetui"];
@@ -382,7 +382,7 @@ in
             scroll-factor = 2.0;
           };
           touchpad = {
-            accel-speed = 0.5;
+            accel-speed = 0.7;
             click-method = "clickfinger";
             middle-emulation = false;
           };

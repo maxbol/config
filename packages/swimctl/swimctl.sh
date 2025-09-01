@@ -4,7 +4,7 @@ SWIM_CONFIG_DIR="${SWIM_CONFIG_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/swim}"
 SWIM_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/swim"
 
 # Another option would be a symlink!
-WALLPAPER_DIR=$(jq -r '.wallpaperDirectory' "${SWIM_CONFIG_DIR}/config.json")
+WALLPAPER_DIR=$(realpath "$(jq -r '.wallpaperDirectory' "${SWIM_CONFIG_DIR}/config.json")")
 
 updateWallpaper() {
   if ! [ -f "${WALLPAPER_DIR}/$1" ]; then

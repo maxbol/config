@@ -6,6 +6,7 @@ in {
   clockify-cli = addPackage ./clockify-cli;
   clockify-tmux = addPackage ./clockify-tmux;
   dynachrome = addPackage ./dynachrome;
+  gamescope-reaperpatch = addPackage ./gamescope-reaperpatch;
   gtkrc-reload = addPackage ./gtkrc-reload;
   hyprdots-kvantum = addPackage ./hyprdots-kvantum;
   hyprdots-qt5ct = addPackage ./hyprdots-qt5ct;

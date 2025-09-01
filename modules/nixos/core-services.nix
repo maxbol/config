@@ -47,7 +47,19 @@ lib-mine.mkFeature "features.core-services" {
 
     blueman.enable = true;
 
-    printing.enable = true;
+    avahi = {
+      enable = true;
+      nssmdns4 = true;
+      openFirewall = true;
+    };
+
+    printing = {
+      enable = true;
+      drivers = with pkgs; [
+        cups-filters
+        cups-browsed
+      ];
+    };
 
     gvfs.enable = true;
     devmon.enable = true;
