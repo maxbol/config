@@ -13,7 +13,7 @@
   impure-config-management.symlink.base = "${home.homeDirectory}/src/config";
 
   features.browser-config.enable = true;
-  # features.secrets-management.enable = true;
+  features.secrets-management.enable = true;
   features.application-support.enable = true;
   features.default-development-environment.enable = true;
   features.office-suite.enable = true;
@@ -52,6 +52,7 @@
         "model/gltf+json" = ["f3d.desktop"];
         "inode/directory" = ["org.gnome.Nautilus.desktop"];
         "inode/symlink" = ["org.gnome.Nautilus.desktop"];
+        "text/csv" = ["onlyoffice-desktopeditors.desktop"];
       };
   in {
     associations.added = apps;
@@ -62,6 +63,12 @@
   # that this specific user is interested in, and that doesn't
   # need/gain anything from having a separate feature module
   home.packages = with pkgs; [
+    (azure-cli.withExtensions (with azure-cli.extensions; [
+      containerapp
+      k8s-extension
+      k8s-runtime
+      fzf
+    ]))
     blender
     celluloid
     discord
@@ -69,10 +76,9 @@
     f3d
     file
     file-roller
-    jetbrains.datagrip
-    jetbrains.rider
     kooha
     krita
+    kubectl
     mpv
     nautilus
     slack

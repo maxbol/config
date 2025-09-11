@@ -129,7 +129,6 @@ in
         general = {
           # From Hyprland Wiki: to avoid having to press two keys to turn the display on.
           after_sleep_cmd = "${config.wayland.windowManager.hyprland.package}/bin/hyprctl dispatch dmps on";
-
           before_sleep_cmd = "${pkgs.systemd}/bin/loginctl lock-session";
           lock_cmd = "pidof hyprlock || ${lib.getExe config.programs.hyprlock.package}";
         };
@@ -143,7 +142,11 @@ in
             }
           ]
           ++ (lib.optional suspendEnabled {
-            timeout = 600;
+            timeout = 1790;
+            on-timeout = "${lib.getExe pkgs.playerctl} pause";
+          })
+          ++ (lib.optional suspendEnabled {
+            timeout = 1800;
             on-timeout = "${pkgs.systemd}/bin/systemctl suspend";
           });
       };

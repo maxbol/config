@@ -33,6 +33,7 @@ in {
           package = nixpkgs-unstable.kitty;
           settings = {
             background_blur = 10;
+            text_composition_strategy = "legacy";
             dynamic_background_opacity = "yes";
             hide_window_decorations =
               if pkgs.stdenv.hostPlatform.isDarwin

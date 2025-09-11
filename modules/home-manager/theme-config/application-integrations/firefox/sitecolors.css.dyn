@@ -8,12 +8,12 @@ defines:
   vimium_search_area_bg: background
   vimium_search_area_input_bg: background
   vimium_search_area_input_fg: accent1
-  vimium_search_result_bg: overlay
+  vimium_search_result_bg: background
   vimium_search_result_fg: text
   vimium_search_result_source_fg: text2
   vimium_search_result_url_fg: accent1
-  vimium_search_result_active_bg: accent1
-  vimium_search_result_active_fg: background
+  vimium_search_result_active_bg: surface
+  vimium_search_result_active_fg: text
 ---
 
 :root {
@@ -86,6 +86,12 @@ defines:
   }
 }
 
+@-moz-document regexp(moz-extension://.*/vomnibar.html) {
+  html, body {
+    zoom: unset !important;
+  }
+}
+
 /* VIMIUM */
 div > .vimiumHintMarker {
   /* linkhint boxes */
@@ -107,7 +113,7 @@ div > .vimiumHintMarker > .matchingCharacter {
 }
 
 #vomnibar {
-  zoom: reset;
+  zoom: unset !important;
   background-color: var(--vimium-search-area-bg) !important;
   font-family: var(--vimium-font-family) !important;
   border-radius: 0 !important;
@@ -118,28 +124,33 @@ div > .vimiumHintMarker > .matchingCharacter {
   background-color: var(--vimium-search-area-bg) !important;
 }
 
-#vomnibar > ul > li:not(.vomnibarSelected) {
+#vomnibar > ul > li:not(.selected, .vomnibarSelected) {
   background-color: var(--vimium-search-result-bg) !important;
   color: var(--vimium-search-result-fg) !important;
 }
 
-#vomnibar > ul > li:not(.vomnibarSelected) .vomnibarSource {
+#vomnibar > ul > li:not(.selected, .vomnibarSelected) .source,
+#vomnibar > ul > li:not(.selected, .vomnibarSelected) .vomnibarSource {
   color: var(--vimium-search-result-source-fg) !important;
 }
 
-#vomnibar > ul > li:not(.vomnibarSelected) .vomnibarUrl {
+#vomnibar > ul > li:not(.selected, .vomnibarSelected) .url,
+#vomnibar > ul > li:not(.selected, .vomnibarSelected) .vomnibarUrl {
   color: var(--vimium-search-result-url-fg) !important;
 }
 
+#vomnibar > ul > li.selected,
 #vomnibar > ul > li.vomnibarSelected {
   background-color: var(--vimium-search-result-active-bg) !important;
   color: var(--vimium-search-result-active-fg) !important;
 }
 
+#vomnibar > ul > li.selected .source,
 #vomnibar > ul > li.vomnibarSelected .vomnibarSource {
   color: var(--vimium-search-result-active-fg) !important;
 }
 
+#vomnibar > ul > li.selected .url,
 #vomnibar > ul > li.vomnibarSelected .vomnibarUrl {
   color: var(--vimium-search-result-active-fg) !important;
 }

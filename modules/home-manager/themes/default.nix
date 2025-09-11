@@ -132,10 +132,6 @@ in {
         highlight-text = palette.all.crust;
       };
 
-      waybarOverrides = palette: {
-        overlay = palette.all.base;
-      };
-
       neovimOverrides = palette: {
         colorscheme = "catppuccin-macchiato";
         background = "dark";

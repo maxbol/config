@@ -125,49 +125,49 @@ in
           [
             # bash
             ''
-                      export EDITOR=nvim
+              export EDITOR=nvim
 
               # case insensitive tab completion in a menu
-                      zstyle ':completion:*' completer _complete _ignored _approximate
-                      zstyle ':completion:*' list-colors
-                      zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
-                      zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-                      zstyle ':completion:*' menu select
-                      zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
-                      zstyle ':completion:*' verbose true
-                      _comp_options+=(globdots)
+              zstyle ':completion:*' completer _complete _ignored _approximate
+              zstyle ':completion:*' list-colors
+              zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+              zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+              zstyle ':completion:*' menu select
+              zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+              zstyle ':completion:*' verbose true
+              _comp_options+=(globdots)
 
-              # token_file="''${config.xdg.configHome}/.github_packages_token"
-              # if [ -f "$token_file" ]; then
-              #   export NPM_TOKEN=$(cat "$token_file");
-              #   export GOTOKEN=$(cat "$token_file");
-              #   export NIX_CONFIG="access-tokens = github.com=$(cat "$token_file")"
-              # fi
+              token_file="${config.xdg.configHome}/.github_packages_token"
+              if [ -f "$token_file" ]; then
+                export NPM_TOKEN=$(cat "$token_file");
+                export GOTOKEN=$(cat "$token_file");
+                export NIX_CONFIG="access-tokens = github.com=$(cat "$token_file")"
+              fi
 
-                      ZVM_INIT_MODE=sourcing
+              ZVM_INIT_MODE=sourcing
 
-                      source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-                      source ${zsh-vi-clipboard-fix}/bin/zsh-vi-clipboard-fix.sh
-                      source ${pkgs.zsh-fzf-history-search}/share/zsh-fzf-history-search/zsh-fzf-history-search.zsh
+              source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+              source ${zsh-vi-clipboard-fix}/bin/zsh-vi-clipboard-fix.sh
+              source ${pkgs.zsh-fzf-history-search}/share/zsh-fzf-history-search/zsh-fzf-history-search.zsh
 
-                      export PATH="$PATH:$HOME/bin:$HOME/go/bin:/opt/homebrew/bin:$HOME/.local/bin"
+              export PATH="$PATH:$HOME/bin:$HOME/go/bin:/opt/homebrew/bin:$HOME/.local/bin"
 
-                      export LLDB_USE_NATIVE_PDB_READER="yes"
-                      if [[ $(uname -s) == "Darwin" ]]; then
-                        export LLDB_DEBUGSERVER_PATH="/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
-                      fi
+              export LLDB_USE_NATIVE_PDB_READER="yes"
+              if [[ $(uname -s) == "Darwin" ]]; then
+                export LLDB_DEBUGSERVER_PATH="/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
+              fi
 
-                      if [[ -f "$HOME/.anthropic-key" ]] then
-                        export AVANTE_ANTHROPIC_API_KEY=$(cat "$HOME/.anthropic-key")
-                      fi
+              if [[ -f "$HOME/.anthropic-key" ]] then
+                export AVANTE_ANTHROPIC_API_KEY=$(cat "$HOME/.anthropic-key")
+              fi
 
-                      export ZIG_BLEEDING_EDGE_BIN="${zig-bleeding-edge}/bin/zig"
+              export ZIG_BLEEDING_EDGE_BIN="${zig-bleeding-edge}/bin/zig"
 
-                      export MANPAGER='nvim +Man!'
+              export MANPAGER='nvim +Man!'
 
-                      setopt PUSHDSILENT
+              setopt PUSHDSILENT
 
-                      alias time="/usr/bin/time"
+              alias time="/usr/bin/time"
             ''
           ]
           ++ initExtra

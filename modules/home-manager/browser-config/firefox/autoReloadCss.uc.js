@@ -1,33 +1,30 @@
 const POLL_INTERVAL = 1000;
 
 (function () {
-
-  console.log("[userChrome.js] Loading autoReloadCss.uc.js")
+  console.log("[userChrome.js] Loading autoReloadCss.uc.js");
 
   const { classes: Cc, interfaces: Ci } = Components;
 
-  const dirSvc = Cc["@mozilla.org/file/directory_service;1"]
-    .getService(Ci.nsIProperties);
+  const dirSvc = Cc["@mozilla.org/file/directory_service;1"].getService(
+    Ci.nsIProperties,
+  );
   const chromeDir = dirSvc.get("UChrm", Ci.nsIFile);
 
-  const ioService = Cc["@mozilla.org/network/io-service;1"]
-    .getService(Ci.nsIIOService);
+  const ioService = Cc["@mozilla.org/network/io-service;1"].getService(
+    Ci.nsIIOService,
+  );
 
-  const sss = Cc["@mozilla.org/content/style-sheet-service;1"]
-    .getService(Ci.nsIStyleSheetService);
+  const sss = Cc["@mozilla.org/content/style-sheet-service;1"].getService(
+    Ci.nsIStyleSheetService,
+  );
 
   // Define stylesheet groups
-  const variableProviders = [
-    "colors.css",
-  ];
+  const variableProviders = ["colors.css"];
 
-  const variableConsumers = [
-    "userChrome.css",
-    "userContent.css",
-  ];
+  const variableConsumers = ["userChrome.css", "userContent.css"];
 
   // Merge and tag all stylesheets
-  const fileData = [...variableProviders, ...variableConsumers].map(name => {
+  const fileData = [...variableProviders, ...variableConsumers].map((name) => {
     const file = chromeDir.clone();
     file.append(name);
     return {
@@ -84,5 +81,7 @@ const POLL_INTERVAL = 1000;
   // Poll intermittently
   setInterval(checkForChanges, POLL_INTERVAL);
 
-  console.log("[userChrome.js] Loaded autoReloadCss.uc.js")
+  reloadStylesheets();
+
+  console.log("[userChrome.js] Loaded autoReloadCss.uc.js");
 })();

@@ -32,4 +32,9 @@ in {
   environment.variables = {
     ELECTRON_OZONE_PLATFORM_HINT = "auto";
   };
+
+  environment.systemPackages = [
+    pkgs.bitwarden
+    pkgs.bitwarden-cli
+  ];
 })

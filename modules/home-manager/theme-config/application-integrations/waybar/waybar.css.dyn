@@ -13,7 +13,7 @@ defines:
     accent3: accent3
     accent4: accent4
 ---
-@define-color base #⟨base:hex⟩;
+@define-color base rgba(⟨base:r⟩,⟨base:g⟩,⟨base:b⟩,0.8);
 @define-color text #⟨text:hex⟩;
 @define-color text2 #⟨text2:hex⟩;
 @define-color surface #⟨surface:hex⟩;
@@ -37,7 +37,8 @@ defines:
 }
 
 window#waybar {
-  background-color: transparent;
+  /*background-color: transparent;*/
+  background-color: @base;
   color: @accent1;
   transition-property: background-color;
   transition-duration: 0.5s;
@@ -153,7 +154,7 @@ button {
 
 /* If workspaces is the leftmost module, reduce left margin */
 .modules-left>widget:first-child>#workspaces {
-  margin-left: 2px;
+  margin-left: 3px;
 }
 
 #clock {
@@ -221,22 +222,23 @@ button {
 }
 
 .modules-left {
-  background-color: @base;
-  border-radius: 10px;
-  padding-right: 10px;
-  margin: 10px 0 0 18px;
+  /*background-color: @base;*/
+  /*border-radius: 10px;*/
+  padding: 2px 20px 2px 10px;
+  margin: 5px 0 0 5px;
 }
 
 .modules-center {
-  background-color: transparent;
-  margin: 10px 0 0 0;
+  /*background-color: transparent;*/
+  margin: 5px 0 2px 0;
+  padding: 2px 20px;
 }
 
 .modules-right {
-  background-color: @base;
-  border-radius: 10px;
-  padding: 0 10px;
-  margin: 10px 18px 0 0;
+  /* background-color: @base;*/
+  /* border-radius: 10px; */
+  padding: 2px 10px 2px 20px;
+  margin: 5px 5px 0 0;
 }
 
 #custom-spotify {
@@ -255,8 +257,8 @@ button {
 
 #mpris {
   color: @accent3;
-  background-color: @base;
-  border-radius: 10px;
+  /*background-color: @base;*/
+  /*border-radius: 10px;*/
   padding: 5px 10px;
   margin-top: 0px;
 }

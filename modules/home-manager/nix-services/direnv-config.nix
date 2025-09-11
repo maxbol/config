@@ -13,6 +13,7 @@ in
     {
       programs.direnv.enable = true;
       programs.direnv.enableZshIntegration = true;
+      programs.direnv.enableNushellIntegration = true;
       programs.direnv.nix-direnv.enable = true;
 
       xdg.configFile."direnv/direnvrc" = {

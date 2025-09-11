@@ -75,7 +75,9 @@ in
       };
     };
 
-    imports = [
+    imports = let
+      eachVault = ctor: foldl' (acc: vaultDir: acc // (ctor vaultDir)) {} cfg.vaults;
+    in [
       (
         mkIf (cfg.enable) (let
           mkPlugin = vaultDir: source: let
@@ -88,7 +90,7 @@ in
 
           mkVaultPlugins = vaultDir: foldl' (acc: plugin: acc // (mkPlugin vaultDir plugin)) {} cfg.config.plugins;
         in {
-          home.file = foldl' (acc: vaultDir: acc // (mkVaultPlugins vaultDir)) {} cfg.vaults;
+          home.file = eachVault mkVaultPlugins;
         })
       )
       # Appearance settings
@@ -133,9 +135,20 @@ in
       # VimRC
       (
         mkIf (cfg.enable && cfg.config.vimrc != null) {
-          home.file.".obsidian.vimrc" = {
-            text = cfg.config.vimrc;
-          };
+          # programs.obsidian.config.plugins = [
+          #   (pkgs.fetchFromGitHub {
+          #     owner = "esm7";
+          #     repo = "obsidian-vimrc-support";
+          #     rev = "774de342055cba0b0641879de4241aad833c830a";
+          #     hash = "";
+          #   })
+          # ];
+
+          home.file = eachVault (vaultDir: {
+            "${vaultDir}/.obsidian.vimrc" = {
+              text = cfg.config.vimrc;
+            };
+          });
         }
       )
     ];

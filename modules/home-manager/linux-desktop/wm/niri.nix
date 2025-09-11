@@ -16,7 +16,7 @@
     # Clean up on exit
     cleanup() {
       rm -f "$SOCKET_PATH"
-      exit 0
+      exit 1
     }
     trap cleanup EXIT INT TERM
 
@@ -325,6 +325,15 @@ in
             default-column-display = "normal";
             draw-border-with-background = false;
           }
+          # {
+          #   matches = [
+          #     {
+          #       is-focused = false;
+          #       app-id = "kitty";
+          #     }
+          #   ];
+          #   opacity = 0.9;
+          # }
           {
             matches = [
               {

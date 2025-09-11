@@ -13,6 +13,7 @@ lib-mine.barrelGroup {
     "shutdown"
     "swim"
     "ui-toolkits"
+    "walker"
     "waybar"
     "wlogout"
     "wm"

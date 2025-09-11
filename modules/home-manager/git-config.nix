@@ -1,4 +1,5 @@
 {
+  config,
   lib-mine,
   pkgs,
   ...
@@ -23,11 +24,6 @@ lib-mine.mkFeature "features.git-config" {
     };
 
     extraConfig = {
-      url = {
-        "https://maxbol:xyz@github.com/volvo-cars-se".insteadOf = "https://github.com/volvo-cars-se";
-        "https://maxbol:xyz@github.com/ourstudio-se".insteadOf = "https://github.com/ourstudio-se";
-      };
-
       credential.helper = "${
         pkgs.git.override {withLibsecret = true;}
       }";
@@ -35,6 +31,23 @@ lib-mine.mkFeature "features.git-config" {
       push = {
         autoSetupRemote = true;
       };
+    };
+  };
+
+  sops = {
+    secrets.github_packages_token = {
+      path = "${config.xdg.configHome}/.github_packages_token";
+    };
+
+    templates.".gitconfig" = {
+      path = "${config.home.homeDirectory}/.gitconfig";
+      content = ''
+        [url "https://maxbol:${config.sops.placeholder.github_packages_token}@github.com/ourstudio-se"]
+                insteadOf = "https://github.com/ourstudio-se"
+
+        [url "https://maxbol:${config.sops.placeholder.github_packages_token}@github.com/volvo-cars-se"]
+                insteadOf = "https://github.com/volvo-cars-se"
+      '';
     };
   };
 }

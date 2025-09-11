@@ -5,7 +5,15 @@ with lib;
     inactive-border ? palette.semantic.text2,
     screencast-border ? palette.colors.green,
   }: {
-    layout = {
+    layout = let
+      gapSize = 16;
+      # topOuterGapSize = 5;
+      # topStrutSize = topOuterGapSize - gapSize;
+    in {
+      gaps = gapSize;
+      # struts = {
+      #   top = topStrutSize;
+      # };
       border = {
         enable = mkForce true;
         width = mkForce 2;
