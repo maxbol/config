@@ -13,7 +13,7 @@ defines:
     accent3: accent3
     accent4: accent4
 ---
-@define-color base rgba(⟨base:r⟩,⟨base:g⟩,⟨base:b⟩,0.8);
+@define-color base rgba(⟨base:r⟩,⟨base:g⟩,⟨base:b⟩,%OPACITY%);
 @define-color text #⟨text:hex⟩;
 @define-color text2 #⟨text2:hex⟩;
 @define-color surface #⟨surface:hex⟩;

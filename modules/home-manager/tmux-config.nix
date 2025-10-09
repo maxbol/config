@@ -206,7 +206,7 @@ in
               '';
           }
           {
-            plugin = tmuxPlugins.session-wizard;
+            plugin = vendor.tmux-session-wizard.default;
             extraConfig =
               /*
               bash

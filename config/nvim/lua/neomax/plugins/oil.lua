@@ -85,6 +85,12 @@ return {
             vim.api.nvim_input("<Left>")
           end
         end, { buffer = o.buf })
+
+        -- Add binding to open directory in new tmux pane
+        vim.keymap.set("n", "<C-w>n", function()
+          local dir = require("oil").get_current_dir()
+          os.execute("tmux new-window -c " .. dir)
+        end, { buffer = o.buf })
       end,
     })
   end,

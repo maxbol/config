@@ -12,6 +12,9 @@ return {
       "Tronikelis/lualine-components.nvim",
       {
         "nvim-lualine/lualine.nvim",
+        dependencies = {
+          { "yavorski/lualine-macro-recording.nvim" },
+        },
         config = function()
           require("lualine").setup({
             theme = "auto",
@@ -22,7 +25,7 @@ return {
                 "diff",
                 "diagnostics",
               },
-              lualine_c = { require("lualine-components.filename-oil") },
+              lualine_c = { require("lualine-components.filename-oil"), "macro_recording", "%S" },
               lualine_x = { "encoding", "fileformat", "filetype" },
               lualine_y = { "progress" },
               lualine_z = { "location" },

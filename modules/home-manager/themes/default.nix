@@ -55,6 +55,8 @@ in {
       variant = "mirage";
       wallpaper = ./ayu/wallpapers/mirage/wallpaper.png;
 
+      waybarOpacity = 0.0;
+
       neovimOverrides = palette: {
         colorscheme = "ayu-mirage";
         background = "dark";

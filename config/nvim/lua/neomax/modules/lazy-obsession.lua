@@ -58,12 +58,16 @@ local load_session = function()
     vim.cmd("Obsession " .. session_path)
   else
     local ok = pcall(vim.cmd, "source " .. session_path)
-    if not ok then
-      print("Couldn't fully restore session, clearing session data")
-      os.remove(session_path)
-      os.remove(session_directory)
+    if ok then
+      return
     end
+
+    print("Couldn't fully restore session, clearing session data")
+    os.remove(session_path)
+    os.remove(session_directory)
   end
+
+  vim.cmd("Oil")
 end
 
 -- vim.opt.shortmess:append("F")

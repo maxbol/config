@@ -1,11 +1,16 @@
 {
   lib-mine,
   lib,
+  origin,
   pkgs,
   vendor,
   self,
   ...
 }: let
+  nixpkgs-unstable = import origin.inputs.nixpkgs-unstable {
+    system = pkgs.system;
+  };
+
   withGoRootWrapper = pkg: binName:
     pkgs.writeShellScriptBin binName ''
       export GOROOT=${pkgs.go}
@@ -47,11 +52,11 @@ in
         asdf-vm
 
         # Golang
-        go
-        gopls
-        golangci-lint
-        golangci-lint-langserver
-        gotools
+        nixpkgs-unstable.go
+        nixpkgs-unstable.gopls
+        nixpkgs-unstable.golangci-lint
+        nixpkgs-unstable.golangci-lint-langserver
+        nixpkgs-unstable.gotools
 
         # Protobuffers
         buf
@@ -87,6 +92,7 @@ in
         dune_3
         ocamlPackages.ocaml-lsp
         ocamlPackages.earlybird
+        ocamlPackages.ocamlformat
 
         # Swift
         sourcekit-lsp
@@ -144,7 +150,7 @@ in
         mdcat
 
         # Shell scripting
-        nushellFull
+        nushell
         nufmt
 
         # Low level tools

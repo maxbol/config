@@ -1,4 +1,5 @@
 {
+  pkgs,
   config,
   lib,
   lib-mine,
@@ -32,6 +33,14 @@ in {
       reloadCommand = ''systemctl --user restart waybar'';
 
       themeOptions = {
+        opacity = mkOption {
+          type = types.float;
+          default = 0.8;
+          description = ''
+            The opacity of the bar background color.
+          '';
+        };
+
         colorOverrides = mkOption {
           type = with types; attrsOf colorType;
           default = {};
@@ -50,7 +59,9 @@ in {
           required = true;
 
           source = mkDefault (opts.palette.generateDynamic {
-            template = ./waybar.css.dyn;
+            template = pkgs.runCommand "waybar.css.dyn" {} ''
+              ${pkgs.gnused}/bin/sed 's/%OPACITY%/${builtins.toString config.opacity}/g' ${./waybar.css.dyn} > $out
+            '';
             paletteOverrides = config.colorOverrides;
           });
         };

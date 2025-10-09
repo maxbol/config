@@ -20,6 +20,7 @@
   features.streaming.enable = true;
   features.git-config.enable = true;
   features.linux-desktop.enable = true;
+  features.linux-desktop.walker.enable = false;
   features.nix-services.enable = true;
   features.terminal-services.enable = true;
   features.terminal-services.terminal-config.enable = true;
@@ -79,10 +80,13 @@
     kooha
     krita
     kubectl
+    kubeseal
+    kustomize
     mpv
     nautilus
     slack
     thunderbird
+    vendor.wooz.default
     vendor.zen-browser.default
     vipsdisp
     vlc

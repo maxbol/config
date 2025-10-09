@@ -38,6 +38,10 @@
     sqlfluff
     typescript-language-server
     vala-language-server
+
+    ocamlPackages.ocaml-lsp
+    ocamlPackages.earlybird
+    ocamlPackages.ocamlformat
   ];
   extraLuaPackages = ps: [ps.magick];
 in

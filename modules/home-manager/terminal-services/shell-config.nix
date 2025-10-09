@@ -144,6 +144,12 @@ in
                 export NIX_CONFIG="access-tokens = github.com=$(cat "$token_file")"
               fi
 
+              # Golang
+              export GOPRIVATE=github.com/volvo-cars-se/*,github.com/ourstudio-se/*,github.com/wayke-se/*
+
+              # # OCaml
+              # [[ ! -r '/home/max/.opam/opam-init/init.zsh' ]] || source '/home/max/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
+
               ZVM_INIT_MODE=sourcing
 
               source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh

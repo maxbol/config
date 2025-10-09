@@ -129,6 +129,7 @@ in rec {
   };
 
   waybar.colorOverrides = waybarOverrides palette;
+  waybar.opacity = 0.0;
 
   rofi.colorOverrides = rofiOverrides palette;
 

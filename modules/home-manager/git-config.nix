@@ -21,12 +21,17 @@ lib-mine.mkFeature "features.git-config" {
 
     aliases = {
       adog = "log --all --decorate --oneline --graph";
+      unshallow = ''!git fetch --unshallow && git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin'';
     };
 
     extraConfig = {
       credential.helper = "${
         pkgs.git.override {withLibsecret = true;}
       }";
+
+      merge = {
+        conflictStyle = "diff3";
+      };
 
       push = {
         autoSetupRemote = true;

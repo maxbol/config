@@ -28,8 +28,8 @@
 
   palette_ = {
     fg = "b9c0cb";
-    bg = "282c34";
-    # bg = "21242D"; #21242D
+    # bg = "282c34";
+    bg = "21242D"; #21242D
     bg_float = "21242D"; #21242D
     cursor = "ffcc00";
     cursor_text = "282c34";
@@ -169,6 +169,10 @@ in rec {
   };
 
   hyprland.colorOverrides = hyprlandOverrides palette;
+
+  niri.colorOverrides = {
+    inactive-border = palette.semantic.text;
+  };
 
   waybar.colorOverrides = waybarOverrides palette;
 

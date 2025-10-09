@@ -23,6 +23,10 @@ local options = {
       "goimports",
     },
 
+    ocaml = {
+      "ocamlformat",
+    },
+
     -- cs = {
     --   "csharpier",
     -- },

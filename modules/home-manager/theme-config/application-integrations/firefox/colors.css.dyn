@@ -27,18 +27,6 @@ defines:
   urlbar_focused_color: overlay
   urlbar_results_color: accent2
   urlbar_results_url_color: accent3
-  vimium_border_color: text2
-  vimium_hint_bg: accent1
-  vimium_hint_fg: background
-  vimium_hint_border: surface
-  vimium_search_area_bg: background
-  vimium_search_area_input_bg: background
-  vimium_search_area_input_fg: accent1
-  vimium_search_result_bg: overlay
-  vimium_search_result_fg: text
-  vimium_search_result_source_fg: text2
-  vimium_search_result_url_fg: accent1
-  vimium_search_result_active_bg: background
 ---
 
 #fullscr-toggler { background-color: rgba(0, 0, 0, 0) !important; }
@@ -96,7 +84,7 @@ defines:
 }
 
 .tabbrowser-tab[first-visible-tab][last-visible-tab]{
-  background-color: var(--uc-bar-bg-color) !important;
+  background-color: var(--uc-bar-color) !important;
 }
 .tab-text.tab-label {
   color: var(--uc-tab-fg-color) !important;

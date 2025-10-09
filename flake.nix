@@ -54,6 +54,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    tmux-session-wizard.url = "github:maxbol/tmux-session-wizard/bugfix/correctly-sort-unattached-sessions";
+
     custom-udev-rules.url = "github:MalteT/custom-udev-rules";
 
     nur.url = "github:nix-community/NUR";
@@ -73,6 +75,7 @@
     textfox.url = "github:maxbol/textfox/copy-on-activation-mode@allow-custom-css@flatten-css";
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     zen-browser.url = "github:youwen5/zen-browser-flake";
+    wooz.url = "github:negrel/wooz";
 
     # Languages
     zig-overlay.url = "github:mitchellh/zig-overlay";

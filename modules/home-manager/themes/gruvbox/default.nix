@@ -181,6 +181,8 @@ in rec {
     }
     // (waybarOverrides palette);
 
+  waybar.opacity = 0.0;
+
   hyprpanel.theme = {
     package = self.hyprpanel-themes;
     name = hyprpanelTheme;

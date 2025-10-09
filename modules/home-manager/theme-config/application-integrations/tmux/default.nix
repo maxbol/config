@@ -2,7 +2,6 @@
   config,
   lib,
   lib-mine,
-  pkgs,
   ...
 }:
 with lib; let
@@ -57,17 +56,4 @@ in {
       reloadCommand = "${lib.getExe config.programs.tmux.package} source ${config.xdg.configHome}/tmux/tmux.conf";
     };
   };
-
-  # imports = [
-  #   (mkIf (cfg.enable && cfg.tmux.enable) {
-  #     programs.tmux.extraConfig = ''
-  #       set -gq @tinted-tmux-modulepane-right-outer "󱃾 #( KUBE_TMUX_NS_ENABLE=false KUBE_TMUX_SYMBOL_ENABLE=false ${kube-tmux}/kube.tmux )"
-  #       set -gqa @tinted-tmux-modulepane-right-outer "  "
-  #       set -gqa @tinted-tmux-modulepane-right-outer "󰥔 #( ${clockifyd}/bin/clockifyd-get-current )"
-  #       set -gqF @tinted-tmux-modulepane-right-inner "%H:%M"
-  #
-  #       source ${config.xdg.configHome}/chroma/active/tmux/tinted-tmux-statusline.conf
-  #     '';
-  #   })
-  # ];
 }

@@ -11,18 +11,19 @@
     then "AyuDark"
     else "AyuMirage"
   ),
-  accent ? "orange",
-  accent2 ? "lightblue",
+  accent ? "lightblue",
+  accent2 ? "orange",
   accent3 ? "yellow",
   accent4 ? "teal",
   accent5 ? "mauve",
   hyprlandOverrides ? p: {},
   waybarOverrides ? p: {},
+  waybarOpacity ? 0.8,
   rofiOverrides ? p: {},
   tmuxOverrides ? p: {},
   sketchybarOverrides ? p: {},
   neovimOverrides ? p: {},
-  wallpaper ? ./wallpapers/dark/wallpaper.jpg,
+  wallpaper ? ./wallpapers/dark/wallpaper.png,
   lib-mine,
   makeDesktop,
   ...
@@ -156,6 +157,7 @@ in rec {
   hyprland.colorOverrides = hyprlandOverrides palette;
 
   waybar.colorOverrides = waybarOverrides palette;
+  waybar.opacity = waybarOpacity;
 
   rofi.colorOverrides = rofiOverrides palette;
 
