@@ -150,9 +150,13 @@ in rec {
         HLLineNum1 = "#ffdd33";
         "@property" = "#" + palette.semantic.text;
         BlinkCmpGhostText = "#949494";
+        DiffviewDiffAddAsDelete = palette.semantic.text;
+        DiffviewDiffAdd = palette.semantic.text;
       };
       hlGroupsBg = {
         FoldColumn = "#181818";
+        DiffviewDiffAddAsDelete = palette.accents.darkred;
+        DiffviewDiffAdd = palette.accents.green;
       };
     }
     // (neovimOverrides palette);

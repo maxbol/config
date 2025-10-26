@@ -63,13 +63,16 @@
   # Various application packages that can be "stupidly" added,
   # that this specific user is interested in, and that doesn't
   # need/gain anything from having a separate feature module
-  home.packages = with pkgs; [
-    (azure-cli.withExtensions (with azure-cli.extensions; [
+  home.packages = with pkgs; let
+    azure = azure-cli.withExtensions (with azure-cli.extensions; [
       containerapp
       k8s-extension
       k8s-runtime
       fzf
-    ]))
+    ]);
+  in [
+    aseprite
+    azure
     blender
     celluloid
     discord
@@ -84,6 +87,7 @@
     kustomize
     mpv
     nautilus
+    postman
     slack
     thunderbird
     vendor.wooz.default

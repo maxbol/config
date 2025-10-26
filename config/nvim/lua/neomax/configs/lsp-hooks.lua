@@ -2,6 +2,16 @@ local map = vim.keymap.set
 
 local M = {}
 
+M.compose_hook = function(hooks)
+  return function(client, bufnr)
+    for _, hook in ipairs(hooks) do
+      if hook ~= nil then
+        hook(client, bufnr)
+      end
+    end
+  end
+end
+
 M.on_init = function(client, _)
   -- if client.supports_method("textDocument/semanticTokens") then
   -- 	client.server_capabilities.semanticTokensProvider = nil
@@ -42,15 +52,59 @@ M.on_attach = function(client, bufnr)
   -- map("n", "gr", "<cmd>Lspsaga finder<CR>")
 
   map("n", "<leader>lf", vim.diagnostic.open_float, { desc = "Lsp floating diagnostics" })
-  map("n", "]d", vim.diagnostic.goto_prev, { desc = "Lsp prev diagnostic" })
-  map("n", "]d", vim.diagnostic.goto_next, { desc = "Lsp next diagnostic" })
+  map("n", "]d", function()
+    vim.diagnostic.jump({ count = -1, float = true })
+  end, { desc = "Lsp prev diagnostic" })
+  map("n", "]d", function()
+    vim.diagnostic.jump({ count = 1, float = true })
+  end, { desc = "Lsp next diagnostic" })
   map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Lsp diagnostic loclist" })
 
-  if client.name == "eslint" then
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      buffer = bufnr,
-      command = "EslintFixAll",
-    })
+  -- if client.name == "eslint" then
+  --   vim.api.nvim_create_autocmd("BufWritePre", {
+  --     buffer = bufnr,
+  --     command = "EslintFixAll",
+  --   })
+  -- end
+end
+
+M.config_servers = function(servers, capabilities)
+  for _, lsp in ipairs(servers) do
+    local config = {}
+    if type(lsp) == "table" then
+      config = lsp[2]
+      lsp = lsp[1]
+    end
+
+    config = vim.tbl_extend("keep", vim.lsp.config[lsp] or {}, config)
+
+    local attach_hook = M.on_attach
+    local init_hook = M.on_init
+
+    if vim.lsp.config[lsp] ~= nil and vim.lsp.config[lsp].on_attach ~= nil then
+      attach_hook = M.compose_hook({ vim.lsp.config[lsp].on_attach, attach_hook })
+    end
+
+    if vim.lsp.config[lsp] ~= nil and vim.lsp.config[lsp].on_init ~= nil then
+      init_hook = M.compose_hook({ vim.lsp.config[lsp].on_init, init_hook })
+    end
+
+    if config.on_attach ~= nil then
+      attach_hook = M.compose_hook({ config.on_attach, attach_hook })
+    end
+    if config.on_init ~= nil then
+      init_hook = M.compose_hook({ config.on_init, init_hook })
+    end
+
+    config.on_attach = attach_hook
+    config.on_init = init_hook
+
+    if config.capabilities == nil then
+      config.capabilities = capabilities
+    end
+
+    vim.lsp.config(lsp, config)
+    vim.lsp.enable(lsp)
   end
 end
 

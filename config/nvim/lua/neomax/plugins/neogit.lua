@@ -1,17 +1,17 @@
 return {
-	"NeogitOrg/neogit",
-	dependencies = {
-		"nvim-lua/plenary.nvim", -- required
-		"sindrets/diffview.nvim", -- optional - Diff integration
+  "NeogitOrg/neogit",
+  dependencies = {
+    "nvim-lua/plenary.nvim", -- required
+    "sindrets/diffview.nvim", -- optional - Diff integration
 
-		-- Only one of these is needed.
-		"nvim-telescope/telescope.nvim", -- optional
-	},
-	lazy = false,
-	config = function()
-		require("neogit").setup({
-			kind = "split_below_all",
-			-- TODO
-		})
-	end,
+    -- Only one of these is needed.
+    "nvim-telescope/telescope.nvim", -- optional
+  },
+  lazy = false,
+  config = function()
+    require("neogit").setup({
+      kind = "tab",
+      -- TODO
+    })
+  end,
 }

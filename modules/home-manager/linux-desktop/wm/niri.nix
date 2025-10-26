@@ -167,7 +167,6 @@ in
         outputs = {
           "DP-1" = {
             # mode = "preferred";
-            # scale = 1.25;
             scale = 1;
             position = {
               x = 2560;
@@ -175,8 +174,17 @@ in
             };
           };
           "DP-3" = {
+            variable-refresh-rate = true;
             # mode = "preferred";
-            # scale = 1.25;
+            scale = 1;
+            position = {
+              x = 2560;
+              y = 0;
+            };
+          };
+          "DP-4" = {
+            variable-refresh-rate = true;
+            # mode = "preferred";
             scale = 1;
             position = {
               x = 2560;
@@ -375,6 +383,23 @@ in
                 is-floating = true;
               }
             ];
+            tiled-state = false;
+          }
+          {
+            matches = [
+              {
+                app-id = "xwaylandvideobridge";
+              }
+            ];
+            opacity = 0.0;
+            max-width = 1;
+            max-height = 1;
+            open-floating = true;
+            open-focused = false;
+            focus-ring.enable = false;
+            border.enable = false;
+            shadow.enable = false;
+            # block-out-from = "screencast";
             tiled-state = false;
           }
         ];

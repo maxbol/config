@@ -57,6 +57,7 @@ in
         nixpkgs-unstable.golangci-lint
         nixpkgs-unstable.golangci-lint-langserver
         nixpkgs-unstable.gotools
+        nixpkgs-unstable.delve
 
         # Protobuffers
         buf
@@ -86,6 +87,9 @@ in
 
         # Vala
         vala
+
+        # Godot
+        godot
 
         #OCaml
         ocaml

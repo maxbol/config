@@ -1,4 +1,5 @@
 local map = vim.keymap.set
+local utils = require("neomax.utils")
 
 map("i", "<C-b>", "<ESC>^i", { desc = "Move Beginning of line" })
 map("i", "<C-e>", "<End>", { desc = "Move End of line" })
@@ -86,7 +87,7 @@ map("n", "<leader>gs", "<cmd>G<CR>", { desc = "Git status" })
 map("n", "<leader>gS", "<cmd>G stash<CR>", { desc = "Git stash" })
 map("n", "<leader>gx", "<cmd>G stash pop<CR>", { desc = "Git stash pop" })
 map("n", "<leader>gd", "<cmd>DiffviewOpen<CR>", { desc = "Open diffview in new tab" })
-map("n", "<leader>gg", "<cmd>Neogit kind=split_below_all<CR>", { desc = "Open Neogit" })
+map("n", "<leader>gg", "<cmd>Neogit<CR>", { desc = "Open Neogit" })
 
 map("n", "<leader>ghc", "<cmd>Octo pr create<CR>", { desc = "Create PR" })
 map("n", "<leader>ghw", "<cmd>Octo pr checks<CR>", { desc = "Watch PR checks" })
@@ -148,6 +149,11 @@ map("n", "<C-p>", "<cmd>cp<CR>", { desc = "Prev quickfix" })
 map({ "n", "x" }, "<leader>m", function()
   vim.api.nvim_input(":s/\\d\\+/\\=submatch(0)/<Left>")
 end, { desc = "Multiply cword" })
+
+-- Search and replace cword or selection
+map({ "n", "x" }, "<leader>re", function()
+  vim.api.nvim_input("<ESC>:%s/" .. utils.get_selected_text_or_cword())
+end)
 
 -- Undotree
 map("n", "<leader>u", "<Cmd>UndotreeToggle<CR>", { desc = "Toggle undotree" })
