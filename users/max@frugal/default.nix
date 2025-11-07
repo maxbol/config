@@ -75,11 +75,13 @@
     azure
     blender
     celluloid
+    claude-code
     discord
     emacs
     f3d
     file
     file-roller
+    gettext
     kooha
     krita
     kubectl
