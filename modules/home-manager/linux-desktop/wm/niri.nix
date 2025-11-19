@@ -214,9 +214,9 @@ in
           "Ctrl+Alt+K".action = set-window-height "-5%";
           "Ctrl+Alt+L".action = set-column-width "+5%";
 
-          "Ctrl+Alt+Period".action = switch-preset-column-width;
-          "Ctrl+Alt+Comma".action = expand-column-to-available-width;
-          "Ctrl+Alt+M".action = set-column-width "100%";
+          "Ctrl+Alt+Period".action = set-column-width "100%";
+          "Ctrl+Alt+Comma".action = set-column-width "50%";
+          "Ctrl+Alt+M".action = switch-preset-column-width;
 
           "Ctrl+Shift+Period".action = focus-floating;
           "Ctrl+Shift+Comma".action = focus-tiling;

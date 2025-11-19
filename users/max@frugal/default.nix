@@ -71,6 +71,7 @@
       fzf
     ]);
   in [
+    # vendor.zen-browser.default
     aseprite
     azure
     blender
@@ -93,9 +94,9 @@
     slack
     thunderbird
     vendor.wooz.default
-    vendor.zen-browser.default
     vipsdisp
     vlc
+    wdisplays
     zed-editor
     zenity
   ];

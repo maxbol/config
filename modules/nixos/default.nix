@@ -9,6 +9,7 @@
     ./nix-registry.nix
     ./nix-store-tooling.nix
     ./secrets-management.nix
+    ./server
     ./system-start.nix
     ./vpn-config
   ];

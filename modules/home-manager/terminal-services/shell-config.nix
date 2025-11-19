@@ -173,7 +173,7 @@ in
 
               setopt PUSHDSILENT
 
-              alias time="/usr/bin/time"
+              export KUBECONFIG=/home/max/.kube/config:/etc/kubernetes/cluster-admin.kubeconfig
             ''
           ]
           ++ initExtra

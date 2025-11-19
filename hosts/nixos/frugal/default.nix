@@ -37,13 +37,14 @@
   features.nix-registry.enable = true;
   features.nix-store-tooling.enable = true;
   features.secrets-management.enable = true;
+  features.server.enable = true;
   features.system-start = {
     enable = true;
     defaultUser = "max";
   };
   # features.vpn-config.enable = true;
 
-  services.timesyncd.enable = false;
+  services.timesyncd.enable = true;
   systemd.watchdog.rebootTime = "45s";
 
   system.stateVersion = "24.11";
