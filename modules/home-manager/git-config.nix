@@ -44,6 +44,8 @@ lib-mine.mkFeature "features.git-config" {
       path = "${config.xdg.configHome}/.github_packages_token";
     };
 
+    secrets.github_vcc_token = {};
+
     templates.".gitconfig" = {
       path = "${config.home.homeDirectory}/.gitconfig";
       content = ''
@@ -52,6 +54,9 @@ lib-mine.mkFeature "features.git-config" {
 
         [url "https://maxbol:${config.sops.placeholder.github_packages_token}@github.com/volvo-cars-se"]
                 insteadOf = "https://github.com/volvo-cars-se"
+
+        [url "https://maxbol:${config.sops.placeholder.github_vcc_token}@github.com/volvo-cars"]
+                insteadOf = "https://github.com/volvo-cars"
       '';
     };
   };
