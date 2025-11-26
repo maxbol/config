@@ -44,7 +44,9 @@ lib-mine.mkFeature "features.git-config" {
       path = "${config.xdg.configHome}/.github_packages_token";
     };
 
-    secrets.github_vcc_token = {};
+    secrets.github_vcc_token = {
+      path = "${config.xdg.configHome}/.github_vcc_token";
+    };
 
     templates.".gitconfig" = {
       path = "${config.home.homeDirectory}/.gitconfig";

@@ -190,12 +190,12 @@ in rec {
 
   macoswallpaper = {inherit wallpaper;};
 
-  firefox = let
-    enable = luminance == "dark";
-  in {
-    enableColors = enable;
-    enableSiteColors = enable;
-  };
+  # firefox = let
+  #   enable = luminance == "dark";
+  # in {
+  #   enableColors = enable;
+  #   enableSiteColors = enable;
+  # };
 
   swim.wallpaperDirectory = lib-mine.path.dirname wallpaper;
 }

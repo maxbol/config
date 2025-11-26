@@ -24,6 +24,7 @@ in {
   synp = addPackage ./synp;
   systemctl-toggle = addPackage ./systemctl-toggle;
   waybar-confgen-hyprdots = addPackage ./waybar-confgen-hyprdots;
+  wayscriber = addPackage ./wayscriber;
   wlogout-launcher-hyprdots = addPackage ./wlogout-launcher-hyprdots;
   zathura-darwin = addPackage ./zathura-darwin;
   zathura-darwin-app = addPackage ./zathura-darwin-app;

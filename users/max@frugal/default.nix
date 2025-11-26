@@ -3,6 +3,7 @@
   pkgs,
   config,
   vendor,
+  self,
   ...
 }: rec {
   home.stateVersion = "24.11";
@@ -83,6 +84,7 @@
     file
     file-roller
     gettext
+    grim
     kooha
     krita
     kubectl
@@ -91,7 +93,9 @@
     mpv
     nautilus
     postman
+    self.wayscriber
     slack
+    slurp
     thunderbird
     vendor.wooz.default
     vipsdisp

@@ -2,9 +2,9 @@
 defines:
   accent_primary: accent1
   arrowpanel_color: text
-  bg_color2: background
   bg_color: background
-  border_color: text2
+  border_color: surface
+  border_color_active: overlay
   fg_color: text
   frame_fg: text
   icon_color: text
@@ -48,18 +48,18 @@ defines:
   --in-content-primary-button-text-color: #⟨primary_btn_fg:hex⟩ !important;
   --lwt-accent-color: var(--mff-bg) !important;
   --lwt-toolbarbutton-icon-fill: var(--mff-icon-color) !important;
-  --mff-bg: #⟨bg_color2:hex⟩ !important;
-  --mff-icon-color: #⟨icon_color:hex⟩;
-  --mff-sidebar-bg: var(--mff-bg);
-  --mff-sidebar-color: #⟨sidebar_color:hex⟩;
-  --mff-tab-color: #⟨tab_color:hex⟩;
-  --mff-tab-pinned-bg: #⟨tab_pinned_bg_color:hex⟩;
-  --mff-tab-selected-bg: #⟨tab_selected_bg_color:hex⟩;
-  --mff-tab-soundplaying-bg: #⟨tab_soundplaying_bg_color:hex⟩;
-  --mff-urlbar-color: #⟨urlbar_color:hex⟩;
-  --mff-urlbar-focused-color: #⟨urlbar_focused_color:hex⟩;
-  --mff-urlbar-results-color: #⟨urlbar_focused_color:hex⟩;
-  --mff-urlbar-results-url-color: #⟨urlbar_results_url_color:hex⟩;
+  --mff-bg: #⟨bg_color:hex⟩ !important;
+  --mff-icon-color: #⟨icon_color:hex⟩ !important;
+  --mff-sidebar-bg: var(--mff-bg) !important;
+  --mff-sidebar-color: #⟨sidebar_color:hex⟩ !important;
+  --mff-tab-color: #⟨tab_color:hex⟩ !important;
+  --mff-tab-pinned-bg: #⟨tab_pinned_bg_color:hex⟩ !important;
+  --mff-tab-selected-bg: #⟨tab_selected_bg_color:hex⟩ !important;
+  --mff-tab-soundplaying-bg: #⟨tab_soundplaying_bg_color:hex⟩ !important;
+  --mff-urlbar-color: #⟨urlbar_color:hex⟩ !important;
+  --mff-urlbar-focused-color: #⟨urlbar_focused_color:hex⟩ !important;
+  --mff-urlbar-results-color: #⟨urlbar_focused_color:hex⟩ !important;
+  --mff-urlbar-results-url-color: #⟨urlbar_results_url_color:hex⟩ !important;
   --newtab-background-color: #⟨newtab_bg_color:hex⟩ !important;
   --panel-disabled-color: #f9f9fa80;
   --s-active-el-bg: #⟨toolbar_active_el_bg:hex⟩ !important;
@@ -71,6 +71,7 @@ defines:
   --s-toolbar-fg: #⟨toolbar_fg:hex⟩ !important;
   --tf-accent: #⟨accent_primary:hex⟩ !important;
   --tf-border: #⟨border_color:hex⟩ !important;
+  --tf-border-active: #⟨border_color_active:hex⟩ !important; 
   --toolbar-bgcolor: var(--mff-bg) !important;
   --toolbar-field-color: #⟨toolbar_field_color:hex⟩ !important;
   --uc-bg-color: #⟨bg_color:hex⟩ !important;
@@ -110,3 +111,6 @@ defines:
   color: var(--active-el-fg) !important;
 }
 
+tabbox#tabbrowser-tabbox:hover {
+  border-color: var(--tf-border-active) !important;
+}

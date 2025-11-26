@@ -124,10 +124,6 @@ in rec {
 
   hyprland.colorOverrides = hyprlandOverrides palette;
 
-  niri.colorOverrides = {
-    inactive-border = palette.accents.wisteria;
-  };
-
   waybar.colorOverrides = waybarOverrides palette;
   waybar.opacity = 0.0;
 

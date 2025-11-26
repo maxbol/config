@@ -1,8 +1,8 @@
 {
   "reload_style_on_change": true,
   "layer": "top",
-  // "height": 58,
-  "spacing": 5,
+  "height": 58,
+  "spacing": 10,
   "modules-left": [
     "image",
     "niri/workspaces",

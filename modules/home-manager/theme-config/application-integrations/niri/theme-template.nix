@@ -1,12 +1,12 @@
 lib: palette:
 with lib;
   {
-    active-border ? palette.semantic.accent1,
-    inactive-border ? palette.semantic.text2,
+    active-border ? palette.semantic.overlay,
+    inactive-border ? palette.semantic.surface,
     screencast-border ? palette.colors.green,
   }: {
     layout = let
-      gapSize = 16;
+      gapSize = 0;
       # topOuterGapSize = 5;
       # topStrutSize = topOuterGapSize - gapSize;
     in {

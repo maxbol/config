@@ -173,7 +173,7 @@ in
 
               setopt PUSHDSILENT
 
-              export KUBECONFIG=/home/max/.kube/config:/etc/kubernetes/cluster-admin.kubeconfig
+              # export KUBECONFIG=/home/max/.kube/config:/etc/kubernetes/cluster-admin.kubeconfig
             ''
           ]
           ++ initExtra

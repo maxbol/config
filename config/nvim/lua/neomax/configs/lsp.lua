@@ -63,6 +63,7 @@ local servers = {
   "vala_ls",
   "mesonlsp",
   "nushell",
+  "tinymist",
   {
     "lua_ls",
     {

@@ -126,6 +126,7 @@
             overlays = mkOverlays system;
             config = {
               allowUnfree = true;
+              input-fonts.acceptLicense = true;
               permittedInsecurePackages = [
                 "openssl-1.1.1w"
                 # "openssl-1.0.0"

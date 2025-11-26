@@ -7,8 +7,11 @@
   accent3 ? "foam",
   accent4 ? "love",
   accent5 ? "iris",
+  niriOverrides ? p: {},
   hyprlandOverrides ? p: {},
   waybarOverrides ? p: {},
+  firefoxOverrides ? p: {},
+  waybarOpacity ? 0.8,
   rofiOverrides ? p: {},
   tmuxOverrides ? p: {},
   sketchybarOverrides ? p: {},
@@ -196,7 +199,12 @@ in rec {
 
   hyprland.colorOverrides = hyprlandOverrides palette;
 
+  niri.colorOverrides = niriOverrides palette;
+
   waybar.colorOverrides = waybarOverrides palette;
+  waybar.opacity = waybarOpacity;
+
+  firefox.colorOverrides = firefoxOverrides palette;
 
   hyprpanel.theme = {
     package = self.hyprpanel-themes;

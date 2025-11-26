@@ -65,10 +65,26 @@
     '';
   };
 
-  ayuPaletteJson = pkgs.lib.pipe "${ayuPaletteToJson}/palette.json" [
-    builtins.readFile
-    builtins.fromJSON
-  ];
+  ayuPaletteJson =
+    pkgs.lib.recursiveUpdate (
+      pkgs.lib.pipe
+      "${ayuPaletteToJson}/palette.json"
+      [
+        builtins.readFile
+        builtins.fromJSON
+      ]
+    )
+    {
+      # Better visibility for overlay/surface
+      dark = {
+        editor.bg = "2D2F34";
+        ui.panel.bg = "23252A";
+      };
+      mirage = {
+        editor.bg = "3A3E47";
+        ui.panel.bg = "31353F";
+      };
+    };
 
   ayuKvantum = let
     src = pkgs.fetchFromGitHub {

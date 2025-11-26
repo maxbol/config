@@ -48,6 +48,8 @@ return {
       {
         "yorik1984/newpaper.nvim",
       },
+      -- Install without configuration
+      { "projekt0n/github-nvim-theme", name = "github-theme" },
       {
         "letorbi/vim-colors-modern-borland",
         config = function()

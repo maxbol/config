@@ -38,6 +38,9 @@
     sqlfluff
     typescript-language-server
     vala-language-server
+    tinymist
+    typstyle
+    websocat
 
     ocamlPackages.ocaml-lsp
     ocamlPackages.earlybird

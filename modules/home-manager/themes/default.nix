@@ -16,7 +16,8 @@
     cursorTheme.package = pkgs.apple-cursor;
     cursorTheme.name = "macOS";
     cursorTheme.size = 28;
-    font.name = "Cantarell";
+    # font.name = "Cantarell";
+    font.name = "DeepMind Sans";
     font.size = 14;
     font.package = pkgs.cantarell-fonts;
     monospaceFont.name = "Aporetic Sans Mono";
@@ -31,6 +32,8 @@
   makeTheme = path: args: (pkgs.callPackage path (specialArgs // args // {inherit makeDesktop;}));
 in {
   Ayu-Dark = makeTheme ./ayu {
+    waybarOpacity = 0.0;
+
     neovimOverrides = palette: {
       colorscheme = "ayu-dark";
       background = "dark";
@@ -80,13 +83,11 @@ in {
     makeTheme ./catppuccin
     {
       variant = "latte";
-      accent = "rosewater";
-      accent2 = "blue";
-      accent3 = "mauve";
 
       hyprlandOverrides = palette: {
         active1 = palette.accents.rosewater;
         active2 = palette.accents.mauve;
+
         inactive1 = palette.accents.lavender;
         inactive2 = palette.accents.teal;
       };
@@ -151,7 +152,13 @@ in {
 
   Gruvbox-Dark = makeTheme ./gruvbox {luminance = "dark";};
 
-  Newpaper-Light = makeTheme ./newpaper {luminance = "light";};
+  Newpaper-Light = makeTheme ./newpaper {
+    luminance = "light";
+    neovimOverrides = _: {
+      background = "light";
+      extraCmds = ["NewpaperLight"];
+    };
+  };
 
   Oh-Lucy =
     makeTheme ./oh-lucy
@@ -174,6 +181,13 @@ in {
     makeTheme ./rose-pine
     {
       variant = "pine";
+      waybarOpacity = 0.0;
+      niriOverrides = palette: {
+        active-border = palette.semantic.text2;
+      };
+      firefoxOverrides = palette: {
+        border_color_active = palette.semantic.text2;
+      };
       neovimOverrides = palette: {
         colorscheme = "rose-pine-main";
         background = "dark";

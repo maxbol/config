@@ -30,9 +30,9 @@ defines:
 
 * {
   font-family:
-    "Aporetic Sans Mono",
+    "Cantarell",
     "Symbols Nerd Font";
-  font-weight: bolder;
+  font-weight: bold;
   font-size: 18px;
 }
 

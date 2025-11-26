@@ -24,13 +24,11 @@
     hash = "sha256-z2kRBlggu0g9qblr2yT18SV+mGNUxekDXs49scZDKf0=";
   };
 
-  capitalize = str: "${pkgs.lib.toUpper (builtins.substring 0 1 str)}${builtins.substring 1 (builtins.stringLength str) str}";
-
   palette_ = {
     fg = "b9c0cb";
     # bg = "282c34";
     bg = "21242D"; #21242D
-    bg_float = "21242D"; #21242D
+    bg_float = "282c34"; #282c34#
     cursor = "ffcc00";
     cursor_text = "282c34";
     black = "41444d";
@@ -135,8 +133,6 @@
     ${mkStarshipPalette "bluloco-dark" palette_dark}
     ${mkStarshipPalette "bluloco-light" palette_light}
   '';
-
-  Luminance = capitalize luminance;
 in rec {
   palette =
     if luminance == "dark"
@@ -169,10 +165,6 @@ in rec {
   };
 
   hyprland.colorOverrides = hyprlandOverrides palette;
-
-  niri.colorOverrides = {
-    inactive-border = palette.semantic.text;
-  };
 
   waybar.colorOverrides = waybarOverrides palette;
 

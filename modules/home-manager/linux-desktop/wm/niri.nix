@@ -255,6 +255,7 @@ in
 
           "Ctrl+Shift+P".action = screenshot {show-pointer = false;};
           "Ctrl+Shift+Alt+P".action = screenshot-window {write-to-disk = true;};
+          "Ctrl+Shift+Mod+P".action.screenshot-screen = [{write-to-disk = true;}];
 
           "Shift+Mod+W".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "w"];
           "Shift+Mod+E".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "f"];
@@ -265,6 +266,8 @@ in
 
           "Shift+Mod+A".action = set-dynamic-cast-window;
           "Shift+Mod+S".action = set-dynamic-cast-monitor;
+
+          "Shift+Mod+D".action = spawn ["pkill" "-SIGUSR1" "wayscriber"];
 
           "XF86AudioMute".action = spawn ["volumecontrol.sh" "-o" "m"];
           "XF86AudioMicMute".action = spawn ["volumecontrol.sh" "-i" "m"];
@@ -437,6 +440,9 @@ in
           }
           {
             command = ["wl-paste" "--type" "image" "--watch" "cliphist" "store"];
+          }
+          {
+            command = ["sh" "-c" "sleep 2s && ~/.nix-profile/bin/wayscriber --daemon"];
           }
         ];
         hotkey-overlay = {

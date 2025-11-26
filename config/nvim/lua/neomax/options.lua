@@ -116,16 +116,16 @@ vim.cmd([[autocmd! BufNewFile,BufRead *.vs,*.fs,*.frag,*.vert set ft=glsl]])
 vim.diagnostic.config({ virtual_text = true })
 -- vim.diagnostic.config({ virtual_lines = true })
 
--- -- Extui options
--- opt.cmdheight = 0
--- if vim.g.neovide == nil then
---   require("vim._extui").enable({
---     enable = true,
---     msg = {
---       target = "cmd",
---     },
---   })
--- end
+-- Extui options
+opt.cmdheight = 0
+if vim.g.neovide == nil then
+  require("vim._extui").enable({
+    enable = true,
+    msg = {
+      target = "cmd",
+    },
+  })
+end
 
 require("neomax.configs.make")
 require("neomax.modules.obsidian")

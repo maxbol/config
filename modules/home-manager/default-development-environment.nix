@@ -152,6 +152,7 @@ in
         openssl
         silicon
         mdcat
+        hurl
 
         # Shell scripting
         nushell
