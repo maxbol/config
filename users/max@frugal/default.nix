@@ -21,6 +21,8 @@
   features.streaming.enable = true;
   features.git-config.enable = true;
   features.linux-desktop.enable = true;
+  features.linux-desktop.notifications.enable = false;
+  features.linux-desktop.waybar.enable = false;
   features.linux-desktop.walker.enable = false;
   features.nix-services.enable = true;
   features.terminal-services.enable = true;
@@ -72,7 +74,6 @@
       fzf
     ]);
   in [
-    # vendor.zen-browser.default
     aseprite
     azure
     blender
@@ -98,6 +99,7 @@
     slurp
     thunderbird
     vendor.wooz.default
+    vendor.zen-browser.default
     vipsdisp
     vlc
     wdisplays

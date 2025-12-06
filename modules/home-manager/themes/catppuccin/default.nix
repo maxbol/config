@@ -92,6 +92,11 @@ in rec {
     name = hyprpanelTheme;
   };
 
+  noctalia = {
+    predefinedColorscheme = "Catppuccin";
+    predefinedColorschemeLuminance = luminance;
+  };
+
   rofi.colorOverrides = rofiOverrides palette;
 
   tmux.colorOverrides = tmuxOverrides palette;

@@ -26,6 +26,7 @@ in {
   waybar-confgen-hyprdots = addPackage ./waybar-confgen-hyprdots;
   wayscriber = addPackage ./wayscriber;
   wlogout-launcher-hyprdots = addPackage ./wlogout-launcher-hyprdots;
+  xwayland-satellite-fix = addPackage ./xwayland-satellite-fix;
   zathura-darwin = addPackage ./zathura-darwin;
   zathura-darwin-app = addPackage ./zathura-darwin-app;
 }

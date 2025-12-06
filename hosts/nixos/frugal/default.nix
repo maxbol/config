@@ -33,6 +33,7 @@
   features.desktop-config.enable = true;
   features.hardware-support.enable = true;
   features.graphics-config.enable = true;
+  features.localsend.enable = true;
   features.localisation.enable = true;
   features.nix-registry.enable = true;
   features.nix-store-tooling.enable = true;

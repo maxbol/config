@@ -10,6 +10,7 @@ lib-mine.barrelGroup {
     "notifications"
     "panel"
     "rofi"
+    "shell"
     "shutdown"
     "swim"
     "ui-toolkits"

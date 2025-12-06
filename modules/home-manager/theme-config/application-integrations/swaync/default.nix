@@ -12,6 +12,7 @@ in {
     theme-config.swaync.enable = mkOption {
       type = types.bool;
       default = config.services.swaync.enable;
+      # default = false;
       example = false;
       description = ''
         Whether to enable swaync themeing as part of the theme integration.
@@ -20,12 +21,12 @@ in {
   };
 
   config = {
-    assertions = [
-      {
-        assertion = !cfg.enable || config.services.swaync.enable;
-        message = "Swaync theme integration only works when the swaync home-manager module is enabled.";
-      }
-    ];
+    # assertions = [
+    #   {
+    #     assertion = !cfg.enable || config.services.swaync.enable;
+    #     message = "Swaync theme integration only works when the swaync home-manager module is enabled.";
+    #   }
+    # ];
 
     theme-config.programs.swaync = {
       themeOptions = {

@@ -19,18 +19,25 @@ updateWallpaper() {
 
 # spellcheck disable=SC2046
 activateWallpaper() {
-  local TRANS="${TRANSITION:-grow}"
-  mapfile -t swwwArgs < <(jq -r '.extraSwwwArgs | .[]' "${SWIM_CONFIG_DIR}/config.json" | while read -r line; do
-    eval "echo $line"
-  done)
-  swww \
-    img "${SWIM_STATE_DIR}/active/wallpaper" \
-    --transition-bezier ".43,1.19,1,.4" \
-    --transition-type "$TRANS" \
-    --transition-duration 0.7 \
-    --transition-fps 120 \
-    --invert-y \
-    "${swwwArgs[@]}"
+  # local TRANS="${TRANSITION:-grow}"
+  # mapfile -t swwwArgs < <(jq -r '.extraSwwwArgs | .[]' "${SWIM_CONFIG_DIR}/config.json" | while read -r line; do
+  #   eval "echo $line"
+  # done)
+  #
+
+  NOCTALIA_WP=$(readlink "${SWIM_STATE_DIR}/active/wallpaper")
+
+  # ln -s "${SWIM_STATE_DIR/active/wallpaper}"
+  noctalia-shell ipc call wallpaper set "$NOCTALIA_WP" all
+
+  # swww \
+  #   img "${SWIM_STATE_DIR}/active/wallpaper" \
+  #   --transition-bezier ".43,1.19,1,.4" \
+  #   --transition-type "$TRANS" \
+  #   --transition-duration 0.7 \
+  #   --transition-fps 120 \
+  #   --invert-y \
+  #   "${swwwArgs[@]}"
 
   WALLPAPER="${SWIM_STATE_DIR}/active/wallpaper" "$SWIM_CONFIG_DIR/activate"
 }

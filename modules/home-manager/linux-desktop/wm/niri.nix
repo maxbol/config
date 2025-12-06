@@ -3,10 +3,25 @@
   lib-mine,
   lib,
   origin,
+  vendor,
   pkgs,
   self,
   ...
 }: let
+  pkgs-unstable = origin.inputs.nixpkgs-unstable.legacyPackages.${pkgs.system};
+
+  noctalia-shell-dir = "${vendor.noctalia.default}/share/noctalia-shell";
+
+  noctalia-ipc-call = args:
+    config.lib.niri.actions.spawn ([
+        "${pkgs-unstable.quickshell}/bin/qs"
+        "-p"
+        noctalia-shell-dir
+        "ipc"
+        "call"
+      ]
+      ++ args);
+
   doubletapServer = pkgs.writeShellScript "doubletap-server" ''
     export TMPDIR=''${TMPDIR:-/run/user/$UID}
     SOCKET_PATH="$TMPDIR/doubletap.sock"
@@ -108,7 +123,7 @@ in
         };
 
         Service = {
-          ExecStart = lib.getExe pkgs.xwayland-satellite;
+          ExecStart = lib.getExe self.xwayland-satellite-fix;
         };
 
         Install.WantedBy = ["niri.service"];
@@ -157,6 +172,17 @@ in
               }
               {
                 criteria = "DP-3";
+              }
+            ];
+          };
+          dp4Docked = {
+            exec = "${self.swimctl}/bin/swimctl activate";
+            outputs = [
+              {
+                criteria = "eDP-2";
+              }
+              {
+                criteria = "DP-4";
               }
             ];
           };
@@ -253,8 +279,8 @@ in
           "Shift+Mod+B".action = spawn ["kitty" "--app-id" "bluetui" "bluetui"];
           "Ctrl+Mod+N".action = spawn ["kitty" "--app-id" "impala" "impala"];
 
-          "Ctrl+Shift+P".action = screenshot {show-pointer = false;};
-          "Ctrl+Shift+Alt+P".action = screenshot-window {write-to-disk = true;};
+          "Ctrl+Shift+P".action.screenshot = [{show-pointer = false;}];
+          "Ctrl+Shift+Alt+P".action.screenshot-window = [{write-to-disk = true;}];
           "Ctrl+Shift+Mod+P".action.screenshot-screen = [{write-to-disk = true;}];
 
           "Shift+Mod+W".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "w"];
@@ -278,7 +304,7 @@ in
           "XF86AudioNext".action = spawn ["playerctl" "next"];
           "XF86AudioPrev".action = spawn ["playerctl" "previous"];
 
-          "Mod+Shift+Return".action = spawn ["wlogout-launcher-hyprland" "1"];
+          "Mod+Shift+Return".action = noctalia-ipc-call ["sessionMenu" "toggle"];
 
           "MouseMiddle".action = spawn "${doubletapClient}";
         };
@@ -317,6 +343,9 @@ in
             matches = [
               {
                 namespace = "swww-daemon";
+              }
+              {
+                namespace = "noctalia-wallpaper";
               }
             ];
             place-within-backdrop = true;
@@ -459,10 +488,14 @@ in
       services.blueman-applet.enable = true;
       services.playerctld.enable = true;
 
-      home.packages = with pkgs; [
-        playerctl
-        bluetui
-        impala
-      ];
+      home.packages =
+        (with pkgs; [
+          playerctl
+          bluetui
+          impala
+        ])
+        ++ [
+          pkgs-unstable.quickshell
+        ];
     };
   }

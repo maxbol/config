@@ -11,6 +11,7 @@
   hyprlandOverrides ? p: {},
   waybarOverrides ? p: {},
   firefoxOverrides ? p: {},
+  noctaliaOverrides ? p: {},
   waybarOpacity ? 0.8,
   rofiOverrides ? p: {},
   tmuxOverrides ? p: {},
@@ -210,6 +211,14 @@ in rec {
     package = self.hyprpanel-themes;
     name = hyprpanelTheme;
   };
+
+  noctalia =
+    {
+      colorOverrides = {
+        mOutline = palette.accents.highlightMed;
+      };
+    }
+    // (noctaliaOverrides palette);
 
   rofi.colorOverrides = rofiOverrides palette;
 

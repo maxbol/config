@@ -173,6 +173,10 @@ in
 
               setopt PUSHDSILENT
 
+              if [[ $(uname -s) == "Linux" ]]; then
+                export SSH_AUTH_SOCK=/run/user/$UID/ssh-agent
+              fi
+
               # export KUBECONFIG=/home/max/.kube/config:/etc/kubernetes/cluster-admin.kubeconfig
             ''
           ]

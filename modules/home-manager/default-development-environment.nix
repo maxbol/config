@@ -50,6 +50,7 @@ in
         nodePackages.ts-node
         asdf
         asdf-vm
+        nixpkgs-unstable.deno
 
         # Golang
         nixpkgs-unstable.go

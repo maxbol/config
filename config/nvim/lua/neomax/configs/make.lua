@@ -398,7 +398,7 @@ M.makeLanguage({
 })
 
 M.makeLanguage({
-  pattern = { "typescript", "javascript" },
+  pattern = { "typescript", "javascript", "typescriptreact", "javascriptreact" },
   grepcmds = {
     lint = '2>/dev/null | awk \'/^(\\/.+)$/ { file=$1; } /^\\s*[0-9]+:[0-9]+/ {  errorMsg=""; for (i=3;i<=NF;++i) errorMsg=errorMsg " " $i; print file ":" $1 " " $2 " " errorMsg }\'',
     make = "2>/dev/null | grep -E '^.+\\([0-9]+,[0-9]+\\)' | sed -E 's/^(.+)\\(([0-9]+),([0-9]+)\\):(.*)/\\1:\\2:\\3 \\4/g'",

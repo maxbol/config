@@ -5,6 +5,7 @@
     ./desktop-config
     ./graphics-config.nix
     ./hardware-support
+    ./localsend.nix
     ./localisation.nix
     ./nix-registry.nix
     ./nix-store-tooling.nix

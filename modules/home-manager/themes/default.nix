@@ -244,6 +244,9 @@ in {
           Folded = "#44415a";
         };
       };
+      noctaliaOverrides = _: {
+        predefinedColorscheme = "Rosepine";
+      };
       wallpaper = ./rose-pine/wallpapers/moon/wallpaper.png;
     };
 

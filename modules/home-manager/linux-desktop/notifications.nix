@@ -1,9 +1,4 @@
-{
-  lib-mine,
-  config,
-  pkgs,
-  ...
-}:
+{lib-mine, ...}:
 lib-mine.mkFeature "features.linux-desktop.notifications" {
   services.swaync = {
     enable = true;

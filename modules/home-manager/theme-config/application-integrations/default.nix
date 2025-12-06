@@ -1,32 +1,33 @@
 {...}: {
   imports = [
     ./bat
+    ./desktop.nix
+    ./dunst.nix
     ./dynawall
     ./firefox
+    ./fish.nix
+    ./gtk.nix
     ./hyprland
     ./hyprpanel
     ./jankyborders
     ./kitty
-    ./niri
-    ./obsidian
-    ./rofi
-    ./sketchybar
-    ./swaync
-    ./tmux
-    ./waybar
-    ./yazi
-    ./zathura
-    ./desktop.nix
-    ./dunst.nix
-    ./fish.nix
-    ./gtk.nix
     ./macos-wallpaper.nix
     ./neovim.nix
+    ./niri
+    ./noctalia
+    ./obsidian
     ./palette.nix
     ./qt
+    ./rofi
+    ./sketchybar
     ./starship.nix
-    ./wlogout
+    ./swaync
+    ./tmux
     ./vscode.nix
+    ./waybar
     ./wezterm.nix
+    ./wlogout
+    ./yazi
+    ./zathura
   ];
 }
