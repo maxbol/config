@@ -15,7 +15,7 @@ in
         fira-code
       ];
 
-      programs.obsidian = {
+      programs.obsidian-mine = {
         enable = true;
         vaults = [
           "Notes/maxnotes"

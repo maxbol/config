@@ -21,11 +21,9 @@ lib-mine.mkFeature "features.linux-desktop.rofi" {
       kitty = config.programs.kitty.package;
     in {
       enable = true;
-      package = pkgs.rofi-wayland;
+      package = pkgs.rofi;
       terminal = "${kitty}/bin/kitty";
-      font = "Aporetic Sans Mono 14";
-      # font = "Iosevka Nerd Font 14";
-      # font = "JetBrainsMono Nerd Font 10";
+      font = "Aporetic Sans Mono 16";
       # FIXME: by default location, xoffset, yoffset are set; we probably don't want these set here
       imports = ["${config.xdg.configHome}/rofi/config.style.rasi"];
     };

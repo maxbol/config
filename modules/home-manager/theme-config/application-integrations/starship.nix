@@ -41,6 +41,12 @@ in {
         themeConfig = {opts, ...}: {
           file."starship.toml".source = tomlFormat.generate "starship-chroma-config" (config.programs.starship.settings
             // {
+              character = {
+                success_symbol = "[❯](bold green)";
+                error_symbol = "[❯](bold red)";
+              };
+            }
+            // {
               palette = opts.starship.palette.name;
             }
             // builtins.fromTOML (builtins.readFile (opts.starship.palette.file)));
@@ -49,7 +55,9 @@ in {
     }
     (mkIf (cfg.enable && cfg.starship.enable) {
       # IDEA: add functionality to Chroma to generate these symlinks from there?
-      xdg.configFile."starship.toml".source = mkForce (config.lib.file.mkOutOfStoreSymlink "${cfg.themeDirectory}/active/starship/starship.toml");
+      home.file.".config/starship.toml" = {
+        source = config.lib.file.mkOutOfStoreSymlink "${cfg.themeDirectory}/active/starship/starship.toml";
+      };
     })
   ];
 }

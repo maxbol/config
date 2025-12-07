@@ -141,10 +141,10 @@ in rec {
 
   desktop = makeDesktop {
     inherit accent;
-    iconTheme = {
-      package = pkgs.papirus-icon-theme;
-      name = "Papirus-Dark";
-    };
+    # iconTheme = {
+    #   package = pkgs.papirus-icon-theme;
+    #   name = "Papirus-Dark";
+    # };
   };
 
   # TODO(2025-05-19, Max Bolotin): Copying this from gruvbox for now, should be replace with theme specific

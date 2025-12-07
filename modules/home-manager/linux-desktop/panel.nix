@@ -23,7 +23,7 @@ lib-mine.mkFeature "features.linux-desktop.panel" {
       systemd.enable = true;
       systemd.target = "hyprland-session.target";
 
-      dontAssertNotificationDaemons = true;
+      # dontAssertNotificationDaemons = true;
 
       settings = lib.mkForce {}; # Do not configure directly, rather use the themeing integration
 

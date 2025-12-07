@@ -57,7 +57,7 @@ in
     home.packages = with pkgs; [
       self.systemctl-toggle
       self.misc-scripts-hyprdots
-      kdePackages.xwaylandvideobridge
+      # kdePackages.xwaylandvideobridge
       procps
       wl-clipboard
       wl-clipboard-x11

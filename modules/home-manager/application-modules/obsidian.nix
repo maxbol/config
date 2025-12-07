@@ -4,13 +4,13 @@
   config,
   ...
 }: let
-  cfg = config.programs.obsidian;
+  cfg = config.programs.obsidian-mine;
   # basename = path: lib.splitString "/" path |> lib.last;
   basename = path: lib.last (lib.splitString "/" path);
 in
   with lib; {
     options = {
-      programs.obsidian = {
+      programs.obsidian-mine = {
         enable = mkEnableOption "Obsidian";
 
         vaults = mkOption {
@@ -135,7 +135,7 @@ in
       # VimRC
       (
         mkIf (cfg.enable && cfg.config.vimrc != null) {
-          # programs.obsidian.config.plugins = [
+          # programs.obsidian-mine.config.plugins = [
           #   (pkgs.fetchFromGitHub {
           #     owner = "esm7";
           #     repo = "obsidian-vimrc-support";

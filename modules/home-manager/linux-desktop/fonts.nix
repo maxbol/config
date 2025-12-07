@@ -18,6 +18,9 @@ lib-mine.mkFeature "features.linux-desktop.fonts" {
     pkgs.cantarell-fonts
     pkgs.input-fonts
     pkgs.inter-nerdfont
+    pkgs.nerd-fonts.symbols-only
+    pkgs.nerd-fonts.iosevka
+    pkgs.nerd-fonts.jetbrains-mono
     pkgs.dm-sans
   ];
 }

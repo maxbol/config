@@ -110,6 +110,7 @@ lib-mine.mkFeature "features.core-services" {
   networking = {
     networkmanager.enable = true;
     wireless.iwd.enable = true;
+    nameservers = ["8.8.4.4" "8.8.8.8"];
   };
 
   programs.seahorse.enable = true;

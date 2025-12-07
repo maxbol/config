@@ -88,9 +88,9 @@ in {
     #   wayland.enable = true;
     # };
 
-    services.logind.extraConfig = ''
-      HandlePowerKey=ignore
-    '';
+    services.logind.settings.Login = {
+      HandlePowerKey = "ignore";
+    };
 
     environment.systemPackages = with pkgs; [
       gdm-settings

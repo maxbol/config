@@ -34,9 +34,9 @@
     userImage = ./image.jpg;
   };
 
-  programs.git = {
-    userName = "Max Bolotin";
-    userEmail = "maks.bolotin@gmail.com";
+  programs.git.settings.user = {
+    name = "Max Bolotin";
+    email = "maks.bolotin@gmail.com";
   };
 
   home.sessionVariables = {

@@ -22,11 +22,7 @@
     font.package = pkgs.cantarell-fonts;
     monospaceFont.name = "Aporetic Sans Mono";
     monospaceFont.size = 12;
-    # monospaceFont.package = pkgs.aporetic;
     monospaceFont.package = specialArgs.vendor.aporetic-kitty.default;
-    # monospaceFont.name = "Iosevka";
-    # monospaceFont.size = 12;
-    # monospaceFont.package = pkgs.iosevka;
   };
 
   makeTheme = path: args: (pkgs.callPackage path (specialArgs // args // {inherit makeDesktop;}));

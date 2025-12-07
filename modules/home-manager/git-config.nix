@@ -50,15 +50,15 @@ lib-mine.mkFeature "features.git-config" {
 
   programs.git = {
     enable = true;
-    package = pkgs.gitAndTools.gitFull;
+    package = pkgs.gitFull;
 
-    aliases = {
-      adog = "log --all --decorate --oneline --graph";
-      unshallow = ''!git fetch --unshallow && git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin'';
-      patch = "push rad HEAD:refs/patches";
-    };
+    settings = {
+      alias = {
+        adog = "log --all --decorate --oneline --graph";
+        unshallow = ''!git fetch --unshallow && git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin'';
+        patch = "push rad HEAD:refs/patches";
+      };
 
-    extraConfig = {
       credential.helper = "${
         pkgs.git.override {withLibsecret = true;}
       }";

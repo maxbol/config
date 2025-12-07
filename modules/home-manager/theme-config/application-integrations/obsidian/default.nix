@@ -14,7 +14,7 @@ in
     options = {
       theme-config.obsidian.enable = mkOption {
         type = types.bool;
-        default = config.programs.obsidian.enable;
+        default = config.programs.obsidian-mine.enable;
         example = false;
         description = ''
           Whether to enable Obsidian settings as part of Chroma.
@@ -66,7 +66,7 @@ in
     imports = [
       (
         mkIf (cfg.enable && cfg.obsidian.enable) {
-          programs.obsidian = {
+          programs.obsidian-mine = {
             config = {
               plugins = [
                 vendor.obsidian-remote.plugin

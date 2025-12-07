@@ -1,10 +1,8 @@
 {
-  origin,
   lib-mine,
   pkgs,
   ...
 }: let
-  nerdfonts = origin.inputs.nixpkgs-legacy.legacyPackages.${pkgs.system}.nerdfonts;
 in
   lib-mine.mkFeature "features.desktop-config.core-desktop" {
     # The name is a remnant of former times. This just enables graphical sessions.
@@ -19,10 +17,6 @@ in
       # Nicer fonts in Java apps
       _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
     };
-
-    environment.systemPackages = [
-      nerdfonts
-    ];
 
     programs.dconf.enable = true;
 

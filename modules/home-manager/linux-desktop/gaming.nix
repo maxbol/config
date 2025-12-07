@@ -23,7 +23,9 @@ in
         wineWowPackages.stableFull
         libgudev
         libvdpau
-        libsoup
+        # TODO: Check if lutris/heroic still works with libsoup 3, otherwise we have to allow libsoup 2 as an insecure package
+        # libsoup_2_4
+        libsoup_3
         libusb1
         gamescope
         mangohud

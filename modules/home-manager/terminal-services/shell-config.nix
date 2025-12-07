@@ -102,6 +102,7 @@ in
 
       programs.zsh = {
         enable = true;
+        dotDir = "./";
         autosuggestion.enable = true;
         enableCompletion = true;
         inherit shellAliases;
@@ -121,7 +122,7 @@ in
             fi
           '';
 
-        initExtra = lib.concatStringsSep "\n" (
+        initContent = lib.concatStringsSep "\n" (
           [
             # bash
             ''

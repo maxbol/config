@@ -267,7 +267,8 @@ in
           "Shift+Mod+F".action = fullscreen-window;
           "Ctrl+Up".action = toggle-overview;
 
-          "Ctrl+Space".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "d"];
+          "Ctrl+Space".action = noctalia-ipc-call ["launcher" "toggle"];
+          # "Ctrl+Space".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "d"];
           "Ctrl+Mod+Space".action = spawn ["1password" "--quick-access"];
 
           "Mod+Q".action = close-window;

@@ -47,7 +47,7 @@ in
         yarn2nix
         vscode-langservers-extracted
         nodePackages.fixjson
-        nodePackages.ts-node
+        # nodePackages.ts-node
         asdf
         asdf-vm
         nixpkgs-unstable.deno
@@ -77,8 +77,8 @@ in
         gcc
         gnumake
         checkmake
-        llvm_17
-        lldb_17
+        llvm
+        lldb
         tracy
         bear
         meson
@@ -100,7 +100,7 @@ in
         ocamlPackages.ocamlformat
 
         # Swift
-        sourcekit-lsp
+        # sourcekit-lsp
 
         # CSharp
         dotnet-sdk_9

@@ -4,7 +4,7 @@
   bc,
   gnused,
   gawk,
-  rofi-wayland,
+  rofi,
   dunst,
   dconf,
   cliphist,
@@ -19,7 +19,7 @@
     # inputs.hyprland.packages.default
     gnused
     gawk
-    rofi-wayland
+    rofi
     dunst
     dconf
     bc

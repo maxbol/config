@@ -19,7 +19,7 @@ max_y=$((y_monres - clip_h - 15)) #offset of 15 for gaps
 pos=""
 if [[ "$compositor" == "hyprland" ]]; then
   x_offset=-15 #* Cursor spawn position on clipboard
-  y_offset=210 #* To point the Cursor to the 1st and 2nd latest word
+  k_offset=210 #* To point the Cursor to the 1st and 2nd latest word
 
   x_cur=$((x_cur - x_offset))
   y_cur=$((y_cur - y_offset))
