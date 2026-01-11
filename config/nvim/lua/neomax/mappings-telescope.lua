@@ -51,6 +51,14 @@ make_telescope_binding("<leader>fw", require("telescope.builtin").live_grep, fun
   }
 end, "Telescope Live grep")
 
+make_telescope_binding("<leader>fW", require("telescope.builtin").live_grep, function()
+  return {
+    cwd = vim.fn.getcwd(-1),
+    no_ignore = true,
+    hidden = true,
+  }
+end, "Telescope Live grep (all files)")
+
 make_telescope_binding("<leader>fo", require("telescope.builtin").oldfiles, function()
   return {
     cwd = vim.fn.getcwd(-1),

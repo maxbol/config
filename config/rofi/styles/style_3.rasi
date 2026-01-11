@@ -69,7 +69,7 @@ listview {
 mode-switcher {
     orientation:                 vertical;
     width:                       100px;
-    enabled:                     true;
+    enabled:                     false;
     padding:                     60px 10px 60px 10px;
     spacing:                     15px;
     background-color:            transparent;

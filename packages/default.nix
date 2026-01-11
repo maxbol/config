@@ -18,6 +18,7 @@ in {
   nancy = addPackage ./nancy;
   openssl_1_0 = addPackage ./openssl_1_0;
   rofi-launchers-hyprdots = addPackage ./rofi-launchers-hyprdots;
+  rofi-wayland = addPackage ./rofi-wayland;
   runcached = addPackage ./runcached;
   sddm-theme-corners = addPackage ./sddm-theme-cornersnix packageArgs;
   swimctl = addPackage ./swimctl;

@@ -13,7 +13,7 @@
   neovimOverrides ? p: {},
   sketchybarOverrides ? p: {},
   yaziOverrides ? p: {},
-  luminance ? "dark",
+  luminanceVariant ? "dark",
   makeDesktop,
   ...
 }: let
@@ -135,7 +135,7 @@
   '';
 in rec {
   palette =
-    if luminance == "dark"
+    if luminanceVariant == "dark"
     then palette_dark
     else palette_light;
 
@@ -174,7 +174,7 @@ in rec {
 
   sketchybar.colorOverrides = sketchybarOverrides palette;
 
-  yazi.syntectTheme = "${bluloco_pkg}/extra/bat/.config/bat/themes/bluloco-${luminance}/bluloco-${luminance}.tmTheme";
+  yazi.syntectTheme = "${bluloco_pkg}/extra/bat/.config/bat/themes/bluloco-${luminanceVariant}/bluloco-${luminanceVariant}.tmTheme";
   yazi.colorOverrides =
     {
       filetype_fallback_dir_fg = palette.accents.blue;
@@ -231,12 +231,12 @@ in rec {
 
   starship.palette = {
     file = starshipPalettes;
-    name = "bluloco-${luminance}";
+    name = "bluloco-${luminanceVariant}";
   };
 
   bat.theme = {
     src = bluloco_pkg;
-    file = "extra/bat/.config/bat/themes/bluloco-${luminance}/bluloco-${luminance}.tmTheme";
+    file = "extra/bat/.config/bat/themes/bluloco-${luminanceVariant}/bluloco-${luminanceVariant}.tmTheme";
   };
 
   macoswallpaper = {

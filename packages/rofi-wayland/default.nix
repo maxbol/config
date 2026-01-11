@@ -6,6 +6,7 @@
   pkg-config,
   wayland-protocols,
   wayland,
+  ...
 }:
 rofi-unwrapped.overrideAttrs (oldAttrs: rec {
   pname = "rofi-wayland-unwrapped";

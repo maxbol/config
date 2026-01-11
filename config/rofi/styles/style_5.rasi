@@ -75,7 +75,7 @@ listview {
 // Modes //
 mode-switcher {
     orientation:                 horizontal;
-    enabled:                     true;
+    enabled:                     false;
     padding:                     30px 160px 30px 160px;
     spacing:                     50px;
     background-color:            transparent;

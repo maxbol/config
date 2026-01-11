@@ -27,7 +27,7 @@ return {
               },
               lualine_c = { require("lualine-components.filename-oil"), "macro_recording", "%S" },
               lualine_x = { "encoding", "fileformat", "filetype" },
-              lualine_y = { "progress" },
+              lualine_y = { "searchcount", "progress" },
               lualine_z = { "location" },
             },
             inactive_sections = {
@@ -43,8 +43,28 @@ return {
       },
 
       -- Themes
-      -- {
-      --
+      {
+        "endel/vim-github-colorscheme",
+      },
+      {
+        "NLKNguyen/papercolor-theme",
+        priority = 1000,
+        config = function()
+          -- vim.g.PaperColor_Theme_Options = {
+          --   theme = {
+          --     default = {
+          --       transparent_background = 1,
+          --     },
+          --   },
+          -- }
+        end,
+      },
+      {
+        "vim-scripts/pyte",
+      },
+      {
+        "navarasu/onedark.nvim",
+      },
       {
         "yorik1984/newpaper.nvim",
       },

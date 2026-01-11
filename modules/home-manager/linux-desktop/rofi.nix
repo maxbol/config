@@ -21,7 +21,7 @@ lib-mine.mkFeature "features.linux-desktop.rofi" {
       kitty = config.programs.kitty.package;
     in {
       enable = true;
-      package = pkgs.rofi;
+      package = self.rofi-wayland;
       terminal = "${kitty}/bin/kitty";
       font = "Aporetic Sans Mono 16";
       # FIXME: by default location, xoffset, yoffset are set; we probably don't want these set here

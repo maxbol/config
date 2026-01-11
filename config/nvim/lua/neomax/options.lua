@@ -127,5 +127,7 @@ if vim.g.neovide == nil then
   })
 end
 
+vim.cmd([[DoMatchParen]])
+
 require("neomax.configs.make")
 require("neomax.modules.obsidian")

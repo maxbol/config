@@ -73,7 +73,7 @@ in {
 
   # Blue-Nightmare = makeTheme ./blue-nightmare {};
 
-  Bluloco-Dark = makeTheme ./bluloco {luminance = "dark";};
+  Bluloco-Dark = makeTheme ./bluloco {luminanceVariant = "dark";};
 
   Catppuccin-Latte =
     makeTheme ./catppuccin
@@ -146,10 +146,25 @@ in {
       };
     };
 
-  Gruvbox-Dark = makeTheme ./gruvbox {luminance = "dark";};
+  Gruvbox-Dark = makeTheme ./gruvbox {
+    luminanceVariant = "dark";
+    neovimOverrides = palette: {
+      hlGroupsFg = {
+        HLChunk1 = "#8ec07c";
+        HLLineNum1 = "#8ec07c";
+        BlinkCmpGhostText = "#" + palette.semantic.text1;
+      };
+      hlGroupsBg = {
+        TelescopeSelection = "#427b58";
+      };
+    };
+  };
+  Gruvbox-Light = makeTheme ./gruvbox {
+    luminanceVariant = "light";
+  };
 
   Newpaper-Light = makeTheme ./newpaper {
-    luminance = "light";
+    luminanceVariant = "light";
     neovimOverrides = _: {
       background = "light";
       extraCmds = ["NewpaperLight"];
@@ -245,6 +260,18 @@ in {
       };
       wallpaper = ./rose-pine/wallpapers/moon/wallpaper.png;
     };
+
+  Rose-Pine-Dawn = makeTheme ./rose-pine {
+    variant = "dawn";
+    luminanceVariant = "light";
+    noctaliaOverrides = _: {
+      predefinedColorscheme = "Rosepine";
+    };
+    neovimOverrides = palette: {
+      colorscheme = "rose-pine-dawn";
+      background = "light";
+    };
+  };
 
   Tsoding-Mode = makeTheme ./tsoding-mode {};
 }

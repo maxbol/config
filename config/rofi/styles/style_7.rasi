@@ -94,7 +94,7 @@ entry {
 mode-switcher {
     width:                       200px;
     orientation:                 horizontal;
-    enabled:                     true;
+    enabled:                     false;
     padding:                     30px 65px 30px 0px;
     spacing:                     10px;
     background-color:            transparent;

@@ -1,7 +1,7 @@
 {
   pkgs,
   self,
-  luminance ? "light",
+  luminanceVariant ? "light",
   accent ? "darkblue",
   accent2 ? "darkgreen",
   accent3 ? "darkorange",
@@ -125,7 +125,7 @@
     "teal" = "blue";
   };
 in rec {
-  palette = allPalettes.${luminance};
+  palette = allPalettes.${luminanceVariant};
 
   desktop = makeDesktop {inherit accent telaMap;};
 
@@ -180,7 +180,7 @@ in rec {
     starshipPalettes = pkgs.writeText "starship-palettes.toml" (pkgs.lib.concatStringsSep "\n\n" (map mkStarshipPalette luminanceOptions));
   in {
     file = starshipPalettes;
-    name = "newpaper_${luminance}";
+    name = "newpaper_${luminanceVariant}";
   };
 
   bat = {
@@ -191,7 +191,7 @@ in rec {
   macoswallpaper = {inherit wallpaper;};
 
   # firefox = let
-  #   enable = luminance == "dark";
+  #   enable = luminanceVariant == "dark";
   # in {
   #   enableColors = enable;
   #   enableSiteColors = enable;

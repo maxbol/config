@@ -6,7 +6,7 @@ roconf="${XDG_CONFIG_HOME:-$HOME/.config}/rofi/config.rasi"
 
 case $1 in
 # d) r_mode="drun" ;;
-d) r_mode="combi -combi-modes \"window,drun\" -modes combi" ;;
+d) r_mode="combi -combi-modes window,drun -modes combi" ;;
 w) r_mode="window" ;;
 f) r_mode="filebrowser" ;;
 h)

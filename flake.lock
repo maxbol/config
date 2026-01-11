@@ -697,15 +697,16 @@
       "locked": {
         "lastModified": 1765054044,
         "narHash": "sha256-ehJij4YslPvPkgUVJG1gl/1XS4CGJKjaVNwDzalvIhQ=",
-        "ref": "refs/heads/animation-override2@update",
+        "owner": "maxbol",
+        "repo": "niri-flake",
         "rev": "e4726324721fe8dd79df5116312e4d64b8d1e6bc",
-        "revCount": 1768,
-        "type": "git",
-        "url": "file:///home/max/src/niri-flake"
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/max/src/niri-flake"
+        "owner": "maxbol",
+        "ref": "animation-override2@update",
+        "repo": "niri-flake",
+        "type": "github"
       }
     },
     "niri-stable": {

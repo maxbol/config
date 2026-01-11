@@ -18,6 +18,7 @@
   sketchybarOverrides ? p: {},
   neovimOverrides ? p: {},
   kittyOverrides ? {},
+  luminanceVariant ? "dark",
   wallpaper ? ./wallpapers/default/wallpaper.png,
   makeDesktop,
   lib-mine,
@@ -237,10 +238,10 @@ in rec {
     theme.package =
       pkgs
       .adw-gtk3;
-    theme.name = "adw-gtk3-dark";
+    theme.name = "adw-gtk3-${luminanceVariant}";
     documentFont = desktop.font;
     # colorScheme = "prefer-light"; # A quirk of the GTK theme
-    colorScheme = "prefer-dark";
+    colorScheme = "prefer-${luminanceVariant}";
   };
 
   qt = {

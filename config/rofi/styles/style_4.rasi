@@ -50,7 +50,7 @@ entry {
 // Modes //
 mode-switcher{
     orientation:                 vertical;
-    enabled:                     true;
+    enabled:                     false;
     spacing:                     0px;
     width:                       100px;
     padding:                     70px 10px 70px 20px;

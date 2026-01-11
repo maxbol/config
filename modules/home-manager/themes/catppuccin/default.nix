@@ -37,14 +37,14 @@
     "yellow" = "yellow";
   };
 
-  luminance =
+  luminanceVariant =
     if variant == "latte"
     then "light"
     else "dark";
 
   Variant = capitalize variant;
   Accent = capitalize accent;
-  Luminance = capitalize luminance;
+  Luminance = capitalize luminanceVariant;
 
   palette_ = let
     source = builtins.fetchurl {
@@ -94,7 +94,7 @@ in rec {
 
   noctalia = {
     predefinedColorscheme = "Catppuccin";
-    predefinedColorschemeLuminance = luminance;
+    predefinedColorschemeLuminance = luminanceVariant;
   };
 
   rofi.colorOverrides = rofiOverrides palette;
@@ -115,7 +115,7 @@ in rec {
     theme.name = "catppuccin-${variant}-${accent}-standard";
     hasGtk4Theme = true;
     documentFont = desktop.font;
-    colorScheme = "prefer-${luminance}";
+    colorScheme = "prefer-${luminanceVariant}";
   };
 
   qt = {

@@ -59,13 +59,6 @@ M.on_attach = function(client, bufnr)
     vim.diagnostic.jump({ count = 1, float = true })
   end, { desc = "Lsp next diagnostic" })
   map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Lsp diagnostic loclist" })
-
-  -- if client.name == "eslint" then
-  --   vim.api.nvim_create_autocmd("BufWritePre", {
-  --     buffer = bufnr,
-  --     command = "EslintFixAll",
-  --   })
-  -- end
 end
 
 M.config_servers = function(servers, capabilities)
@@ -75,8 +68,6 @@ M.config_servers = function(servers, capabilities)
       config = lsp[2]
       lsp = lsp[1]
     end
-
-    config = vim.tbl_extend("keep", vim.lsp.config[lsp] or {}, config)
 
     local attach_hook = M.on_attach
     local init_hook = M.on_init
@@ -95,6 +86,8 @@ M.config_servers = function(servers, capabilities)
     if config.on_init ~= nil then
       init_hook = M.compose_hook({ config.on_init, init_hook })
     end
+
+    config = vim.tbl_extend("keep", vim.lsp.config[lsp] or {}, config)
 
     config.on_attach = attach_hook
     config.on_init = init_hook

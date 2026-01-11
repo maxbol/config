@@ -50,7 +50,7 @@ entry {
 mode-switcher {
     width:                       150px;
     orientation:                 vertical;
-    enabled:                     true;
+    enabled:                     false;
     padding:                     80px 40px 80px 40px;
     spacing:                     20px;
     background-color:            @main-bg;

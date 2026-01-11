@@ -267,8 +267,8 @@ in
           "Shift+Mod+F".action = fullscreen-window;
           "Ctrl+Up".action = toggle-overview;
 
-          "Ctrl+Space".action = noctalia-ipc-call ["launcher" "toggle"];
-          # "Ctrl+Space".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "d"];
+          # "Ctrl+Space".action = noctalia-ipc-call ["launcher" "toggle"];
+          "Ctrl+Space".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "d"];
           "Ctrl+Mod+Space".action = spawn ["1password" "--quick-access"];
 
           "Mod+Q".action = close-window;
@@ -289,6 +289,7 @@ in
           "Shift+Mod+R".action = spawn "${self.rofi-launchers-hyprdots}/bin/rofiselect.sh";
           "Shift+Mod+T".action = spawn "${self.rofi-launchers-hyprdots}/bin/themeselect.sh";
           "Shift+Mod+V".action = spawn ["${self.rofi-launchers-hyprdots}/bin/cliphist.sh" "c"];
+          # "Shift+Mod+V".action = noctalia-ipc-call ["launcher" "clipboard"];
           "Shift+Mod+C".action = center-window;
 
           "Shift+Mod+A".action = set-dynamic-cast-window;
@@ -296,10 +297,14 @@ in
 
           "Shift+Mod+D".action = spawn ["pkill" "-SIGUSR1" "wayscriber"];
 
-          "XF86AudioMute".action = spawn ["volumecontrol.sh" "-o" "m"];
-          "XF86AudioMicMute".action = spawn ["volumecontrol.sh" "-i" "m"];
-          "XF86AudioLowerVolume".action = spawn ["volumecontrol.sh" "-o" "d"];
-          "XF86AudioRaiseVolume".action = spawn ["volumecontrol.sh" "-o" "i"];
+          "XF86AudioMute".action = noctalia-ipc-call ["volume" "muteOutput"];
+          "XF86AudioMicMute".action = noctalia-ipc-call ["volume" "muteInput"];
+          # "XF86AudioMute".action = spawn ["volumecontrol.sh" "-o" "m"];
+          # "XF86AudioMicMute".action = spawn ["volumecontrol.sh" "-i" "m"];
+          "XF86AudioLowerVolume".action = noctalia-ipc-call ["volume" "decrease"];
+          "XF86AudioRaiseVolume".action = noctalia-ipc-call ["volume" "increase"];
+          # "XF86AudioLowerVolume".action = spawn ["volumecontrol.sh" "-o" "d"];
+          # "XF86AudioRaiseVolume".action = spawn ["volumecontrol.sh" "-o" "i"];
           "XF86AudioPlay".action = spawn ["playerctl" "play-pause"];
           "XF86AudioPause".action = spawn ["playerctl" "play-pause"];
           "XF86AudioNext".action = spawn ["playerctl" "next"];
@@ -484,6 +489,18 @@ in
           DISPLAY = ":0"; #Needed for xwayland-satellite apps
         };
       };
+
+      theme-config.niri.extraConfigTxt = ''
+        recent-windows {
+          binds {
+            Mod+Tab { next-window; }
+            Mod+Shift+Tab { previous-window; }
+
+            Mod+Backspace { next-window filter="app-id"; }
+            Mod+Shift+Backspace { previous-window filter="app-id"; }
+          }
+        }
+      '';
 
       services.network-manager-applet.enable = true;
       services.blueman-applet.enable = true;

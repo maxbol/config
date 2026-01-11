@@ -1,7 +1,7 @@
 {
   pkgs,
   self,
-  luminance ? "dark",
+  luminanceVariant ? "dark",
   accent ? "aqua",
   accent2 ? "orange",
   accent3 ? "blue",
@@ -127,7 +127,7 @@
     };
   };
 
-  Luminance = capitalize luminance;
+  Luminance = capitalize luminanceVariant;
 
   mkStarshipPalette = name: palette: ''
     [palettes.${name}]
@@ -162,7 +162,7 @@
   };
 in rec {
   palette =
-    if luminance == "dark"
+    if luminanceVariant == "dark"
     then palette_dark
     else palette_light;
 
@@ -204,12 +204,12 @@ in rec {
   yazi.colorOverrides = {
     filetype_fallback_dir_fg = palette.accents.aqua;
   };
-  yazi.syntectTheme = "${tmTheme}/gruvbox-${luminance}.tmTheme";
+  yazi.syntectTheme = "${tmTheme}/gruvbox-${luminanceVariant}.tmTheme";
 
   neovim =
     {
       colorscheme = "gruvbox-material";
-      background = "dark";
+      background = luminanceVariant;
       hlGroupsFg = {
         HLChunk1 = "#8ec07c";
         HLLineNum1 = "#8ec07c";
@@ -236,7 +236,7 @@ in rec {
     theme.name = "Gruvbox-${Luminance}";
     hasGtk4Theme = true;
     documentFont = desktop.font;
-    colorScheme = "prefer-${luminance}";
+    colorScheme = "prefer-${luminanceVariant}";
   };
 
   qt = {
@@ -252,7 +252,7 @@ in rec {
   };
 
   kitty = let
-    themeFile = "${pkgs.kitty-themes}/share/kitty-themes/themes/gruvbox-${luminance}.conf";
+    themeFile = "${pkgs.kitty-themes}/share/kitty-themes/themes/gruvbox-${luminanceVariant}.conf";
     themeConf = builtins.readFile themeFile;
 
     themeSource = pkgs.writeText "theme.conf" ''
@@ -265,12 +265,12 @@ in rec {
 
   starship.palette = {
     file = starshipPalettes;
-    name = "gruvbox-${luminance}";
+    name = "gruvbox-${luminanceVariant}";
   };
 
   bat.theme = {
     src = tmTheme;
-    file = "gruvbox-${luminance}.tmTheme";
+    file = "gruvbox-${luminanceVariant}.tmTheme";
   };
 
   macoswallpaper = {

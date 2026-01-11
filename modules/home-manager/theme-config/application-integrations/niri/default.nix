@@ -42,6 +42,12 @@ in {
         default = {};
         description = ''Base config to apply to the config.kdl - should be set globally for the niri installation'';
       };
+
+      extraConfigTxt = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''Extra config as string to append at the end of the config file. Useful for when sodiboo is lazy with updating the niri flake.'';
+      };
     };
   };
 
@@ -73,13 +79,28 @@ in {
           if config.themeSettings == null
           then ((import ./theme-template.nix) lib opts.palette config.colorOverrides)
           else config.themeSettings;
-      in {
-        file."config.kdl".source = makeNiriConfig niri-cfg.package (
+
+        settingsFile = makeNiriConfig niri-cfg.package (
           lib.mkMerge [
             cfg.niri.baseConfig
             themeSettings
           ]
         );
+
+        mergedSettingsFile =
+          if cfg.niri.extraConfigTxt == null
+          then settingsFile
+          else
+            pkgs.runCommand "niri-config" {} ''
+              touch $out
+              cat ${settingsFile} >> $out
+              cat >> $out << EOF
+
+              ${cfg.niri.extraConfigTxt}
+              EOF
+            '';
+      in {
+        file."config.kdl".source = mergedSettingsFile;
       };
     };
   };

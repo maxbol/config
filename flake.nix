@@ -34,8 +34,7 @@
 
     # NixOS desktop environment
     niri = {
-      # url = "github:sodiboo/niri-flake";
-      url = "git+file:///home/max/src/niri-flake";
+      url = "github:maxbol/niri-flake/animation-override2@update";
     };
 
     noctalia = {
