@@ -1,60 +1,63 @@
 return {
-	"mfussenegger/nvim-dap",
+  "mfussenegger/nvim-dap",
 
-	dependencies = {
+  dependencies = {
 
-		-- fancy UI for the debugger
-		-- {
-		-- 	"rcarriga/nvim-dap-ui",
-		-- 	keys = require("neomax.configs.debugging.keys.dap-ui"),
-		-- 	opts = {},
-		-- 	config = require("neomax.configs.debugging.dap-ui"),
-		-- 	dependencies = {
-		-- 		"nvim-neotest/nvim-nio",
-		-- 	},
-		-- },
+    -- fancy UI for the debugger
+    -- {
+    -- 	"rcarriga/nvim-dap-ui",
+    -- 	keys = require("neomax.configs.debugging.keys.dap-ui"),
+    -- 	opts = {},
+    -- 	config = require("neomax.configs.debugging.dap-ui"),
+    -- 	dependencies = {
+    -- 		"nvim-neotest/nvim-nio",
+    -- 	},
+    -- },
 
-		{
-			"igorlfs/nvim-dap-view",
-			keys = require("neomax.configs.debugging.keys.dap-ui"),
-			opts = {},
-			config = require("neomax.configs.debugging.dap-ui"),
-		},
-		-- virtual text for the debugger
-		{
-			"theHamsta/nvim-dap-virtual-text",
-			opts = {},
-		},
+    {
+      "igorlfs/nvim-dap-view",
+      keys = require("neomax.configs.debugging.keys.dap-ui"),
+      opts = {},
+      config = require("neomax.configs.debugging.dap-ui"),
+    },
+    -- virtual text for the debugger
+    {
+      "theHamsta/nvim-dap-virtual-text",
+      opts = {},
+    },
 
-		-- which key integration
-		{
-			"folke/which-key.nvim",
-			optional = true,
-			opts = {
-				defaults = {
-					["<leader>d"] = { name = "+debug" },
-				},
-			},
-		},
+    -- which key integration
+    {
+      "folke/which-key.nvim",
+      optional = true,
+      opts = {
+        defaults = {
+          ["<leader>d"] = { name = "+debug" },
+        },
+      },
+    },
 
-		-- mason.nvim integration
-		{
-			"jay-babu/mason-nvim-dap.nvim",
-			dependencies = "mason.nvim",
-			cmd = { "DapInstall", "DapUninstall" },
-			opts = require("neomax.configs.debugging.languages.auto"),
-		},
-		"leoluz/nvim-dap-go",
+    -- mason.nvim integration
+    {
+      "jay-babu/mason-nvim-dap.nvim",
+      dependencies = "mason.nvim",
+      cmd = { "DapInstall", "DapUninstall" },
+      opts = require("neomax.configs.debugging.languages.auto"),
+    },
+    {
+      "carlosflorencio/nvim-dap-go",
+      branch = "feat/go-mod-subfolder-support",
+    },
 
-		-- {
-		-- 	"nvim-telescope/telescope-dap.nvim",
-		-- 	config = function()
-		-- 		require("telescope").load_extension("dap")
-		-- 	end,
-		-- },
-	},
-	keys = require("neomax.configs.debugging.keys.dap"),
-	config = function()
-		require("neomax.configs.debugging.init")
-	end,
+    -- {
+    -- 	"nvim-telescope/telescope-dap.nvim",
+    -- 	config = function()
+    -- 		require("telescope").load_extension("dap")
+    -- 	end,
+    -- },
+  },
+  keys = require("neomax.configs.debugging.keys.dap"),
+  config = function()
+    require("neomax.configs.debugging.init")
+  end,
 }

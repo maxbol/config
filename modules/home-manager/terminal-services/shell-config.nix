@@ -58,6 +58,10 @@
       zvm_highlight clear # zvm_vi_put_before introduces weird highlighting for me
     }
 
+    genpasswd() {
+      tr -dc 'A-Za-z0-9!?%=' < /dev/urandom | head -c ''${1:-10}
+    }
+
     zvm_after_lazy_keybindings() {
       zvm_define_widget my_zvm_vi_yank
       zvm_define_widget my_zvm_vi_delete
@@ -91,8 +95,6 @@ in
         vim = "nv";
         vi = "nv";
         icat = "kitten icat";
-
-        genpasswd = "tr -dc 'A-Za-z0-9!?%=' < /dev/urandom | head -c 10";
       };
     in {
       programs.nushell = {
@@ -146,7 +148,7 @@ in
               fi
 
               # Golang
-              export GOPRIVATE=github.com/volvo-cars-se/*,github.com/ourstudio-se/*,github.com/wayke-se/*
+              export GOPRIVATE=github.com/volvo-cars-se/*,github.com/ourstudio-se/*,github.com/wayke-se/*,go.glennta.se/*
 
               # # OCaml
               # [[ ! -r '/home/max/.opam/opam-init/init.zsh' ]] || source '/home/max/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null

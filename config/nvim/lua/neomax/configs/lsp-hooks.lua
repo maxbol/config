@@ -62,6 +62,8 @@ M.on_attach = function(client, bufnr)
 end
 
 M.config_servers = function(servers, capabilities)
+  local blink = require("blink.cmp")
+
   for _, lsp in ipairs(servers) do
     local config = {}
     if type(lsp) == "table" then
@@ -87,14 +89,16 @@ M.config_servers = function(servers, capabilities)
       init_hook = M.compose_hook({ config.on_init, init_hook })
     end
 
-    config = vim.tbl_extend("keep", vim.lsp.config[lsp] or {}, config)
+    config = vim.tbl_deep_extend("force", vim.lsp.config[lsp] or {}, { capabilities = capabilities }, config)
+
+    if lsp == "ts_ls" then
+      print(lsp .. " " .. vim.inspect(config.capabilities))
+    end
 
     config.on_attach = attach_hook
     config.on_init = init_hook
 
-    if config.capabilities == nil then
-      config.capabilities = capabilities
-    end
+    config.capabilities = blink.get_lsp_capabilities(config.capabilities)
 
     vim.lsp.config(lsp, config)
     vim.lsp.enable(lsp)

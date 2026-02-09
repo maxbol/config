@@ -297,6 +297,8 @@ in
 
           "Shift+Mod+D".action = spawn ["pkill" "-SIGUSR1" "wayscriber"];
 
+          "Shift+Mod+M".action = toggle-column-tabbed-display;
+
           "XF86AudioMute".action = noctalia-ipc-call ["volume" "muteOutput"];
           "XF86AudioMicMute".action = noctalia-ipc-call ["volume" "muteInput"];
           # "XF86AudioMute".action = spawn ["volumecontrol.sh" "-o" "m"];
@@ -320,8 +322,14 @@ in
           };
         };
         layout = {
-          default-column-display = "normal";
+          default-column-display = "tabbed";
+          # default-column-display = "normal";
           background-color = "transparent";
+
+          tab-indicator = {
+            position = "top";
+            gap = -8;
+          };
 
           preset-column-widths = [
             {proportion = 1.;}

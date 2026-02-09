@@ -51,6 +51,7 @@ in
         asdf
         asdf-vm
         nixpkgs-unstable.deno
+        pnpm
 
         # Golang
         nixpkgs-unstable.go

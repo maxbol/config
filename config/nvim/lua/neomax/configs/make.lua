@@ -14,6 +14,10 @@ local M = {}
 
 M.max_history = 15
 
+local function looks_like_path(str)
+  return str:match("[/\\]") ~= nil
+end
+
 function M.insertCmdInList(cmds, cmd)
   local new_cmds = { cmd }
   for i, c in ipairs(cmds) do
@@ -108,10 +112,11 @@ function M.getCustomCmd(cmds, cb)
   -- }, function(cmd_with_args) end)
 end
 
-function M.make(statusmsg, makecmd, grepcmd, on_success, on_failure)
+function M.make(cwd, statusmsg, makecmd, grepcmd, on_success, on_failure)
   local lines = {}
   local grep_lines = {}
-  print(statusmsg .. ": " .. makecmd)
+  local editor_cwd = vim.fn.getcwd()
+  print(statusmsg .. ": " .. makecmd .. " (cwd: " .. cwd .. ")")
 
   local function on_output(_, data, _)
     if data then
@@ -135,9 +140,21 @@ function M.make(statusmsg, makecmd, grepcmd, on_success, on_failure)
           grep_lines = vim.split(grep_output, "\n")
         end
       end
+
+      if cwd ~= editor_cwd then
+        for i, v in ipairs(grep_lines) do
+          local parts = vim.split(v, ":")
+          local p1 = parts[1]
+          if p1 ~= nil and looks_like_path(p1) then
+            local path = vim.fs.joinpath(cwd, p1)
+            parts[1] = vim.fs.relpath(editor_cwd, path)
+          end
+          grep_lines[i] = table.concat(parts, ":")
+        end
+      end
     end
 
-    vim.fn.setqflist({}, " ", {
+    vim.fn.setqflist({}, "r", {
       title = makecmd,
       lines = grep_lines,
     })
@@ -192,6 +209,7 @@ function M.make(statusmsg, makecmd, grepcmd, on_success, on_failure)
   end
 
   vim.fn.jobstart(makecmd, {
+    cwd = cwd,
     on_stderr = on_output,
     on_stdout = on_output,
     on_exit = on_exit,
@@ -200,10 +218,12 @@ function M.make(statusmsg, makecmd, grepcmd, on_success, on_failure)
   })
 end
 
-function M.run(runcmd, on_success, on_failure)
+function M.run(cwd, runcmd, on_success, on_failure)
   local ui = vim.api.nvim_list_uis()[1]
 
-  print("Running project: " .. runcmd)
+  local original_cwd = vim.loop.cwd()
+
+  print("Running project: " .. runcmd .. " (cwd: " .. cwd .. ")")
 
   local cmd = runcmd
 
@@ -217,43 +237,45 @@ function M.run(runcmd, on_success, on_failure)
     end
   end
 
+  vim.loop.chdir(cwd)
+
   local success = os.execute(cmd)
+
   if success and on_success then
     on_success()
   elseif not success and on_failure then
     on_failure()
   end
+
+  vim.loop.chdir(original_cwd)
 end
 
--- TODO(2024-11-10, Max Bolotin): We have managed to set up dressing.nvim to handle a more lazy select,
--- now let's finish our masterpiece by storing a list of up to N historical cmds being run for each type of cmd
--- and feed them into the vim.ui.select
 function M.mapMake(o)
   map("n", o.mappingDefault, function()
-    M.make(o.label, o.getCmds()[1], o.grepcmd)
+    M.make(o.getCwd(), o.label, o.getCmds()[1], o.grepcmd)
   end, { desc = o.descDefault, buffer = o.buffer })
   map("n", o.mappingCustom, function()
     local cmds = o.getCmds()
     M.getCustomCmd(cmds, function(cmd)
-      M.make(o.label, cmd, o.grepcmd, o.setCmds(M.insertCmdInList(cmds, cmd)))
+      M.make(o.getCwd(), o.label, cmd, o.grepcmd, o.setCmds(M.insertCmdInList(cmds, cmd)))
     end)
   end, { desc = o.descCustom, buffer = o.buffer })
 end
 
 function M.mapMakeRun(o)
   map("n", o.mappingDefault, function()
-    M.make(o.label, o.getMakeCmds()[1], o.grepcmd, function()
+    M.make(o.getCwd(), o.label, o.getMakeCmds()[1], o.grepcmd, function()
       local cmd = o.getCmds()[1]
       print("Running project: " .. cmd)
-      M.run(cmd)
+      M.run(o.getCwd(), cmd)
     end)
   end, { desc = o.descDefault, buffer = o.buffer })
   map("n", o.mappingCustom, function()
     local cmds = o.getCmds()
     M.getCustomCmd(cmds, function(cmd)
-      M.make(o.label, o.getMakeCmds()[1], o.grepcmd, function()
+      M.make(o.getCwd(), o.label, o.getMakeCmds()[1], o.grepcmd, function()
         print("Running project: " .. cmd)
-        M.run(cmd, o.setCmds(M.insertCmdInList(cmds, cmd)))
+        M.run(o.getCwd(), cmd, o.setCmds(M.insertCmdInList(cmds, cmd)))
       end)
     end)
   end, { desc = o.descCustom, buffer = o.buffer })
@@ -271,6 +293,43 @@ function M.makeLanguage(opts)
 
   local cmds_per_cwd = {}
 
+  local cwd_roots = { ".git", ".jj" }
+
+  for _, v in ipairs(opts.cwd_roots or {}) do
+    table.insert(cwd_roots, v)
+  end
+
+  local function getCwd()
+    local function traverse(dir)
+      local handle = vim.loop.fs_scandir(dir)
+      if not handle then
+        return nil
+      end
+
+      while true do
+        local name = vim.loop.fs_scandir_next(handle)
+        if name == nil then
+          break
+        end
+
+        for _, root in ipairs(cwd_roots) do
+          if root == name then
+            return dir
+          end
+        end
+      end
+
+      local parent_dir = vim.loop.fs_realpath(dir .. "/../")
+      if parent_dir then
+        return traverse(parent_dir)
+      end
+
+      return nil
+    end
+
+    return traverse(vim.fs.dirname(vim.fn.expand("%:p"))) or vim.fn.getcwd()
+  end
+
   local function getCmdsByCwd(cwd)
     if cmds_per_cwd[cwd] == nil then
       cmds_per_cwd[cwd] = M.getLastCmds({
@@ -283,19 +342,19 @@ function M.makeLanguage(opts)
   end
 
   local function getMakeCmds()
-    return getCmdsByCwd(vim.fn.getcwd()).makecmd
+    return getCmdsByCwd(getCwd()).makecmd
   end
 
   local function getRunCmds()
-    return getCmdsByCwd(vim.fn.getcwd()).runcmd
+    return getCmdsByCwd(getCwd()).runcmd
   end
 
   local function getLintCmds()
-    return getCmdsByCwd(vim.fn.getcwd()).lintcmd
+    return getCmdsByCwd(getCwd()).lintcmd
   end
 
   local function setMakeCmds(cmds)
-    local cwd = vim.fn.getcwd()
+    local cwd = getCwd()
     cmds_per_cwd[cwd].makecmd = cmds
     return function()
       M.storeMakeCmds(cmds, cwd)
@@ -303,7 +362,7 @@ function M.makeLanguage(opts)
   end
 
   local function setRunCmds(cmds)
-    local cwd = vim.fn.getcwd()
+    local cwd = getCwd()
     cmds_per_cwd[cwd].runcmd = cmds
     return function()
       M.storeRunCmds(cmds, cwd)
@@ -311,7 +370,7 @@ function M.makeLanguage(opts)
   end
 
   local function setLintCmds(cmds)
-    local cwd = vim.fn.getcwd()
+    local cwd = getCwd()
     cmds_per_cwd[cwd].lintcmd = cmds
     return function()
       M.storeLintCmd(cmds, cwd)
@@ -326,6 +385,7 @@ function M.makeLanguage(opts)
     callback = function(o)
       if lintcmd ~= nil then
         M.mapMake({
+          getCwd = getCwd,
           getCmds = getLintCmds,
           setCmds = setLintCmds,
           grepcmd = grepcmds.lint,
@@ -340,6 +400,7 @@ function M.makeLanguage(opts)
 
       if makecmd ~= nil then
         M.mapMake({
+          getCwd = getCwd,
           getCmds = getMakeCmds,
           setCmds = setMakeCmds,
           grepcmd = grepcmds.make,
@@ -353,6 +414,7 @@ function M.makeLanguage(opts)
 
         if runcmd ~= nil then
           M.mapMakeRun({
+            getCwd = getCwd,
             getCmds = getRunCmds,
             getMakeCmds = getMakeCmds,
             setCmds = setRunCmds,
@@ -377,6 +439,7 @@ M.makeLanguage({
   grepcmd = "2>&1 | grep -E '^.+:[0-9]+:[0-9]+'",
   makecmd = "zig build",
   runcmd = "zig build run",
+  cwd_roots = { "build.zig", "build.zig.zon" },
 })
 
 M.makeLanguage({
@@ -395,6 +458,7 @@ M.makeLanguage({
   lintcmd = "golangci-lint run --timeout 300s --config .golangci.yml ./...",
   makecmd = "go build ./...",
   runcmd = "go run .",
+  cwd_roots = { "go.mod", "go.sum" },
 })
 
 M.makeLanguage({
@@ -406,6 +470,7 @@ M.makeLanguage({
   lintcmd = "yarn lint",
   makecmd = "yarn build",
   runcmd = "yarn start",
+  cwd_roots = { "package.json", "yarn.lock" },
 })
 
 M.makeLanguage({
@@ -413,6 +478,7 @@ M.makeLanguage({
   grepcmd = "2>&1 | grep -E '^.+:[0-9]+:[0-9]+'",
   makecmd = "make",
   runcmd = "./out",
+  cwd_roots = { "Makefile", "compile_commands.json" },
 })
 
 M.makeLanguage({
@@ -420,4 +486,5 @@ M.makeLanguage({
   grepcmd = "2>&1 | grep -E '^.+:[0-9]+:[0-9]+'",
   makecmd = "dune build",
   runcmd = "dune exec myapp",
+  cwd_roots = { "dune-project" },
 })

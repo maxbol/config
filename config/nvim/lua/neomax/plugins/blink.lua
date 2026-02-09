@@ -64,6 +64,7 @@ return {
     keymap = {
       -- preset = "default",
       preset = "none",
+      ["<C-e>"] = { "cancel", "fallback" },
       ["<Right>"] = { "accept", "snippet_forward", "fallback" },
       ["<Up>"] = { "select_prev", "fallback" },
       ["<Down>"] = { "select_next", "fallback" },
@@ -83,7 +84,24 @@ return {
 
     -- (Default) Only show the documentation popup when manually triggered
     completion = {
-      documentation = { auto_show = false, auto_show_delay_ms = 100 },
+      documentation = { auto_show = true, auto_show_delay_ms = 100 },
+      menu = {
+        draw = {
+          columns = {
+            {
+              "kind_icon",
+              "label",
+              gap = 1,
+            },
+            {
+              "label_description",
+            },
+            {
+              "source_name",
+            },
+          },
+        },
+      },
       accept = {
         auto_brackets = {
           enabled = false,
@@ -110,9 +128,9 @@ return {
 
     sources = {
       default = {
+        "snippets",
         "lsp",
         "path",
-        "snippets",
         "buffer",
       },
       providers = {
@@ -130,6 +148,11 @@ return {
 
     signature = {
       enabled = true,
+      window = {
+        winblend = 0,
+        winhighlight = "Normal:BlinkCmpSignatureHelp,FloatBorder:BlinkCmpSignatureHelpBorder",
+        show_documentation = true,
+      },
     },
 
     -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance

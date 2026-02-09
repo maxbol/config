@@ -38,6 +38,7 @@
     sqlfluff
     typescript-language-server
     vala-language-server
+    vtsls
     tinymist
     typstyle
     websocat

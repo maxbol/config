@@ -77,11 +77,13 @@
     aseprite
     azure
     blender
+    cachix
     celluloid
     claude-code
     discord
     emacs
     f3d
+    ffmpeg
     file
     file-roller
     gettext
@@ -98,12 +100,21 @@
     slack
     slurp
     thunderbird
+    unzip
     vendor.wooz.default
     vendor.zen-browser.default
     vipsdisp
     vlc
     wdisplays
+    yq-go
     zed-editor
     zenity
+
+    (python3.withPackages
+      (python-pkgs:
+        with python-pkgs; [
+          pandas
+          openpyxl
+        ]))
   ];
 }

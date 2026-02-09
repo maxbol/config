@@ -108,10 +108,10 @@
   mkPalette = palette_: rec {
     semantic = {
       text = palette_.fg;
-      text1 = palette_.accent;
-      text2 = palette_.cursor_fg;
-      overlay = palette_.gray2;
-      surface = palette_.gray1;
+      text1 = palette_.gray_punc;
+      text2 = palette_.gray2;
+      overlay = palette_.black1;
+      surface = palette_.black;
       background = palette_.bg;
       accent1 = accents.${accent};
       accent2 = accents.${accent2};
@@ -171,8 +171,7 @@ in rec {
 
   # TODO(2025-05-19, Max Bolotin): Copying this from gruvbox for now, should be replace with theme specific
   gtk = {
-    theme.package =
-      pkgs
+    theme.package = pkgs
       .gruvbox-gtk-theme
       .overrideAttrs (prev: {propagatedUserEnvPkgs = prev.propagatedUserEnvPkgs ++ [pkgs.gnome-themes-extra];});
     theme.name = "Gruvbox-Dark";

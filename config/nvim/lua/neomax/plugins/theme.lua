@@ -26,7 +26,7 @@ return {
                 "diagnostics",
               },
               lualine_c = { require("lualine-components.filename-oil"), "macro_recording", "%S" },
-              lualine_x = { "encoding", "fileformat", "filetype" },
+              lualine_x = { "selectioncount", "encoding", "fileformat", "filetype" },
               lualine_y = { "searchcount", "progress" },
               lualine_z = { "location" },
             },

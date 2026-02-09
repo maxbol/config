@@ -34,6 +34,8 @@ g.completion_matching_ignore_case = 1
 
 -- opt.relativenumber = true
 
+o.winborder = "double"
+
 -- Indenting
 o.expandtab = true
 o.shiftwidth = 2

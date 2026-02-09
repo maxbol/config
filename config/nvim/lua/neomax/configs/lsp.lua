@@ -1,53 +1,38 @@
 local hooks = require("neomax.configs.lsp-hooks")
 
--- Add borders to floating windows
-local lsp_float_border = {
-  { "🭽", "FloatBorder" },
-  { "▔", "FloatBorder" },
-  { "🭾", "FloatBorder" },
-  { "▕", "FloatBorder" },
-  { "🭿", "FloatBorder" },
-  { "▁", "FloatBorder" },
-  { "🭼", "FloatBorder" },
-  { "▏", "FloatBorder" },
-}
-local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-  opts = opts or {}
-  opts.border = opts.border or lsp_float_border
-  return orig_util_open_floating_preview(contents, syntax, opts, ...)
-end
-
-local capabilities = require("blink.cmp").get_lsp_capabilities()
-
-capabilities.textDocument.completion.completionItem = {
-  documentationFormat = { "markdown", "plaintext" },
-  snippetSupport = true,
-  preselectSupport = true,
-  insertReplaceSupport = true,
-  labelDetailsSupport = true,
-  deprecatedSupport = true,
-  commitCharactersSupport = true,
-  tagSupport = { valueSet = { 1 } },
-  resolveSupport = {
-    properties = {
-      "documentation",
-      "detail",
-      "additionalTextEdits",
+local capabilities = {
+  textDocument = {
+    completion = {
+      foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
+      },
+      completionItem = {
+        documentationFormat = { "markdown", "plaintext" },
+        snippetSupport = true,
+        preselectSupport = true,
+        insertReplaceSupport = true,
+        labelDetailsSupport = true,
+        deprecatedSupport = true,
+        commitCharactersSupport = true,
+        tagSupport = { valueSet = { 1 } },
+        resolveSupport = {
+          properties = {
+            "documentation",
+            "detail",
+            "additionalTextEdits",
+          },
+        },
+      },
     },
   },
-}
-
-capabilities.textDocument.foldingRange = {
-  dynamicRegistration = false,
-  lineFoldingOnly = true,
 }
 
 -- if you just want default config for the servers then put them in a table
 local servers = {
   "cssls",
   "buf_ls",
-  "ts_ls",
+  "vtsls",
   "nixd",
   "gopls",
   "golangci_lint_ls",
@@ -99,13 +84,13 @@ local servers = {
   {
     "sourcekit",
     {
-      capabilities = vim.tbl_extend("keep", capabilities or {}, {
+      capabilities = {
         workspace = {
           didChangeWatchedFiles = {
             dynamicRegistration = true,
           },
         },
-      }),
+      },
       filetypes = { "swift" },
     },
   },

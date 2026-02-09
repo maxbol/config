@@ -38,7 +38,7 @@
   features.nix-registry.enable = true;
   features.nix-store-tooling.enable = true;
   features.secrets-management.enable = true;
-  features.server.enable = true;
+  features.server.enable = false;
   features.system-start = {
     enable = true;
     defaultUser = "max";
