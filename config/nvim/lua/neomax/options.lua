@@ -121,7 +121,7 @@ vim.diagnostic.config({ virtual_text = true })
 -- Extui options
 opt.cmdheight = 0
 if vim.g.neovide == nil then
-  require("vim._extui").enable({
+  require("vim._core.ui2").enable({
     enable = true,
     msg = {
       target = "cmd",

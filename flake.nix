@@ -52,11 +52,6 @@
 
     hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
 
-    kmonad = {
-      url = "github:kmonad/kmonad?dir=nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     tmux-session-wizard.url = "github:maxbol/tmux-session-wizard/bugfix/correctly-sort-unattached-sessions";
 
     custom-udev-rules.url = "github:MalteT/custom-udev-rules";

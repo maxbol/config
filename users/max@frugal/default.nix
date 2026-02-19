@@ -109,6 +109,7 @@
     yq-go
     zed-editor
     zenity
+    zsnes2
 
     (python3.withPackages
       (python-pkgs:

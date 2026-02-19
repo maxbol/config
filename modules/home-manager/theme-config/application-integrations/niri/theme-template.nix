@@ -13,9 +13,14 @@ with lib;
       gapSize = 0;
       # topOuterGapSize = 5;
       # topStrutSize = topOuterGapSize - gapSize;
+      borderWidth = 2;
     in {
       gaps = gapSize;
       struts = {
+        # left = -borderWidth;
+        # right = -borderWidth;
+        # bottom = -borderWidth;
+        # top = -borderWidth;
         # left = strutSize - gapSize;
         # right = strutSize - gapSize;
         # top = strutSize;
@@ -31,7 +36,7 @@ with lib;
       };
       border = {
         enable = mkForce true;
-        width = mkForce 2;
+        width = mkForce borderWidth;
         active = mkForce {
           color = "#${active-border}";
         };
