@@ -408,6 +408,15 @@ in
               {
                 app-id = "org.gnome.FileRoller";
               }
+              {
+                app-id = "org.gnome.Nautilus";
+              }
+              {
+                app-id = "io.github.celluloid_player.Celluloid";
+              }
+              {
+                app-id = "org.libvips.vipsdisp";
+              }
             ];
             open-floating = true;
           }

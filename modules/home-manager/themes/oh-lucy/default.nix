@@ -110,8 +110,8 @@
       text = palette_.fg;
       text1 = palette_.gray_punc;
       text2 = palette_.gray2;
-      overlay = palette_.black1;
-      surface = palette_.black;
+      overlay = palette_.gray1;
+      surface = palette_.black1;
       background = palette_.bg;
       accent1 = accents.${accent};
       accent2 = accents.${accent2};

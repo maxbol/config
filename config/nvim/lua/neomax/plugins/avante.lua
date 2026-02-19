@@ -10,6 +10,9 @@ return {
     -- add any opts here
     -- for example
     provider = "claude",
+    selection = {
+      hint_display = "none",
+    },
     providers = {
       claude = {
         endpoint = "https://api.anthropic.com",
