@@ -124,7 +124,7 @@ if vim.g.neovide == nil then
   require("vim._core.ui2").enable({
     enable = true,
     msg = {
-      target = "cmd",
+      target = "msg",
     },
   })
 end
