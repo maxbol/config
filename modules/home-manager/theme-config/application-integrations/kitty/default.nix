@@ -45,7 +45,7 @@ in {
           type = types.nullOr hm.types.fontType;
           default = {
             name = "Aporetic Sans Mono";
-            size = 18;
+            size = 12;
             package = vendor.aporetic-kitty.default;
           };
           description = ''

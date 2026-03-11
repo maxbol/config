@@ -18,7 +18,7 @@
     cursorTheme.size = 28;
     # font.name = "Cantarell";
     font.name = "DeepMind Sans";
-    font.size = 14;
+    font.size = 12;
     font.package = pkgs.cantarell-fonts;
     monospaceFont.name = "Aporetic Sans Mono";
     monospaceFont.size = 12;

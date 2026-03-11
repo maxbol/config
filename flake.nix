@@ -32,6 +32,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    devenv = {
+      url = "github:cachix/devenv";
+    };
+
     # NixOS desktop environment
     niri = {
       url = "github:maxbol/niri-flake/animation-override2@update";
@@ -40,6 +44,10 @@
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
+    vicinae = {
+      url = "github:vicinaehq/vicinae";
     };
 
     hyprcursor = {
@@ -328,18 +336,22 @@
   nixConfig = {
     extra-substituters = [
       "https://cache.garnix.io"
+      "https://devenv.cachix.org"
       "https://nix-community.cachix.org"
       "https://maxbol.cachix.org"
       "https://hyprland.cachix.org"
       "https://walker-git.cachix.org"
+      "https://vicinae.cachix.org"
     ];
 
     extra-trusted-public-keys = [
       "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+      "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "maxbol.cachix.org-1:Rlo1/Hw2jg0bxRoB/w1d9PXAc0kpyJ2uKFAdLkVygU0="
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "walker-git.cachix.org-1:vmC0ocfPWh0S/vRAQGtChuiZBTAe4wiKDeyyXM0/7pM="
+      "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="
     ];
   };
 }

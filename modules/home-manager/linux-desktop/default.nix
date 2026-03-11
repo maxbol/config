@@ -6,6 +6,7 @@ lib-mine.barrelGroup {
     "default-application-handling"
     "fonts"
     "gaming"
+    "launcher"
     "lockscreen"
     "notifications"
     "panel"

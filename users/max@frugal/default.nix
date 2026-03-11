@@ -4,8 +4,14 @@
   config,
   vendor,
   self,
+  origin,
   ...
-}: rec {
+}: let
+  nixpkgs-unstable = import origin.inputs.nixpkgs-unstable {
+    inherit (pkgs) system;
+    config = {allowUnfree = true;};
+  };
+in rec {
   home.stateVersion = "24.11";
   home.username = "max";
   home.homeDirectory = "/home/max/";
@@ -79,7 +85,7 @@
     blender
     cachix
     celluloid
-    claude-code
+    nixpkgs-unstable.claude-code
     discord
     emacs
     f3d

@@ -119,15 +119,15 @@ vim.diagnostic.config({ virtual_text = true })
 -- vim.diagnostic.config({ virtual_lines = true })
 
 -- Extui options
-opt.cmdheight = 0
-if vim.g.neovide == nil then
-  require("vim._core.ui2").enable({
-    enable = true,
-    msg = {
-      target = "msg",
-    },
-  })
-end
+-- opt.cmdheight = 0
+-- if vim.g.neovide == nil then
+--   require("vim._core.ui2").enable({
+--     enable = true,
+--     msg = {
+--       target = "msg",
+--     },
+--   })
+-- end
 
 vim.cmd([[DoMatchParen]])
 

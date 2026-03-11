@@ -116,7 +116,7 @@ in
           rounding = "10px";
           font = {
             family = "Aporetic Sans Mono";
-            size = "18px";
+            size = "14px";
           };
         };
       };

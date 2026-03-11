@@ -268,7 +268,8 @@ in
           "Ctrl+Up".action = toggle-overview;
 
           # "Ctrl+Space".action = noctalia-ipc-call ["launcher" "toggle"];
-          "Ctrl+Space".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "d"];
+          # "Ctrl+Space".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "d"];
+          "Ctrl+Space".action = spawn ["vicinae" "toggle"];
           "Ctrl+Mod+Space".action = spawn ["1password" "--quick-access"];
 
           "Mod+Q".action = close-window;
@@ -288,8 +289,9 @@ in
           "Shift+Mod+E".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "f"];
           "Shift+Mod+R".action = spawn "${self.rofi-launchers-hyprdots}/bin/rofiselect.sh";
           "Shift+Mod+T".action = spawn "${self.rofi-launchers-hyprdots}/bin/themeselect.sh";
-          "Shift+Mod+V".action = spawn ["${self.rofi-launchers-hyprdots}/bin/cliphist.sh" "c"];
+          # "Shift+Mod+V".action = spawn ["${self.rofi-launchers-hyprdots}/bin/cliphist.sh" "c"];
           # "Shift+Mod+V".action = noctalia-ipc-call ["launcher" "clipboard"];
+          "Shift+Mod+V".action = spawn ["vicinae" "vicinae://extensions/vicinae/clipboard/history"];
           "Shift+Mod+C".action = center-window;
 
           "Shift+Mod+A".action = set-dynamic-cast-window;
