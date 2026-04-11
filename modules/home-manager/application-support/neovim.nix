@@ -5,6 +5,8 @@
   origin,
   ...
 }: let
+  fff-nvim = origin.inputs.fff.packages.${pkgs.system}.fff-nvim;
+
   neovim-unwrapped = vendor.neovim-nightly-overlay.default.overrideAttrs (old: {
     meta =
       old.meta
@@ -16,6 +18,21 @@
   });
 
   nvim-colorctl = vendor.nvim-colorctl.default;
+
+  vscode-lldb = pkgs.vscode-extensions.vadimcn.vscode-lldb;
+
+  vscode-lldb-neovim = pkgs.symlinkJoin {
+    name = "vscode-lldb-neovim";
+    paths = [
+      vscode-lldb
+      (
+        pkgs.runCommand "vscode-lldb-bin" {} ''
+          mkdir -p $out/bin
+          ln -s ${vscode-lldb}/share/vscode/extensions/vadimcn.vscode-lldb/adapter/codelldb $out/bin/codelldb
+        ''
+      )
+    ];
+  };
 
   extraPackages = with pkgs; [
     origin.inputs.nixpkgs-unstable.legacyPackages.${pkgs.system}.tree-sitter
@@ -31,6 +48,7 @@
     eslint
     eslint_d
     html-tidy
+    lldb_20
     mesonlsp
     prettierd
     shfmt
@@ -38,6 +56,7 @@
     sqlfluff
     typescript-language-server
     vala-language-server
+    vscode-lldb-neovim
     vtsls
     tinymist
     typstyle
@@ -70,6 +89,10 @@ in
       nvim-colorctl
       neovide
     ];
+
+    home.file.".local/share/nvim/fff-nvim-plugin" = {
+      source = fff-nvim;
+    };
 
     impure-config-management.config."nvim" = "config/nvim";
   }

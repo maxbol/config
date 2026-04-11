@@ -85,7 +85,6 @@ in rec {
     blender
     cachix
     celluloid
-    nixpkgs-unstable.claude-code
     discord
     emacs
     f3d
@@ -94,6 +93,7 @@ in rec {
     file-roller
     gettext
     grim
+    inkscape
     kooha
     krita
     kubectl
@@ -101,6 +101,7 @@ in rec {
     kustomize
     mpv
     nautilus
+    nixpkgs-unstable.claude-code
     postman
     self.wayscriber
     slack

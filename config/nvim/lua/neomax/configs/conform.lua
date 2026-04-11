@@ -1,15 +1,25 @@
+local utils = require("neomax.utils")
+
+local jsfmt = function(bufnr)
+  local biomeProject = utils.find_project_cwd({ "biome.json" }, vim.fn.getcwd(), vim.api.nvim_buf_get_name(bufnr))
+  if biomeProject ~= nil then
+    return { "biome" }
+  end
+  return { "prettierd" }
+end
+
 local options = {
   formatters_by_ft = {
     nix = { "alejandra" },
 
     lua = { "stylua" },
 
-    typescriptreact = { "prettierd" },
-    javascriptreact = { "prettierd" },
-    typescript = { "prettierd" },
-    javascript = { "prettierd" },
-    css = { "prettierd" },
-    graphql = { "prettierd" },
+    typescriptreact = jsfmt,
+    javascriptreact = jsfmt,
+    typescript = jsfmt,
+    javascript = jsfmt,
+    css = jsfmt,
+    graphql = jsfmt,
     html = { "prettier_html" },
     vento = { "prettier_html" },
     templ = { "prettier_html" },

@@ -59,6 +59,7 @@ map(
 )
 
 require("neomax.mappings-telescope")
+require("neomax.mappings-fff")
 
 -- Extra incremente/decrement mappings to allow me to keep C-A as my tmux leader :)
 map({ "n", "x" }, "<M-a>", "<C-a>", { noremap = true, silent = true })
@@ -154,6 +155,31 @@ end, { desc = "Multiply cword" })
 map({ "n", "x" }, "<leader>re", function()
   vim.api.nvim_input("<ESC>:%s/" .. utils.get_selected_text_or_cword())
 end)
+
+-- Yank file path
+map("n", "yp", function()
+  vim.fn.setreg("+", vim.fn.expand("%"))
+  print("File path yanked!")
+end, { desc = "Yank file path" })
+
+map("n", "yP", function()
+  local filename = vim.fn.expand("%")
+  local linenr = vim.api.nvim_win_get_cursor(0)[1]
+  local yanked = filename .. ":" .. linenr
+  vim.fn.setreg("+", yanked)
+  print("File path and line number yanked!")
+end, { desc = "Yank file path and line number" })
+
+map("x", "Yp", function()
+  local filename = vim.fn.expand("%")
+  local s_start = vim.fn.getpos("v")
+  local s_end = vim.fn.getpos(".")
+  local r_start = math.min(s_start[2], s_end[2])
+  local r_end = math.max(s_start[2], s_end[2])
+  local yanked = filename .. ":" .. r_start .. "-" .. r_end
+  vim.fn.setreg("+", yanked)
+  print("File path and line numbers yanked!")
+end, { desc = "Yank file path and line range" })
 
 -- Undotree
 map("n", "<leader>u", "<Cmd>UndotreeToggle<CR>", { desc = "Toggle undotree" })

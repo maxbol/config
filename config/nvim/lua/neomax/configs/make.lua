@@ -145,7 +145,9 @@ function M.make(cwd, statusmsg, makecmd, grepcmd, on_success, on_failure)
         for i, v in ipairs(grep_lines) do
           local parts = vim.split(v, ":")
           local p1 = parts[1]
-          if p1 ~= nil and looks_like_path(p1) then
+          if
+            p1 ~= nil --[[ and looks_like_path(p1) ]]
+          then
             local path = vim.fs.joinpath(cwd, p1)
             parts[1] = vim.fs.relpath(editor_cwd, path)
           end

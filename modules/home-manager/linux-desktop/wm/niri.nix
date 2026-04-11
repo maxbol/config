@@ -193,7 +193,7 @@ in
         outputs = {
           "DP-1" = {
             # mode = "preferred";
-            scale = 1;
+            scale = 1.25;
             position = {
               x = 2560;
               y = 0;
@@ -202,7 +202,7 @@ in
           "DP-3" = {
             variable-refresh-rate = true;
             # mode = "preferred";
-            scale = 1;
+            scale = 1.25;
             position = {
               x = 2560;
               y = 0;
@@ -211,14 +211,14 @@ in
           "DP-4" = {
             variable-refresh-rate = true;
             # mode = "preferred";
-            scale = 1;
+            scale = 1.25;
             position = {
               x = 2560;
               y = 0;
             };
           };
           "eDP-2" = {
-            scale = 1;
+            scale = 1.25;
             position = {
               x = 0;
               y = 0;
@@ -329,7 +329,7 @@ in
           background-color = "transparent";
 
           tab-indicator = {
-            position = "top";
+            position = "left";
             gap = -8;
           };
 
@@ -370,7 +370,8 @@ in
         window-rules = [
           {
             geometry-corner-radius = let
-              radius = 10.;
+              # radius = 10.;
+              radius = 0.0;
             in {
               bottom-left = radius;
               bottom-right = radius;
@@ -378,7 +379,6 @@ in
               top-right = radius;
             };
             clip-to-geometry = true;
-            default-column-display = "normal";
             draw-border-with-background = false;
           }
           # {
@@ -403,6 +403,9 @@ in
               }
               {
                 app-id = "bluetui";
+              }
+              {
+                app-id = "wdisplays";
               }
               {
                 app-id = "impala";
@@ -519,6 +522,13 @@ in
             Mod+Shift+Backspace { previous-window filter="app-id"; }
           }
         }
+
+        window-rule {
+          background-effect {
+            blur true
+            xray true
+          }
+        }
       '';
 
       services.network-manager-applet.enable = true;
@@ -530,6 +540,7 @@ in
           playerctl
           bluetui
           impala
+          gpu-screen-recorder
         ])
         ++ [
           pkgs-unstable.quickshell

@@ -196,21 +196,22 @@ in {
       niriOverrides = palette: {
         active-border = palette.semantic.text2;
       };
-      firefoxOverrides = palette: {
-        border_color_active = palette.semantic.text2;
-      };
+      # firefoxOverrides = palette: {
+      #   border_color_active = palette.semantic.text2;
+      # };
       neovimOverrides = palette: {
         colorscheme = "rose-pine-main";
         background = "dark";
         hlGroupsFg = {
           HLChunk1 = "#c4a7e7";
           HLLineNum1 = "#c4a7e7";
+          CursorLineNr = "#" + palette.semantic.text;
         };
         hlGroupsBg = {
-          CursorLine = "#44415a";
           Cursor = "#6e6a86";
           Folded = "#44415a";
         };
+        hlClear = ["CursorLine"];
       };
     };
 
@@ -225,12 +226,13 @@ in {
         hlGroupsFg = {
           HLChunk1 = "#c4a7e7";
           HLLineNum1 = "#c4a7e7";
+          CursorLineNr = "#" + palette.semantic.text;
         };
         hlGroupsBg = {
-          CursorLine = "#44415a";
           Cursor = "#6e6a86";
           Folded = "#44415a";
         };
+        hlClear = ["CursorLine"];
       };
 
       wallpaper = ./rose-pine/wallpapers/eclipse/wallpaper.png;
@@ -248,12 +250,13 @@ in {
         hlGroupsFg = {
           HLChunk1 = "#c4a7e7";
           HLLineNum1 = "#c4a7e7";
+          CursorLineNr = "#" + palette.semantic.text;
         };
         hlGroupsBg = {
-          CursorLine = "#44415a";
           Cursor = "#6e6a86";
           Folded = "#44415a";
         };
+        hlClear = ["CursorLine"];
       };
       noctaliaOverrides = _: {
         predefinedColorscheme = "Rosepine";

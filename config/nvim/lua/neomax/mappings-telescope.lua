@@ -1,5 +1,17 @@
 local map = vim.keymap.set
 
+local function get_selection()
+  -- does not handle rectangular selection
+  local s_start = vim.fn.getpos(".")
+  local s_end = vim.fn.getpos("v")
+  local lines = vim.fn.getregion(s_start, s_end)
+  local text = vim.fn.escape(lines[1], [[\/]])
+  for i = 2, #lines do
+    text = text .. "\\n" .. vim.fn.escape(lines[i], [[\/]])
+  end
+  return text
+end
+
 local function mergeTables(a, b)
   local merged = {}
   for k, v in pairs(a) do
@@ -20,22 +32,22 @@ local function make_telescope_binding(binding, picker, args, desc)
     picker(args(), { desc = desc })
   end)
   map("x", binding, function()
-    picker(mergeTables(args(), { default_text = vim.fn.expand("<cword>") }), { desc = desc })
+    picker(mergeTables(args(), { default_text = get_selection() }), { desc = desc })
   end)
 end
 
-make_telescope_binding("<leader><leader>", require("telescope.builtin").find_files, function()
-  return {
-    find_command = { "rg", "--ignore", "--files", "--sortr", "accessed" },
-    cwd = vim.fn.getcwd(-1),
-  }
-end, "Telescope find (based on access time)")
-
-make_telescope_binding("<leader>ff", require("telescope.builtin").find_files, function()
-  return {
-    cwd = vim.fn.getcwd(-1),
-  }
-end, "Telescope find files")
+-- make_telescope_binding("<leader><leader>", require("telescope.builtin").find_files, function()
+--   return {
+--     find_command = { "rg", "--ignore", "--files", "--sortr", "accessed" },
+--     cwd = vim.fn.getcwd(-1),
+--   }
+-- end, "Telescope find (based on access time)")
+--
+-- make_telescope_binding("<leader>ff", require("telescope.builtin").find_files, function()
+--   return {
+--     cwd = vim.fn.getcwd(-1),
+--   }
+-- end, "Telescope find files")
 
 make_telescope_binding("<leader>fa", require("telescope.builtin").find_files, function()
   return {
@@ -45,11 +57,11 @@ make_telescope_binding("<leader>fa", require("telescope.builtin").find_files, fu
   }
 end, "Telescope Find all files")
 
-make_telescope_binding("<leader>fw", require("telescope.builtin").live_grep, function()
-  return {
-    cwd = vim.fn.getcwd(-1),
-  }
-end, "Telescope Live grep")
+-- make_telescope_binding("<leader>fw", require("telescope.builtin").live_grep, function()
+--   return {
+--     cwd = vim.fn.getcwd(-1),
+--   }
+-- end, "Telescope Live grep")
 
 make_telescope_binding("<leader>fW", require("telescope.builtin").live_grep, function()
   return {
