@@ -16,6 +16,8 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
 
+    flake-utils.url = "github:numtide/flake-utils";
+
     # Core nix stuff
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
@@ -92,8 +94,16 @@
     # My own stuff
     clockifyd.url = "github:maxbol/clockifyd";
     nvim-colorctl.url = "github:maxbol/nvim-colorctl";
-    obsidian-remote.url = "github:maxbol/obsidian-remote";
-    aporetic-kitty.url = "github:maxbol/aporetic-kitty";
+    obsidian-remote = {
+      url = "github:maxbol/obsidian-remote";
+    };
+    aporetic-kitty = {
+      url = "github:maxbol/aporetic-kitty";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
   };
 
   outputs = inputs @ {
