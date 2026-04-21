@@ -36,7 +36,7 @@ in
       with pkgs; [
         gamescope
         mangohud
-        self.openssl_1_0 # Needed for some native linux games
+        # self.openssl_1_0 # Needed for some native linux games
       ];
   in {
     home.packages = let

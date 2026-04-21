@@ -100,8 +100,8 @@
     aporetic-kitty = {
       url = "github:maxbol/aporetic-kitty";
       inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
+        # nixpkgs.follows = "nixpkgs";
+        # flake-utils.follows = "flake-utils";
       };
     };
   };
