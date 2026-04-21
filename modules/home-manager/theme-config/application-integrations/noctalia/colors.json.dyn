@@ -13,7 +13,7 @@ defines:
     mPrimary: accent1
     mSecondary: accent3
     mShadow: background
-    mSurface: background
+    mSurface: background:darken(0.4)
     mSurfaceVariant: overlay
     mTertiary: accent2
 ---

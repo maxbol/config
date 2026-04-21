@@ -74,7 +74,7 @@ with lib;
             is-focused = true;
           }
         ];
-        opacity = 0.90;
+        opacity = 0.95;
       }
       {
         matches = [

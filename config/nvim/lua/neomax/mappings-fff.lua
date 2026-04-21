@@ -38,13 +38,13 @@ end
 
 make_fff_binding("<leader><leader>", require("fff").find_files, function()
   return {
-    base_path = vim.fn.getcwd(-1),
+    cwd = vim.fn.getcwd(-1),
   }
 end, "fff.nvim find files")
 
 make_fff_binding("<leader>ff", require("fff").find_files, function()
   return {
-    base_path = vim.fn.getcwd(-1),
+    cwd = vim.fn.getcwd(-1),
   }
 end, "fff.nvim find files")
 

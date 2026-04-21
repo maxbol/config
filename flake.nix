@@ -79,6 +79,7 @@
     # Application modules
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     fff.url = "github:dmtrKovalenko/fff.nvim";
+
     textfox.url = "github:maxbol/textfox/copy-on-activation-mode@allow-custom-css@flatten-css";
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     zen-browser.url = "github:youwen5/zen-browser-flake";

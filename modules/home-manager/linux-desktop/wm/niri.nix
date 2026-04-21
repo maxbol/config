@@ -329,6 +329,7 @@ in
           background-color = "transparent";
 
           tab-indicator = {
+            hide-when-single-tab = true;
             position = "left";
             gap = -8;
           };
@@ -421,6 +422,12 @@ in
               }
               {
                 app-id = "org.libvips.vipsdisp";
+              }
+              {
+                app-id = "Bitwarden";
+              }
+              {
+                app-id = "1password";
               }
             ];
             open-floating = true;
@@ -524,9 +531,10 @@ in
         }
 
         window-rule {
+          match is-floating=false
           background-effect {
             blur true
-            xray true
+            xray false
           }
         }
       '';

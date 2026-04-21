@@ -146,6 +146,21 @@ in {
       };
     };
 
+  Neobones-Dark = makeTheme ./neobones {
+    luminanceVariant = "dark";
+    neovimOverrides = palette: {
+      colorscheme = "neobones";
+      background = "dark";
+    };
+  };
+  Neobones-Light = makeTheme ./neobones {
+    luminanceVariant = "light";
+    neovimOverrides = palette: {
+      colorscheme = "neobones";
+      background = "light";
+    };
+  };
+
   Gruvbox-Dark = makeTheme ./gruvbox {
     luminanceVariant = "dark";
     neovimOverrides = palette: {

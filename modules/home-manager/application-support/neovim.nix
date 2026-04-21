@@ -61,6 +61,11 @@
     tinymist
     typstyle
     websocat
+    cargo
+    rustc
+    rust-analyzer
+    rustfmt
+    shellcheck
 
     ocamlPackages.ocaml-lsp
     ocamlPackages.earlybird
