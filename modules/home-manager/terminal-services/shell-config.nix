@@ -79,6 +79,8 @@
       zvm_bindkey vicmd  'P' my_zvm_vi_put_before
     }
   '';
+
+  devenv = origin.inputs.devenv.packages.${pkgs.system}.devenv;
 in
   lib-mine.mkFeature "features.terminal-services.shell-config" ({config, ...}: let
     initExtra = config.features.terminal-services.shell-config.initExtra;
@@ -179,6 +181,12 @@ in
               if [[ $(uname -s) == "Linux" ]]; then
                 export SSH_AUTH_SOCK=/run/user/$UID/ssh-agent
               fi
+
+              if [ -f ~/.config/cachix/cachix.dhall ]; then
+                export CACHIX_AUTH_TOKEN="$(awk '/authToken/{getline; gsub(/[[:space:]"]/,"",$0); print}' ~/.config/cachix/cachix.dhall)"
+              fi
+
+              # eval "$(${lib.getExe devenv} hook zsh)"
 
               # export KUBECONFIG=/home/max/.kube/config:/etc/kubernetes/cluster-admin.kubeconfig
             ''

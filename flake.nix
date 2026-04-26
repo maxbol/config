@@ -35,7 +35,7 @@
     };
 
     devenv = {
-      url = "github:cachix/devenv";
+      url = "github:cachix/devenv/42246161fa3bf7cd18f8334d08c73d6aaa8762d3";
     };
 
     # NixOS desktop environment
@@ -63,6 +63,8 @@
     hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
 
     tmux-session-wizard.url = "github:maxbol/tmux-session-wizard/bugfix/correctly-sort-unattached-sessions";
+
+    workmux.url = "github:raine/workmux";
 
     custom-udev-rules.url = "github:MalteT/custom-udev-rules";
 

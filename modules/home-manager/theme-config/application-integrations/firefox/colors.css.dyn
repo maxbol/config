@@ -84,6 +84,10 @@ defines:
   border: none !important;
 }
 
+.browserContainer {
+  background: none !important;
+}
+
 .tabbrowser-tab[first-visible-tab][last-visible-tab]{
   background-color: var(--uc-bar-color) !important;
 }

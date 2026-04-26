@@ -223,5 +223,7 @@ in
         ];
     };
 
-    home.packages = [ta clockifyd];
+    home.packages = [ta clockifyd vendor.workmux.default];
+
+    programs.zsh.shellAliases.wm = "workmux";
   }

@@ -7,15 +7,19 @@
 }: let
   fff-nvim = origin.inputs.fff.packages.${pkgs.system}.fff-nvim;
 
-  neovim-unwrapped = vendor.neovim-nightly-overlay.default.overrideAttrs (old: {
-    meta =
-      old.meta
-      or {}
-      // {
-        maintainers = old.maintainers or [];
-      };
-    treesitter-parsers = {};
-  });
+  # neovim-unwrapped = vendor.neovim-nightly-overlay.default.overrideAttrs (old: {
+  #   meta =
+  #     old.meta
+  #     or {}
+  #     // {
+  #       maintainers = old.maintainers or [];
+  #     };
+  #   treesitter-parsers = {};
+  # });
+
+  # neovim-unwrapped = vendor.neovim-nightly-overlay.default;
+
+  neovim-unwrapped = origin.inputs.nixpkgs-unstable.legacyPackages.${pkgs.system}.neovim-unwrapped;
 
   nvim-colorctl = vendor.nvim-colorctl.default;
 

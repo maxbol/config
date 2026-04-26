@@ -155,8 +155,8 @@ in
         gh
 
         # Package management, virtualisation, environments, etc
-        # origin.inputs.devenv.packages.${pkg.system}.devenv
-        devenv
+        origin.inputs.devenv.packages.${pkgs.system}.devenv
+        # nixpkgs-unstable.devenv
 
         # Global libs/tooling
         openssl

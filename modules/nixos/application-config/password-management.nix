@@ -1,17 +1,17 @@
 {
   lib-mine,
   lib,
-  # origin,
+  origin,
   pkgs,
   ...
 }:
 lib-mine.mkFeature "features.application-config.password-management" ({config, ...}: let
-  # unstable-pkgs = import origin.inputs.nixpkgs-unstable {
-  #   system = pkgs.system;
-  #   config = {
-  #     allowUnfree = true;
-  #   };
-  # };
+  unstable-pkgs = import origin.inputs.nixpkgs-unstable {
+    system = pkgs.system;
+    config = {
+      allowUnfree = true;
+    };
+  };
   # beta = with unstable-pkgs;
   #   _1password-gui-beta.overrideAttrs {
   #     preFixup = ''
@@ -25,7 +25,7 @@ lib-mine.mkFeature "features.application-config.password-management" ({config, .
 in {
   programs._1password.enable = true;
   programs._1password-gui = {
-    # package = beta;
+    package = unstable-pkgs._1password-gui;
     enable = true;
     polkitPolicyOwners = lib.attrNames config.users.users;
   };

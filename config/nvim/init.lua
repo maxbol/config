@@ -67,6 +67,8 @@ require("fff").setup({
 
 require("neomax.options")
 
+-- Start treesitter
+
 if vim.g.neovide == nil then
   require("neomax.modules.lazy-obsession")
 end
