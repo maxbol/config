@@ -17,6 +17,14 @@
       ${lib.getExe pkg} $*
     '';
 
+  gotoolsWithoutModernize = pkgs.symlinkJoin {
+    name = "gotools-without-modernize";
+    paths = [nixpkgs-unstable.gotools];
+    postBuild = ''
+      rm -f "$out/bin/modernize"
+    '';
+  };
+
   # Wrap sqlcmd to make output legible in dadbod
   sqlcmd = pkgs.writeShellScriptBin "sqlcmd" ''
     ${pkgs.sqlcmd}/bin/sqlcmd -w 200 -Y 36 "$@"
@@ -58,7 +66,7 @@ in
         nixpkgs-unstable.gopls
         nixpkgs-unstable.golangci-lint
         nixpkgs-unstable.golangci-lint-langserver
-        nixpkgs-unstable.gotools
+        gotoolsWithoutModernize
         nixpkgs-unstable.delve
 
         # Protobuffers
@@ -147,8 +155,8 @@ in
         gh
 
         # Package management, virtualisation, environments, etc
-        # origin.inputs.devenv.packages.${pkg.system}.devenv
-        devenv
+        origin.inputs.devenv.packages.${pkgs.system}.devenv
+        # nixpkgs-unstable.devenv
 
         # Global libs/tooling
         openssl

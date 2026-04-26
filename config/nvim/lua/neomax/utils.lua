@@ -28,4 +28,40 @@ M.get_selected_text_or_cword = function()
   return M.get_cword()
 end
 
+M.find_project_cwd = function(projectMarkers, rootCwd, bufPath)
+  local function traverse(dir)
+    -- Can't search outside of editor CWD
+    if string.sub(dir, 1, #rootCwd) ~= rootCwd then
+      return nil
+    end
+
+    local handle = vim.loop.fs_scandir(dir)
+    if not handle then
+      return nil
+    end
+
+    while true do
+      local name = vim.loop.fs_scandir_next(handle)
+      if name == nil then
+        break
+      end
+
+      for _, root in ipairs(projectMarkers) do
+        if root == name then
+          return dir
+        end
+      end
+    end
+
+    local parent_dir = vim.loop.fs_realpath(dir .. "/../")
+    if parent_dir then
+      return traverse(parent_dir)
+    end
+
+    return nil
+  end
+
+  return traverse(vim.fs.dirname(bufPath))
+end
+
 return M

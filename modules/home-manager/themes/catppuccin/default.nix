@@ -92,10 +92,10 @@ in rec {
     name = hyprpanelTheme;
   };
 
-  noctalia = {
-    predefinedColorscheme = "Catppuccin";
-    predefinedColorschemeLuminance = luminanceVariant;
-  };
+  # noctalia = {
+  #   predefinedColorscheme = "Catppuccin";
+  #   predefinedColorschemeLuminance = luminanceVariant;
+  # };
 
   rofi.colorOverrides = rofiOverrides palette;
 

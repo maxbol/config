@@ -31,7 +31,7 @@ in {
           enable = true;
           package = nixpkgs-unstable.kitty;
           settings = {
-            background_blur = 10;
+            background_blur = 64;
             text_composition_strategy = "3 0";
             # text_composition_strategy = "platform";
             dynamic_background_opacity = "yes";

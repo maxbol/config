@@ -59,6 +59,8 @@ M.on_attach = function(client, bufnr)
     vim.diagnostic.jump({ count = 1, float = true })
   end, { desc = "Lsp next diagnostic" })
   map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Lsp diagnostic loclist" })
+
+  vim.lsp.inlay_hint.enable(false)
 end
 
 M.config_servers = function(servers, capabilities)

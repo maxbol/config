@@ -60,6 +60,13 @@ in {
             A mapping of highlight groups to their foreground color.
           '';
         };
+        hlClear = mkOption {
+          type = types.listOf types.str;
+          default = [];
+          description = ''
+            A list of highlight groups to clear on activation.
+          '';
+        };
         extraCmds = mkOption {
           type = types.listOf types.str;
           example = ["NewpaperLight"];
@@ -78,10 +85,11 @@ in {
 
         fgGroups = padArg (lib.concatStringsSep " " (lib.mapAttrsToList (name: value: "--hi-fg ${name},${value}") config.hlGroupsFg));
         bgGroups = padArg (lib.concatStringsSep " " (lib.mapAttrsToList (name: value: "--hi-bg ${name},${value}") config.hlGroupsBg));
+        clearGroups = padArg (lib.concatStringsSep " " (map (name: "--extra-cmd \"hi clear ${name}\"") config.hlClear));
         extraCmds = padArg (lib.concatStringsSep " " (map (value: "--extra-cmd \"${value}\"") config.extraCmds));
       in {
         file."colorctl" = let
-          cmd = "${lib.getExe nvim-colorctl} --emit-lua ${homeDirectory}/.config/nvim/lua/neomax/color/init.lua -s ${config.colorscheme} -b ${config.background}${fgGroups}${bgGroups}${extraCmds}";
+          cmd = "${lib.getExe nvim-colorctl} --emit-lua ${homeDirectory}/.config/nvim/lua/neomax/color/init.lua -s ${config.colorscheme} -b ${config.background}${fgGroups}${bgGroups}${clearGroups}${extraCmds}";
         in {
           required = true;
           source = mkDefault (pkgs.writeShellScript "colorctl" "echo \"${cmd}\" && ${cmd} && echo \"Done\".");

@@ -3,6 +3,9 @@ local opt = vim.o
 return {
   "neovim/nvim-lspconfig",
   event = "User FilePost",
+  opts = {
+    inlay_hints = { enabled = false },
+  },
   config = function()
     opt.foldcolumn = "1" -- '0' is not bad
     opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value

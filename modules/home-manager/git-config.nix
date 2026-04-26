@@ -59,9 +59,9 @@ lib-mine.mkFeature "features.git-config" {
         patch = "push rad HEAD:refs/patches";
       };
 
-      credential.helper = "${
-        pkgs.git.override {withLibsecret = true;}
-      }";
+      # credential.helper = "${
+      #   pkgs.git.override {withLibsecret = true;}
+      # }";
 
       merge = {
         conflictStyle = "diff3";

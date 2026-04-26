@@ -14,9 +14,14 @@ with lib;
       # topOuterGapSize = 5;
       # topStrutSize = topOuterGapSize - gapSize;
       borderWidth = 2;
+      strutSize = 0;
     in {
       gaps = gapSize;
       struts = {
+        left = strutSize;
+        right = strutSize;
+        top = strutSize;
+        bottom = strutSize;
         # left = -borderWidth;
         # right = -borderWidth;
         # bottom = -borderWidth;
@@ -35,18 +40,42 @@ with lib;
         urgent.color = "#${urgent-tab}";
       };
       border = {
-        enable = mkForce true;
-        width = mkForce borderWidth;
-        active = mkForce {
-          color = "#${active-border}";
-        };
-        inactive = mkForce {
-          color = "#${inactive-border}";
-        };
+        enable = mkForce false;
+        # width = mkForce borderWidth;
+        # active = mkForce {
+        #   color = "#${active-border}";
+        # };
+        # inactive = mkForce {
+        #   color = "#${inactive-border}";
+        # };
       };
       focus-ring.enable = mkForce false;
     };
     window-rules = [
+      {
+        matches = [
+          {
+            is-focused = true;
+          }
+        ];
+        excludes = [
+          {
+            is-active = true;
+          }
+        ];
+        opacity = 0.99;
+      }
+      {
+        excludes = [
+          {
+            is-active = true;
+          }
+          {
+            is-focused = true;
+          }
+        ];
+        opacity = 0.95;
+      }
       {
         matches = [
           {

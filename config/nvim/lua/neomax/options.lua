@@ -4,9 +4,9 @@ local g = vim.g
 
 -- add yours here!
 
-opt.wrap = true
+opt.wrap = false
 opt.linebreak = true
-opt.colorcolumn = "120"
+-- opt.colorcolumn = "120"
 
 opt.termguicolors = true
 opt.clipboard = "unnamedplus"
@@ -17,7 +17,7 @@ g.markdown_recommended_style = 0
 
 opt.foldenable = true
 opt.foldmethod = "syntax"
-opt.cursorline = false
+opt.cursorline = true
 opt.guicursor = "n-v-c:block-blinkon500-blinkwait3000-blinkoff500-Cursor/lCursor,i-ci:ver25"
 
 -- Hide mode notation in cmdline

@@ -56,6 +56,10 @@ return {
       callback = function(o)
         if o.match:find("^oil://") then
           vim.cmd("lcd " .. (require("oil").get_current_dir()))
+        elseif o.match:find("fffile search$") then
+          -- fff.nvim calls `nvim_set_current_win` after collecting the current working dir
+          -- from configuration, which then triggers the cd switch here, leading to inconsistencies.
+          -- To avoid this, have this call always be a noop
         else
           vim.cmd("lcd " .. (vim.fn.getcwd(-1)))
         end
@@ -90,6 +94,29 @@ return {
         vim.keymap.set("n", "<C-w>n", function()
           local dir = require("oil").get_current_dir()
           os.execute("tmux new-window -c " .. dir)
+        end, { buffer = o.buf })
+
+        vim.keymap.set("x", "<C-q>", function()
+          local lines_start = vim.fn.getpos(".")[2]
+          local lines_end = vim.fn.getpos("v")[2]
+
+          local files = {}
+
+          local s = math.min(lines_start, lines_end)
+          local e = math.max(lines_start, lines_end)
+
+          for i = s, e, 1 do
+            local entry = oil.get_entry_on_line(o.buf, i)
+            local qfentry = entry.name .. ":1:1:" .. entry.name
+            table.insert(files, qfentry)
+          end
+
+          vim.fn.setqflist({}, "r", {
+            title = "Oil files",
+            lines = files,
+          })
+
+          vim.cmd("copen")
         end, { buffer = o.buf })
       end,
     })

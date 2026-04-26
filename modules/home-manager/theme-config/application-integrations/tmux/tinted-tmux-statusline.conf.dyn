@@ -73,7 +73,7 @@ set-window-option -g window-status-activity-style "fg=#⟨window_status_activity
 set-option -g message-command-style "fg=#⟨message_command_fg:hex⟩,bg=#⟨message_command_bg:hex⟩"
 
 set-window-option -g window-active-style "fg=#⟨window_active_fg:hex⟩,bg=terminal"
-set-window-option -g window-style "fg=#⟨window_inactive_fg:hex⟩,bg=#⟨window_inactive_bg:hex⟩"
+set-window-option -g window-style "fg=#⟨window_inactive_fg:hex⟩,bg=terminal"
 
 set -ogqF @tinted-tmux-modulepane-right-inner "#h"
 set -ogqF @tinted-tmux-modulepane-right-outer "%Y-%m-%d  %H:%M"

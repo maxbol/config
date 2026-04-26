@@ -16,6 +16,8 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
 
+    flake-utils.url = "github:numtide/flake-utils";
+
     # Core nix stuff
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
@@ -33,12 +35,12 @@
     };
 
     devenv = {
-      url = "github:cachix/devenv";
+      url = "github:cachix/devenv/42246161fa3bf7cd18f8334d08c73d6aaa8762d3";
     };
 
     # NixOS desktop environment
     niri = {
-      url = "github:maxbol/niri-flake/animation-override2@update";
+      url = "github:maxbol/niri-flake/niri-20260311";
     };
 
     noctalia = {
@@ -62,6 +64,8 @@
 
     tmux-session-wizard.url = "github:maxbol/tmux-session-wizard/bugfix/correctly-sort-unattached-sessions";
 
+    workmux.url = "github:raine/workmux";
+
     custom-udev-rules.url = "github:MalteT/custom-udev-rules";
 
     nur.url = "github:nix-community/NUR";
@@ -78,6 +82,8 @@
 
     # Application modules
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    fff.url = "github:dmtrKovalenko/fff.nvim";
+
     textfox.url = "github:maxbol/textfox/copy-on-activation-mode@allow-custom-css@flatten-css";
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     zen-browser.url = "github:youwen5/zen-browser-flake";
@@ -90,8 +96,16 @@
     # My own stuff
     clockifyd.url = "github:maxbol/clockifyd";
     nvim-colorctl.url = "github:maxbol/nvim-colorctl";
-    obsidian-remote.url = "github:maxbol/obsidian-remote";
-    aporetic-kitty.url = "github:maxbol/aporetic-kitty";
+    obsidian-remote = {
+      url = "github:maxbol/obsidian-remote";
+    };
+    aporetic-kitty = {
+      url = "github:maxbol/aporetic-kitty";
+      inputs = {
+        # nixpkgs.follows = "nixpkgs";
+        # flake-utils.follows = "flake-utils";
+      };
+    };
   };
 
   outputs = inputs @ {
