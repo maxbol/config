@@ -1,0 +1,33 @@
+{...}: {
+  imports = [
+    ./bat
+    ./desktop.nix
+    ./dunst.nix
+    ./dynawall
+    ./firefox
+    ./fish.nix
+    ./gtk.nix
+    ./hyprland
+    ./hyprpanel
+    ./jankyborders
+    ./kitty
+    ./macos-wallpaper.nix
+    ./neovim.nix
+    ./niri
+    ./noctalia
+    ./obsidian
+    ./palette.nix
+    ./qt
+    ./rofi
+    ./sketchybar
+    ./starship.nix
+    ./swaync
+    ./tmux
+    ./vscode.nix
+    ./waybar
+    ./wezterm.nix
+    ./wlogout
+    ./yazi
+    ./zathura
+  ];
+}

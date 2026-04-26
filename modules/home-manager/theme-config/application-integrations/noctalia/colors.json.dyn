@@ -1,0 +1,37 @@
+---
+defines:
+    mError: red
+    mHover: text2
+    mOnError: background
+    mOnHover: text
+    mOnPrimary: background
+    mOnSecondary: background
+    mOnSurface: text
+    mOnSurfaceVariant: text1
+    mOnTertiary: text
+    mOutline: text2
+    mPrimary: accent1
+    mSecondary: accent3
+    mShadow: background
+    mSurface: background
+    mSurfaceVariant: overlay
+    mTertiary: accent2
+---
+{
+    "mError": "#⟨mError:hex⟩",
+    "mHover": "#⟨mHover:hex⟩",
+    "mOnError": "#⟨mOnError:hex⟩",
+    "mOnHover": "#⟨mOnHover:hex⟩",
+    "mOnPrimary": "#⟨mOnPrimary:hex⟩",
+    "mOnSecondary": "#⟨mOnSecondary:hex⟩",
+    "mOnSurface": "#⟨mOnSurface:hex⟩",
+    "mOnSurfaceVariant": "#⟨mOnSurfaceVariant:hex⟩",
+    "mOnTertiary": "#⟨mOnTertiary:hex⟩",
+    "mOutline": "#⟨mOutline:hex⟩",
+    "mPrimary": "#⟨mPrimary:hex⟩",
+    "mSecondary": "#⟨mSecondary:hex⟩",
+    "mShadow": "#⟨mShadow:hex⟩",
+    "mSurface": "#⟨mSurface:hex⟩",
+    "mSurfaceVariant": "#⟨mSurfaceVariant:hex⟩",
+    "mTertiary": "#⟨mTertiary:hex⟩" 
+}

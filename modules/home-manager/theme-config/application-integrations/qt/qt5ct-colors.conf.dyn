@@ -1,0 +1,14 @@
+---
+defines:
+    fg: text
+    accent1: accent1
+    accent2: accent2
+    accent3: accent3
+    accent4: accent1
+    red: red
+---
+
+[ColorScheme]
+active_colors=#⟨fg:hex⟩f4, #⟨accent1:hex⟩2e, #⟨accent2:hex⟩c8, #⟨accent1:hex⟩b2, #⟨red:hex⟩f4, #⟨accent1:hex⟩86, #⟨fg:hex⟩f4, #⟨fg:hex⟩f4, #⟨fg:hex⟩f4, #⟨accent1:hex⟩2e, #⟨red:hex⟩25, #⟨accent3:hex⟩9c, #⟨accent3:hex⟩fa, #⟨accent1:hex⟩2e, #⟨accent3:hex⟩fa, #⟨accent4:hex⟩a8, #⟨accent1:hex⟩2e, #⟨fg:hex⟩f4, #⟨red:hex⟩1b, #⟨fg:hex⟩f4, #⟨accent1:hex⟩9c,
+disabled_colors=#⟨accent2:hex⟩c8, #⟨accent1:hex⟩2e, #⟨accent2:hex⟩c8, #⟨accent1:hex⟩b2, #⟨red:hex⟩5a, #⟨accent1:hex⟩86, #⟨accent2:hex⟩c8, #⟨accent2:hex⟩c8, #⟨accent2:hex⟩c8, #⟨accent1:hex⟩2e, #⟨red:hex⟩1b, #⟨accent3:hex⟩9c, #⟨accent3:hex⟩fa, #⟨red:hex⟩5a, #⟨accent3:hex⟩fa, #⟨accent4:hex⟩a8, #⟨accent1:hex⟩2e, #⟨fg:hex⟩f4, #⟨red:hex⟩1b, #⟨fg:hex⟩f4, #⟨accent1:hex⟩9c,
+inactive_colors=#⟨fg:hex⟩f4, #⟨accent1:hex⟩2e, #⟨accent2:hex⟩c8, #⟨accent1:hex⟩b2, #⟨red:hex⟩5a, #⟨accent1:hex⟩86, #⟨fg:hex⟩f4, #⟨fg:hex⟩f4, #⟨fg:hex⟩f4, #⟨accent1:hex⟩2e, #⟨red:hex⟩25, #⟨accent3:hex⟩9c, #⟨accent3:hex⟩fa, #⟨accent2:hex⟩c8, #⟨accent3:hex⟩fa, #⟨accent4:hex⟩a8, #⟨accent1:hex⟩2e, #⟨fg:hex⟩f4, #⟨red:hex⟩1b, #⟨fg:hex⟩f4, #⟨accent1:hex⟩9c

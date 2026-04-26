@@ -1,0 +1,41 @@
+{
+    "label" : "lock",
+    "action" : "shutdownctl lock-session",
+    "text" : "Lock",
+    "keybind" : "l"
+}
+
+{
+    "label" : "logout",
+    "action" : "shutdownctl logout",
+    "text" : "Logout",
+    "keybind" : "e"
+}
+
+{
+    "label" : "suspend",
+    "action" : "shutdownctl suspend",
+    "text" : "Suspend",
+    "keybind" : "u"
+}
+
+{
+    "label" : "shutdown",
+    "action" : "shutdownctl poweroff",
+    "text" : "Shutdown",
+    "keybind" : "s"
+}
+
+{
+    "label" : "hibernate",
+    "action" : "shutdownctl hibernate",
+    "text" : "Hibernate",
+    "keybind" : "h"
+}
+
+{
+    "label" : "reboot",
+    "action" : "shutdownctl reboot",
+    "text" : "Reboot",
+    "keybind" : "r"
+}

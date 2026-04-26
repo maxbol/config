@@ -1,162 +1,357 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-24.11-darwin";
-    nix-darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-24.11";
-    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    # Core packages
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin/nix-darwin-25.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    home-manager = {
+      url = "github:nix-community/home-manager/release-25.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    flake-parts.url = "github:hercules-ci/flake-parts";
+
+    # Core nix stuff
+    nix-index-database = {
+      url = "github:Mic92/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-search-cli = {
+      url = "github:peterldowns/nix-search-cli";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    devenv = {
+      url = "github:cachix/devenv";
+    };
+
+    # NixOS desktop environment
+    niri = {
+      url = "github:maxbol/niri-flake/animation-override2@update";
+    };
+
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
+    vicinae = {
+      url = "github:vicinaehq/vicinae";
+    };
+
+    hyprcursor = {
+      url = "github:hyprwm/hyprcursor";
+      inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.systems.follows = "systems-linux";
+    };
+
+    walker.url = "github:abenz1267/walker";
+
+    hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
+
+    tmux-session-wizard.url = "github:maxbol/tmux-session-wizard/bugfix/correctly-sort-unattached-sessions";
+
+    custom-udev-rules.url = "github:MalteT/custom-udev-rules";
+
+    nur.url = "github:nix-community/NUR";
+
+    # For virtual machines, servers, etc
+    disko = {
+      url = "github:nix-community/disko";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+    };
+
+    # Application modules
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    textfox.url = "github:maxbol/textfox/copy-on-activation-mode@allow-custom-css@flatten-css";
+    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
+    zen-browser.url = "github:youwen5/zen-browser-flake";
+    wooz.url = "github:negrel/wooz";
+
+    # Languages
+    zig-overlay.url = "github:mitchellh/zig-overlay";
+    zls.url = "github:zigtools/zls";
+
+    # My own stuff
+    clockifyd.url = "github:maxbol/clockifyd";
+    nvim-colorctl.url = "github:maxbol/nvim-colorctl";
+    obsidian-remote.url = "github:maxbol/obsidian-remote";
+    aporetic-kitty.url = "github:maxbol/aporetic-kitty";
   };
 
   outputs = inputs @ {
-    self,
     nix-darwin,
+    home-manager,
+    flake-parts,
     nixpkgs,
-  }: let
-    configuration = {
-      pkgs,
-      lib,
-      ...
-    }: {
-      # List packages installed in system profile. To search by name, run:
-      # $ nix-env -qaP | grep wget
-      environment.systemPackages = [
-        pkgs.vim
-        pkgs.jankyborders
-        pkgs.aerospace
-        pkgs.sketchybar
-      ];
+    ...
+  }:
+    flake-parts.lib.mkFlake {
+      inherit inputs;
+    } (
+      {
+        config,
+        options,
+        self,
+        ...
+      }: let
+        hmModuleRoot = import ./modules/home-manager;
+        themeConfigModule = import ./modules/home-manager/theme-config;
+        darwinModuleRoot = import ./modules/darwin;
+        nixosModuleRoot = import ./modules/nixos;
+        lib-mine = (import ./lib) {inherit (nixpkgs) lib;};
+        moduleArgs = self // {inherit config options;};
+        systems = [
+          "aarch64-darwin"
+          "x86_64-linux"
+        ];
 
-      nix.settings = {
-        experimental-features = "nix-command flakes";
-        trusted-users = ["maxbolotin"];
-      };
-
-      # Necessary for using flakes on this system.
-
-      # Enable alternative shell support in nix-darwin.
-      # programs.fish.enable = true;
-
-      # Set Git commit hash for darwin-version.
-      system.configurationRevision = self.rev or self.dirtyRev or null;
-
-      # Used for backwards compatibility, please read the changelog before changing.
-      # $ darwin-rebuild changelog
-      system.stateVersion = 5;
-
-      # The platform the configuration will be used on.
-      nixpkgs.hostPlatform = "aarch64-darwin";
-
-      services.nix-daemon.enable = true;
-
-      system.defaults = {
-        spaces = {
-          spans-displays = true;
+        mkOverlays = (import ./overlays) {
+          inherit (nixpkgs) lib;
+          inherit inputs;
         };
-        dock = {
-          expose-group-apps = true;
-        };
-      };
 
-      services = {
-        aerospace = {
-          enable = true;
-          settings = let
-            triggerSketchybarWorkspaceChanged = [
-              "/bin/bash"
-              "-c"
-              "sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE"
-            ];
-          in {
-            exec-on-workspace-change = triggerSketchybarWorkspaceChanged;
-            on-focused-monitor-changed = [];
-            gaps = {
-              outer = {
-                left = 20;
-                right = 20;
-                top = 55;
-                bottom = 20;
-              };
-              inner = {
-                horizontal = 10;
-                vertical = 10;
-              };
-            };
-            mode.main.binding = {
-              alt-ctrl-shift-f = "fullscreen";
-              alt-ctrl-f = "layout floating tiling";
-
-              alt-h = "focus left";
-              alt-j = "focus down";
-              alt-k = "focus up";
-              alt-l = "focus right";
-
-              alt-ctrl-h = "workspace prev";
-              alt-ctrl-l = "workspace next";
-
-              alt-shift-ctrl-h = "move-node-to-workspace prev --focus-follows-window";
-              alt-shift-ctrl-l = "move-node-to-workspace next --focus-follows-window";
-
-              alt-shift-h = "move left";
-              alt-shift-j = "move down";
-              alt-shift-k = "move up";
-              alt-shift-l = "move right";
-
-              alt-left = "join-with left";
-              alt-right = "join-with right";
-              alt-up = "join-with up";
-              alt-down = "join-with down";
-
-              alt-slash = "layout tiles horizontal vertical";
-              alt-comma = "layout accordion horizontal vertical";
-
-              alt-minus = "resize smart -50";
-              alt-equal = "resize smart +50";
-
-              alt-tab = "workspace-back-and-forth";
-              alt-shift-tab = "move-workspace-to-monitor --wrap-around next";
-
-              alt-1 = "workspace 1";
-              alt-2 = "workspace 2";
-              alt-3 = "workspace 3";
-              alt-4 = "workspace 4";
-
-              alt-shift-1 = "move-node-to-workspace 1 --focus-follows-window";
-              alt-shift-2 = "move-node-to-workspace 2 --focus-follows-window";
-              alt-shift-3 = "move-node-to-workspace 3 --focus-follows-window";
-              alt-shift-4 = "move-node-to-workspace 4 --focus-follows-window";
+        mkPackages = system:
+          import nixpkgs {
+            inherit system;
+            overlays = mkOverlays system;
+            config = {
+              allowUnfree = true;
+              input-fonts.acceptLicense = true;
+              permittedInsecurePackages = [
+                "openssl-1.1.1w"
+                # "openssl-1.0.0"
+              ];
             };
           };
-        };
-        jankyborders.enable = true;
-        sketchybar.enable = true;
-      };
-
-      launchd.user.agents = let
-        PATH = "/usr/bin:/bin:/usr/sbin:/sbin:${pkgs.sketchybar}/bin:${pkgs.aerospace}/bin:${pkgs.jankyborders}/bin";
       in {
-        aerospace = {
-          environment.PATH = PATH;
+        inherit systems;
+
+        debug = true;
+
+        imports = [
+          ./meta.nix
+        ];
+
+        perSystem = {
+          pkgs,
+          self',
+          system,
+          ...
+        }: let
+          packageArgs = {
+            self = self'.packages;
+            inputs = inputs;
+            vendor = pkgs.lib.foldlAttrs (inputPackages: inputName: input:
+              inputPackages
+              // (
+                if inputName == "nixpkgs"
+                then {}
+                else {${inputName} = input.packages.${system};}
+              )) {}
+            inputs;
+          };
+        in {
+          _module.args.pkgs = mkPackages system;
+
+          packages = pkgs.callPackage ./packages packageArgs;
+          # themes = import ./themes (
+          #   {
+          #     inherit pkgs lib lib-mine options;
+          #   }
+          #   // packageArgs
+          # );
         };
-        jankyborders = {
-          serviceConfig.ProgramArguments = lib.mkForce [
-            "/bin/bash"
-            "-c"
-            "${pkgs.jankyborders}/bin/borders"
+
+        flake = let
+          mkSpecialArgs = system: let
+            pkgs = mkPackages system;
+          in {
+            inherit lib-mine;
+            origin = moduleArgs;
+            self = self.packages.${system};
+            vendor = pkgs.lib.foldlAttrs (inputPackages: inputName: input:
+              inputPackages
+              // (
+                if inputName == "nixpkgs"
+                then {}
+                else {${inputName} = input.packages.${system};}
+              )) {}
+            inputs;
+          };
+
+          mkDarwinConfiguration = {
+            host,
+            system,
+          }: let
+            hostModule = import (./. + ''/hosts/darwin/${host}'');
+          in
+            nix-darwin.lib.darwinSystem {
+              specialArgs = mkSpecialArgs system;
+              pkgs = mkPackages system;
+              modules = [
+                darwinModuleRoot
+                hostModule
+                ({lib, ...}: {
+                  nixpkgs.hostPlatform = lib.mkDefault system;
+                })
+              ];
+            };
+
+          mkDarwinConfigurations = builtins.foldl' (acc: config @ {host, ...}:
+            acc
+            // {
+              ${host} = mkDarwinConfiguration config;
+            }) {};
+
+          mkNixosConfiguration = {
+            host,
+            system,
+          }: let
+            hostModule = import (./. + "/hosts/nixos/${host}");
+          in
+            nixpkgs.lib.nixosSystem {
+              specialArgs = mkSpecialArgs system;
+              pkgs = mkPackages system;
+              modules = [
+                nixosModuleRoot
+                hostModule
+                ({lib, ...}: {
+                  nixpkgs.hostPlatform = lib.mkDefault system;
+                })
+              ];
+            };
+
+          mkNixosConfigurations = builtins.foldl' (acc: config @ {host, ...}:
+            acc
+            // {
+              ${host} = mkNixosConfiguration config;
+            }) {};
+
+          mkHomeManagerConfiguration = {
+            system,
+            username,
+            host,
+          }: let
+            userModule = import (./. + ''/users/${username}@${host}'');
+          in
+            home-manager.lib.homeManagerConfiguration {
+              modules = [
+                hmModuleRoot
+                userModule
+                {
+                  programs.home-manager.enable = true;
+                }
+                ({lib, ...}: {
+                  home.username = username;
+                  home.homeDirectory =
+                    lib.mkDefault
+                    (
+                      if system == "aarch64-darwin"
+                      then "/Users/${username}/"
+                      else "/home/${username}"
+                    );
+                })
+              ];
+              pkgs = mkPackages system;
+              extraSpecialArgs = mkSpecialArgs system;
+            };
+
+          mkHomeManagerConfigurations = builtins.foldl' (acc: config @ {
+            username,
+            host,
+            ...
+          }:
+            acc
+            // {
+              "${username}@${host}" = mkHomeManagerConfiguration config;
+            }) {};
+        in {
+          nixosConfigurations = mkNixosConfigurations [
+            {
+              host = "jockey";
+              system = "x86_64-linux";
+            }
+            {
+              host = "frugal";
+              system = "x86_64-linux";
+            }
+            {
+              host = "whitebox";
+              system = "x86_64-linux";
+            }
           ];
-          environment.PATH = PATH;
-        };
-        clearDirenv = {
-          serviceConfig = {
-            Program = "/bin/bash";
-            ProgramArguments = ["-c" ''rm -rf /private/tmp/direnv/''${UID}/layouts/*''];
-            RunAtLoad = true;
+
+          darwinConfigurations = mkDarwinConfigurations [
+            {
+              host = "void";
+              system = "aarch64-darwin";
+            }
+          ];
+
+          homeConfigurations = mkHomeManagerConfigurations [
+            {
+              system = "aarch64-darwin";
+              username = "maxbolotin";
+              host = "void";
+            }
+            {
+              system = "x86_64-linux";
+              username = "max";
+              host = "frugal";
+            }
+          ];
+
+          darwinModules = {
+            all = darwinModuleRoot;
+          };
+
+          homeManagerModules = {
+            all = hmModuleRoot;
+            themeConfig = themeConfigModule;
           };
         };
-      };
-    };
-  in {
-    # Build darwin flake using:
-    # $ darwin-rebuild build --flake .#simple
-    darwinConfigurations."void" = nix-darwin.lib.darwinSystem {
-      modules = [configuration];
-    };
+
+        meta = {
+          flakeRoot = ./.;
+        };
+      }
+    );
+
+  nixConfig = {
+    extra-substituters = [
+      "https://cache.garnix.io"
+      "https://devenv.cachix.org"
+      "https://nix-community.cachix.org"
+      "https://maxbol.cachix.org"
+      "https://hyprland.cachix.org"
+      "https://walker-git.cachix.org"
+      "https://vicinae.cachix.org"
+    ];
+
+    extra-trusted-public-keys = [
+      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+      "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "maxbol.cachix.org-1:Rlo1/Hw2jg0bxRoB/w1d9PXAc0kpyJ2uKFAdLkVygU0="
+      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      "walker-git.cachix.org-1:vmC0ocfPWh0S/vRAQGtChuiZBTAe4wiKDeyyXM0/7pM="
+      "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="
+    ];
   };
 }

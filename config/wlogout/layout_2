@@ -1,0 +1,27 @@
+{
+    "label" : "lock",
+    "action" : "shutdownctl lock-session",
+    "text" : "Lock",
+    "keybind" : "l"
+}
+
+{
+    "label" : "logout",
+    "action" : "shutdownctl logout",
+    "text" : "Logout",
+    "keybind" : "e"
+}
+
+{
+    "label" : "shutdown",
+    "action" : "shutdownctl poweroff",
+    "text" : "Shutdown",
+    "keybind" : "s"
+}
+
+{
+    "label" : "reboot",
+    "action" : "shutdownctl reboot",
+    "text" : "Reboot",
+    "keybind" : "r"
+}

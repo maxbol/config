@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkMenu" id="menu">
+    <child>
+      <object class="GtkMenuItem" id="en">
+        <property name="label">English (us)</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="se">
+        <property name="label">Swedish</property>
+      </object>
+    </child>
+  </object>
+</interface>

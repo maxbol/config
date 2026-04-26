@@ -1,0 +1,247 @@
+{
+  pkgs,
+  self,
+  accent ? "blue",
+  accent2 ? "red",
+  accent3 ? "green",
+  accent4 ? "magenta",
+  accent5 ? "cyan",
+  hyprlandOverrides ? p: {},
+  waybarOverrides ? p: {},
+  rofiOverrides ? p: {},
+  tmuxOverrides ? p: {},
+  neovimOverrides ? p: {},
+  sketchybarOverrides ? p: {},
+  yaziOverrides ? p: {},
+  luminanceVariant ? "dark",
+  makeDesktop,
+  ...
+}: let
+  bluloco_pkg = pkgs.fetchFromGitHub {
+    owner = "uloco";
+    repo = "bluloco.nvim";
+    rev = "main";
+    hash = "sha256-z2kRBlggu0g9qblr2yT18SV+mGNUxekDXs49scZDKf0=";
+  };
+
+  palette_ = {
+    fg = "b9c0cb";
+    # bg = "282c34";
+    bg = "21242D"; #21242D
+    bg_float = "282c34"; #282c34#
+    cursor = "ffcc00";
+    cursor_text = "282c34";
+    black = "41444d";
+    red = "fc2f52";
+    green = "25a45c";
+    yellow = "ff936a";
+    blue = "3476ff"; #3476ff
+    magenta = "7a82da"; #7a82da
+    cyan = "4483aa";
+    white = "cdd4e0";
+    bright_black = "8f9aae";
+    bright_red = "ff637f";
+    bright_green = "3fc56a";
+    bright_yellow = "f9c858";
+    bright_blue = "10b0fe";
+    bright_magenta = "ff78f8";
+    bright_cyan = "5fb9bc";
+    bright_white = "ffffff";
+  };
+
+  palette_dark = rec {
+    colors = {
+      red = palette_.bright_red;
+      green = palette_.bright_green;
+      yellow = palette_.bright_yellow;
+      blue = palette_.bright_blue;
+    };
+
+    accents = {
+      inherit (colors) red green yellow blue;
+      magenta = palette_.bright_magenta;
+      cyan = palette_.bright_cyan;
+      orange = palette_.yellow;
+      black = palette_.black;
+    };
+
+    semantic = {
+      text = palette_.fg;
+      text1 = palette_.white;
+      text2 = palette_.bright_white;
+      overlay = palette_.black;
+      surface = palette_.bg_float;
+      background = palette_.bg;
+      accent1 = accents.${accent};
+      accent2 = accents.${accent2};
+      accent3 = accents.${accent3};
+      accent4 = accents.${accent4};
+      accent5 = accents.${accent5};
+    };
+  };
+
+  palette_light = rec {
+    colors = {
+      red = palette_.red;
+      green = palette_.green;
+      yellow = palette_.yellow;
+      blue = palette_.blue;
+    };
+
+    accents = {
+      inherit (colors) red green yellow blue;
+      magenta = palette_.magenta;
+      cyan = palette_.cyan;
+      orange = palette_.yellow;
+      black = palette_.black;
+    };
+
+    semantic = {
+      text = palette_.bg;
+      text1 = palette_.bright_black;
+      text2 = palette_.black;
+      overlay = palette_.white;
+      surface = palette_.bright_white;
+      background = palette_.fg;
+      accent1 = accents.${accent};
+      accent2 = accents.${accent2};
+      accent3 = accents.${accent3};
+    };
+  };
+
+  mkStarshipPalette = name: palette: ''
+    [palettes.${name}]
+    text = "#${palette.semantic.text}"
+    subtext0 = "#${palette.semantic.text1}"
+    subtext1 = "#${palette.semantic.text2}"
+    surface0 = "#${palette.semantic.background}"
+    surface1 = "#${palette.semantic.surface}"
+    surface2 = "#${palette.semantic.surface}"
+    overlay0 = "#${palette.semantic.overlay}"
+    overlay1 = "#${palette.semantic.overlay}"
+    overlay2 = "#${palette.semantic.overlay}"
+    red = "#${palette.colors.red}"
+    green = "#${palette.colors.green}"
+    yellow = "#${palette.colors.yellow}"
+    blue = "#${palette.colors.blue}"
+    purple = "#${palette.accents.magenta}"
+    aqua = "#${palette.accents.cyan}"
+    orange = "#${palette.accents.yellow}"
+  '';
+
+  starshipPalettes = pkgs.writeText "starship-palettes.toml" ''
+    ${mkStarshipPalette "bluloco-dark" palette_dark}
+    ${mkStarshipPalette "bluloco-light" palette_light}
+  '';
+in rec {
+  palette =
+    if luminanceVariant == "dark"
+    then palette_dark
+    else palette_light;
+
+  desktop = makeDesktop {
+    inherit accent;
+    # iconTheme = {
+    #   package = pkgs.papirus-icon-theme;
+    #   name = "Papirus-Dark";
+    # };
+  };
+
+  # TODO(2025-05-19, Max Bolotin): Copying this from gruvbox for now, should be replace with theme specific
+  gtk = {
+    theme.package = pkgs
+      .gruvbox-gtk-theme
+      .overrideAttrs (prev: {propagatedUserEnvPkgs = prev.propagatedUserEnvPkgs ++ [pkgs.gnome-themes-extra];});
+    theme.name = "Gruvbox-Dark";
+    documentFont = desktop.font;
+    colorScheme = "prefer-dark";
+  };
+
+  qt = {
+    kvantum = {
+      package = self.hyprdots-kvantum;
+      name = "Gruvbox-Retro";
+    };
+  };
+
+  hyprland.colorOverrides = hyprlandOverrides palette;
+
+  waybar.colorOverrides = waybarOverrides palette;
+
+  rofi.colorOverrides = rofiOverrides palette;
+
+  tmux.colorOverrides = tmuxOverrides palette;
+
+  sketchybar.colorOverrides = sketchybarOverrides palette;
+
+  yazi.syntectTheme = "${bluloco_pkg}/extra/bat/.config/bat/themes/bluloco-${luminanceVariant}/bluloco-${luminanceVariant}.tmTheme";
+  yazi.colorOverrides =
+    {
+      filetype_fallback_dir_fg = palette.accents.blue;
+    }
+    // (yaziOverrides palette);
+
+  neovim =
+    {
+      colorscheme = "bluloco-dark";
+      background = "dark";
+      hlGroupsFg = {
+        HLChunk1 = "#" + palette.semantic.accent1;
+        HLLineNum1 = "#" + palette.semantic.accent1;
+      };
+    }
+    // (neovimOverrides palette);
+
+  dynawall = {
+    shader = "voronoi2nobuf";
+    colorOverrides = {
+      accents = [
+        ("#" + palette.accents.blue)
+        ("#" + palette.accents.magenta)
+        ("#" + palette.accents.red)
+        ("#" + palette.accents.orange)
+      ];
+    };
+  };
+
+  kitty = {
+    autoGenerate = {
+      enable = true;
+      colorOverrides = {
+        color0 = palette.semantic.background;
+        color1 = palette.accents.red;
+        color2 = palette.accents.green;
+        color3 = palette.accents.blue;
+        color4 = palette.accents.yellow;
+        color5 = palette.accents.magenta;
+        color6 = palette.accents.cyan;
+        color7 = palette.accents.orange;
+        color8 = palette.semantic.overlay;
+        color9 = palette.accents.red;
+        color10 = palette.accents.green;
+        color11 = palette.accents.blue;
+        color12 = palette.accents.yellow;
+        color13 = palette.accents.magenta;
+        color14 = palette.accents.cyan;
+        color15 = palette.semantic.text2;
+      };
+    };
+    # file."theme.conf".source = "${bluloco_pkg}/terminal-themes/kitty/Bluloco${Luminance}.conf";
+  };
+
+  starship.palette = {
+    file = starshipPalettes;
+    name = "bluloco-${luminanceVariant}";
+  };
+
+  bat.theme = {
+    src = bluloco_pkg;
+    file = "extra/bat/.config/bat/themes/bluloco-${luminanceVariant}/bluloco-${luminanceVariant}.tmTheme";
+  };
+
+  macoswallpaper = {
+    wallpaper = ./wallpapers/wallpaper.jpg;
+  };
+
+  swim.wallpaperDirectory = ./wallpapers;
+}

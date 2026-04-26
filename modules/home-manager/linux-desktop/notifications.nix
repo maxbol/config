@@ -1,0 +1,27 @@
+{lib-mine, ...}:
+lib-mine.mkFeature "features.linux-desktop.notifications" {
+  services.swaync = {
+    enable = true;
+  };
+
+  # services.dunst = {
+  #   enable = true;
+  #   settings = {
+  #     global = {
+  #       dmenu = "${pkgs.rofi-wayland}/bin/rofi -dmenu -p dunst";
+  #       browser = "${pkgs.xdg-utils}/bin/xdg-open";
+  #     };
+  #
+  #     urgency_low.icon = "${config.xdg.configHome}/dunst/icons/hyprdots.svg";
+  #     urgency_normal.icon = "${config.xdg.configHome}/dunst/icons/hyprdots.svg";
+  #     urgency_critical.icon = "${config.xdg.configHome}/dunst/icons/critical.svg";
+  #   };
+  # };
+  # systemd.user.services.dunst.Install.WantedBy = ["niri.service"];
+  #
+  # impure-config-management.config."dunst/dunstrc.d/00-hyprdots.conf" = "config/dunst/dunstrc.d/00-hyprdots.conf";
+  # # TODO: some icons, in particular volume icons are needed by the volumecontrol script and should maybe be colocated with that
+  # impure-config-management.config."dunst/icons" = "config/dunst/icons";
+  #
+  # # copper.desktopEnvironment.notificationDaemon = "dunst";
+}

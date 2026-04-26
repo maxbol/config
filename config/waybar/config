@@ -1,0 +1,272 @@
+{
+  "reload_style_on_change": true,
+  "layer": "top",
+  "height": 58,
+  "spacing": 10,
+  "modules-left": [
+    "image",
+    "niri/workspaces",
+    "niri/window"
+  ],
+  "modules-center": [
+    "mpris"
+  ],
+  "modules-right": [
+    "tray",
+    "bluetooth",
+    "network",
+    "pulseaudio",
+    "power-profiles-daemon",
+    "backlight",
+    "battery",
+    "idle_inhibitor",
+    "custom/notification",
+    "custom/cliphist",
+    "niri/language",
+    "clock",
+    "custom/power"
+  ],
+  "hyprland/window": {
+    "separate-outputs": false
+  },
+  "niri/workspaces": {
+    "all-outputs": false,
+    "current-only": false,
+    "format": "{icon}",
+    "format-icons": {
+      "active": "",
+      "inactive": "",
+      "urgent": "",
+      "default": ""
+    }
+  },
+  "user": {
+    "format": "  max | ({work_H}hr {work_M} mins ↑)",
+    "interval": 60,
+    "height": 23,
+    "width": 23,
+    "icon": true,
+    "avatar": "/home/max/.face.icon"
+  },
+  "tray": {
+    "spacing": 10
+  },
+  "clock": {
+    "format": "󰃭 {:L%a %d %H:%M}",
+    "timezone": "Europe/Berlin",
+    "format-alt": "{:%H:%M}  {:%b %Y}",
+    "tooltip-format": "<tt><big>{calendar}</big></tt>",
+    "locale": "sv_SE.UTF-8"
+  },
+  "battery": {
+    "states": {
+      "good": 95,
+      "warning": 30,
+      "critical": 20
+    },
+    "interval": 2,
+    "format": "{icon} {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-plugged": " {capacity}%",
+    "format-alt": "{time} {icon}",
+    "format-icons": [
+      "󰂎",
+      "󰁺",
+      "󰁻",
+      "󰁼",
+      "󰁽",
+      "󰁾",
+      "󰁿",
+      "󰂀",
+      "󰂁",
+      "󰂂",
+      "󰁹"
+    ]
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}",
+    "format-muted": "󰖁",
+    "on-click": "pavucontrol -t 3",
+    "on-click-middle": "volumecontrol.sh -o m",
+    "on-scroll-up": "volumecontrol.sh -o i",
+    "on-scroll-down": "volumecontrol.sh -o d",
+    "tooltip-format": "{icon} {desc} // {volume}%",
+    "scroll-step": 5,
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": [
+        "",
+        "",
+        ""
+      ]
+    }
+  },
+  "pulseaudio#microphone": {
+    "format": "{format_source}",
+    "format-source": "󰍬",
+    "format-source-muted": "",
+    "on-click": "pavucontrol -t 4",
+    "on-click-middle": "volumecontrol.sh -i m",
+    "on-scroll-up": "volumecontrol.sh -i i",
+    "on-scroll-down": "volumecontrol.sh -i d",
+    "tooltip-format": "{format_source} {source_desc} // {source_volume}%",
+    "scroll-step": 5
+  },
+  "custom/power": {
+    "format": "{}",
+    "exec": "echo ; echo  logout",
+    "on-click": "wlogout-launcher-hyprland 1",
+    "interval": 86400,
+    "tooltip": true
+  },
+  "power-profiles-daemon": {
+    "format": "{icon}",
+    "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+    "tooltip": true,
+    "format-icons": {
+      "default": "",
+      "performance": "",
+      "balanced": "",
+      "power-saver": ""
+    }
+  },
+  "image": {
+    "path": "/home/max/.config/waybar/nix.svg",
+    "size": 20,
+    "interval": 5,
+    "on-click": "rofilaunch.sh d"
+  },
+  "bluetooth": {
+    "format": "",
+    "format-disabled": "",
+    "format-connected": " {num_connections}",
+    "tooltip-format": " {device_alias}",
+    "tooltip-format-connected": "{device_enumerate}",
+    "tooltip-format-enumerate-connected": " {device_alias}",
+    "on-double-click": "kitty --app-id=bluetui bluetui",
+    "on-click-right": "kitty --app-id=bluetui bluetui"
+  },
+  "custom/spotify": {
+    "exec": "/usr/bin/python3 $HOME/.config/waybar/modules/mediaplayer.py --player spotify",
+    "format": "{} ",
+    "return-type": "json",
+    "on-click": "playerctl play-pause --player spotify",
+    "on-scroll-up": "playerctl next",
+    "on-scroll-down": "playerctl previous"
+  },
+  "custom/notification": {
+    "tooltip": false,
+    "format": "{icon}",
+    "format-icons": {
+      "notification": "<span foreground='red'><sup></sup></span>",
+      "none": "",
+      "dnd-notification": "<span><sup></sup></span>",
+      "dnd-none": "",
+      "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+      "inhibited-none": "",
+      "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+      "dnd-inhibited-none": ""
+    },
+    "return-type": "json",
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true
+  },
+  "custom/weather": {
+    "exec": "~/.config/scripts/weather",
+    "interval": 3600,
+    "format": "{}",
+    "return-type": "text"
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "󰅶",
+      "deactivated": "󰛊"
+    },
+    "tooltip-format-activated": "caffeinated",
+    "tooltip-format-deactivated": "decaffeinated",
+  },
+  "mpris": {
+    "format": "{player_icon} {dynamic}",
+    "format-paused": "{status_icon} <i>{dynamic}</i>",
+    "player-icons": {
+      "default": "▶",
+      "mpv": "🎵",
+      "spotify": " ",
+      "firefox": "󰈹"
+    },
+    "ignored-players": [
+      "firefox"
+    ],
+    "status-icons": {
+      "paused": "⏸"
+    },
+    "max-length": 1000
+  },
+  "niri/window": {
+    "format": "{app_id}   {title}",
+    "separate-outputs": true,
+    "rewrite": {
+      // ".*  ${USER}@${set_sysname}:(.*)": "  $1",
+      ".*  (.*) — Mozilla Firefox": "󰈹  $1",
+      ".*  (.*)Mozilla Firefox": "󰈹  Firefox",
+      ".*  (.*) - Visual Studio Code": "󰨞  $1",
+      ".*  (.*)Visual Studio Code": "󰨞 Code",
+      ".*  (.*) — Dolphin": "󰉋  $1",
+      "spotify   (.*)": "󰓇  $1",
+      "org.gnome.Nautilus   (.*)": "󰉋  $1",
+      ".*  (.*)Steam": "󰓓  Steam",
+      ".*  (.*) / nvim": "  $1",
+      ".*  (.*) / zsh": "  $1",
+      ".*  (.*) / man": "󰋽  $1",
+      ".*  (.*) / yazi": "󰉋  $1",
+      ".*  (.*) - Slack": "󰒱  $1",
+      "(?!spotify|org.gnome.Nautilus).*   (.*)":"  $1",
+    }
+  },
+  "niri/language": {
+    "format": "{short}",
+    "menu": "on-click",
+    "menu-file": "~/.config/waybar/menus/language.xml",
+    "menu-actions": {
+      "en": "niri msg action switch-layout 0",
+      "se": "niri msg action switch-layout 1"
+    }
+  },
+  "custom/cliphist": {
+    "format": "{}",
+    "exec": "echo ; echo 󰅇 clipboard history",
+    "on-click": "sleep 0.1 && cliphist.sh c",
+    "on-click-right": "sleep 0.1 && cliphist.sh d",
+    "on-click-middle": "sleep 0.1 && cliphist.sh w",
+    "interval": 86400,
+    "tooltip": true
+  },
+  "backlight": {
+    "device": "intel_backlight",
+    "format": "{icon} {percent}%",
+    "format-icons": ["", "", "", "", "", "", "", "", ""],
+    "on-scroll-down": "brightnessctl set 1%-",
+    "on-scroll-up": "brightnessctl set 1%+",
+    "min-length": 6
+  },
+  "network": {
+    // "interface": "wlp2*", // (Optional) To force the use of this interface
+    "format-wifi": "󰤨 {essid}",
+    "format-ethernet": "󱘖 Wired",
+    "tooltip-format": "󱘖 {ipaddr}  {bandwidthUpBytes}  {bandwidthDownBytes}",
+    "format-linked": "󱘖 {ifname} (No IP)",
+    "format-disconnected": " Disconnected",
+    "format-alt": "󰤨 {signalStrength}%",
+    "interval": 5,
+    "on-click-right": "kitty --app-id=impala impala"
+  },
+}

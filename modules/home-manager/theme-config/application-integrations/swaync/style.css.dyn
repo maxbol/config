@@ -1,0 +1,368 @@
+---
+defines:
+  control_center_background_color: background
+  control_center_border_color: text2
+  control_center_shadow_color: overlay
+  control_center_dnd_slider: overlay
+  control_center_foreground_color: text
+  control_center_notification_action_active_background: text2
+  control_center_notification_action_background: background
+  control_center_notification_action_border: text2
+  control_center_notification_action_foreground: text
+  control_center_notification_action_hover_background: overlay
+  control_center_notification_background: surface
+  control_center_notification_body_foreground: text1
+  control_center_notification_border: text2
+  control_center_notification_close_button_active_background: accent2
+  control_center_notification_close_button_background: accent1
+  control_center_notification_close_button_foreground: text
+  control_center_notification_close_button_hover_foreground: background
+  control_center_notification_content_foreground: text
+  control_center_notification_critical_border: accent1
+  control_center_notification_foreground: text
+  control_center_notification_summary_foreground: text
+  control_center_trough: text2
+  control_center_widget_title_button_active_background: text2
+  control_center_widget_title_button_background: surface
+  control_center_widget_title_button_border: text2
+  control_center_widget_title_button_foreground: text
+  control_center_widget_title_button_hover_background: overlay
+  control_center_widget_title_foreground: accent2
+  notification_action_active_background: text2
+  notification_action_background: surface
+  notification_action_border: text2
+  notification_action_foreground: text
+  notification_action_hover_background: overlay
+  notification_background: background
+  notification_body: text2
+  notification_border: text2
+  notification_close_btn_active_background: accent2
+  notification_close_btn_background: accent1
+  notification_close_btn_foreground: text
+  notification_close_btn_hover_foreground: background
+  notification_critical_progress: accent1
+  notification_critical_border: accent1
+  notification_foreground: text
+  notification_progress: accent3
+  notification_summary: text
+  trough: surface
+  widget_dnd: text1
+  widget_dnd_switch_background: overlay
+  widget_dnd_switch_border: text2
+  widget_dnd_switch_checked_slider: accent4
+  widget_dnd_switch_slider: text2
+---
+* {
+  all: unset;
+  font-family: Aporetic Sans Mono;
+  transition: 0.3s;
+  font-size: 1.0rem;
+}
+
+.floating-notifications.background .notification-row {
+  padding: 1rem;
+}
+
+.floating-notifications.background .notification-row .notification-background {
+  border-radius: 0;
+  background-color: #⟨notification_background:hex⟩;
+  color: #⟨notification_foreground:hex⟩;
+  border: 1px solid #⟨notification_border:hex⟩;
+}
+
+.floating-notifications.background
+  .notification-row
+  .notification-background
+  .notification {
+  padding: 0.5rem;
+  border-radius: 0;
+}
+
+.floating-notifications.background
+  .notification-row
+  .notification-background
+  .notification.critical {
+  border: 1px solid #⟨notification_critical_border:hex⟩;
+}
+
+.floating-notifications.background
+  .notification-row
+  .notification-background
+  .notification
+  .notification-content
+  .summary {
+  margin: 0.5rem;
+  color: #⟨notification_summary:hex⟩;
+  font-weight: bold;
+}
+
+.floating-notifications.background
+  .notification-row
+  .notification-background
+  .notification
+  .notification-content
+  .body {
+  margin: 0.5rem;
+  color: #⟨notification_body:hex⟩;
+}
+
+.floating-notifications.background
+  .notification-row
+  .notification-background
+  .notification
+  > *:last-child
+  > * {
+  min-height: 3rem;
+}
+
+.floating-notifications.background
+  .notification-row
+  .notification-background
+  .notification
+  > *:last-child
+  > *
+  .notification-action {
+  border-radius: 0;
+  color: #⟨notification_action_foreground:hex⟩;
+  background-color: #⟨notification_action_background:hex⟩;
+  border: 1px solid #⟨notification_action_border:hex⟩;
+}
+
+.floating-notifications.background
+  .notification-row
+  .notification-background
+  .notification
+  > *:last-child
+  > *
+  .notification-action:hover {
+  background-color: #⟨notification_action_hover_background:hex⟩;
+}
+
+.floating-notifications.background
+  .notification-row
+  .notification-background
+  .notification
+  > *:last-child
+  > *
+  .notification-action:active {
+  background-color: #⟨notification_action_active_background:hex⟩;
+}
+
+.floating-notifications.background
+  .notification-row
+  .notification-background
+  .close-button {
+  margin: 0.5rem;
+  padding: 0.25rem;
+  border-radius: 0;
+  color: #⟨notification_close_btn_foreground:hex⟩;
+  background-color: #⟨notification_close_btn_background:hex⟩;
+}
+
+.floating-notifications.background
+  .notification-row
+  .notification-background
+  .close-button:hover {
+  color: #⟨notification_close_btn_hover_foreground:hex⟩;
+}
+
+.floating-notifications.background
+  .notification-row
+  .notification-background
+  .close-button:active {
+  background-color: #⟨notification_close_btn_active_background:hex⟩;
+}
+
+.control-center {
+  border-radius: 0;
+  margin: 0.5rem 0rem;
+  color: #⟨control_center_foreground_color:hex⟩;
+  background-color: #⟨control_center_background_color:hex⟩;
+  padding: 1rem;
+  border: 1px solid #⟨control_center_border_color:hex⟩;
+  box-shadow: -5px 5px #⟨control_center_shadow_color:hex⟩;
+}
+
+.control-center .widget-title {
+  color: #⟨control_center_widget_title_foreground:hex⟩;
+  font-weight: bold;
+}
+
+.control-center .widget-title button {
+  border-radius: 0;
+  color: #⟨control_center_widget_title_button_foreground:hex⟩;
+  background-color: #⟨control_center_widget_title_button_background:hex⟩;
+  border: 1px solid #⟨control_center_widget_title_button_border:hex⟩;
+  padding: 0.5rem;
+}
+
+.control-center .widget-title button:hover {
+  background-color: #⟨control_center_widget_title_button_hover_background:hex⟩;
+}
+
+.control-center .widget-title button:active {
+  background-color: #⟨control_center_widget_title_button_active_background:hex⟩;
+}
+
+.control-center .notification-row .notification-background {
+  border-radius: 0;
+  margin: 0.5rem 0;
+  background-color: #⟨control_center_notification_background:hex⟩;
+  color: #⟨control_center_notification_foreground:hex⟩;
+  border: 1px solid #⟨control_center_notification_border:hex⟩;
+}
+
+.control-center .notification-row .notification-background .notification {
+  padding: 0.5rem;
+  border-radius: 0;
+}
+
+.control-center
+  .notification-row
+  .notification-background
+  .notification.critical {
+  border: 1px solid #⟨control_center_notification_critical_border:hex⟩;
+}
+
+.control-center
+  .notification-row
+  .notification-background
+  .notification
+  .notification-content {
+  color: #⟨control_center_notification_content_foreground:hex⟩;
+}
+
+.control-center
+  .notification-row
+  .notification-background
+  .notification
+  .notification-content
+  .summary {
+  margin: 0.5rem;
+  color: #⟨control_center_notification_summary_foreground:hex⟩;
+  font-weight: bold;
+}
+
+.control-center
+  .notification-row
+  .notification-background
+  .notification
+  .notification-content
+  .body {
+  margin: 0.5rem;
+  color: #⟨control_center_notification_body_foreground:hex⟩;
+}
+
+.control-center
+  .notification-row
+  .notification-background
+  .notification
+  > *:last-child
+  > * {
+  min-height: 3rem;
+}
+
+.control-center
+  .notification-row
+  .notification-background
+  .notification
+  > *:last-child
+  > *
+  .notification-action {
+  border-radius: 0;
+  color: #⟨control_center_notification_action_foreground:hex⟩;
+  background-color: #⟨control_center_notification_action_background:hex⟩;
+  border: 1px solid #⟨control_center_notification_action_border:hex⟩;
+}
+
+.control-center
+  .notification-row
+  .notification-background
+  .notification
+  > *:last-child
+  > *
+  .notification-action:hover {
+  background-color: #⟨control_center_notification_action_hover_background:hex⟩;
+}
+
+.control-center
+  .notification-row
+  .notification-background
+  .notification
+  > *:last-child
+  > *
+  .notification-action:active {
+  background-color: #⟨control_center_notification_action_active_background:hex⟩;
+}
+
+.control-center .notification-row .notification-background .close-button {
+  margin: 0.5rem;
+  padding: 0.25rem;
+  border-radius: 0;
+  color: #⟨control_center_notification_close_button_foreground:hex⟩;
+  background-color: #⟨control_center_notification_close_button_background:hex⟩;
+}
+
+.control-center .notification-row .notification-background .close-button:hover {
+  color: #⟨control_center_notification_close_button_hover_foreground:hex⟩;
+}
+
+.control-center
+  .notification-row
+  .notification-background
+  .close-button:active {
+  background-color: #⟨control_center_notification_close_button_active_background:hex⟩;
+}
+
+progressbar,
+progress,
+trough {
+  border-radius: 0;
+}
+
+.notification.critical progress {
+  background-color: #⟨notification_critical_progress:hex⟩;
+}
+
+.notification.low progress,
+.notification.normal progress {
+  background-color: #⟨notification_progress:hex⟩;
+}
+
+trough {
+  background-color: #⟨trough:hex⟩;
+}
+
+.control-center trough {
+  background-color: #⟨control_center_trough:hex⟩;
+}
+
+.control-center-dnd {
+  margin: 1rem 0;
+  border-radius: 0;
+}
+
+.control-center-dnd slider {
+  background: #⟨control_center_dnd_slider:hex⟩;
+  border-radius: 0;
+}
+
+.widget-dnd {
+  color: #⟨widget_dnd:hex⟩;
+}
+
+.widget-dnd > switch {
+  border-radius: 0;
+  background: #⟨widget_dnd_switch_background:hex⟩;
+  border: 1px solid #⟨widget_dnd_switch_border:hex⟩;
+}
+
+.widget-dnd > switch:checked slider {
+  background: #⟨widget_dnd_switch_checked_slider:hex⟩;
+}
+
+.widget-dnd > switch slider {
+  background: #⟨widget_dnd_switch_slider:hex⟩;
+  border-radius: 0;
+  margin: 0.25rem;
+}

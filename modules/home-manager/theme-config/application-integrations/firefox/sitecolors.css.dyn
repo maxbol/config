@@ -1,0 +1,163 @@
+---
+defines:
+  site_bg: background
+  vimium_border_color: text2
+  vimium_hint_bg: accent1
+  vimium_hint_fg: background
+  vimium_hint_border: surface
+  vimium_search_area_bg: background
+  vimium_search_area_input_bg: background
+  vimium_search_area_input_fg: accent1
+  vimium_search_result_bg: background
+  vimium_search_result_fg: text
+  vimium_search_result_source_fg: text2
+  vimium_search_result_url_fg: accent1
+  vimium_search_result_active_bg: surface
+  vimium_search_result_active_fg: text
+---
+
+:root {
+  --site-bg: #⟨site_bg:hex⟩;
+  --vimium-border-color: #⟨vimium_border_color:hex⟩;
+  --vimium-hint-bg: #⟨vimium_hint_bg:hex⟩;
+  --vimium-hint-border: #⟨vimium_hint_border:hex⟩;
+  --vimium-hint-fg: #⟨vimium_hint_fg:hex⟩;
+  --vimium-search-area-bg: #⟨vimium_search_area_bg:hex⟩;
+  --vimium-search-area-input-bg: #⟨vimium_search_area_input_bg:hex⟩;
+  --vimium-search-area-input-fg: #⟨vimium_search_area_input_fg:hex⟩;
+  --vimium-search-result-bg: #⟨vimium_search_result_bg:hex⟩;
+  --vimium-search-result-fg: #⟨vimium_search_result_fg:hex⟩;
+  --vimium-search-result-source-fg: #⟨vimium_search_result_source_fg:hex⟩;
+  --vimium-search-result-url-fg: #⟨vimium_search_result_url_fg:hex⟩;
+  --vimium-search-result-active-bg: #⟨vimium_search_result_active_bg:hex⟩;
+  --vimium-search-result-active-fg: #⟨vimium_search_result_active_fg:hex⟩;
+  --vimium-font-family: Arial;
+}
+
+@-moz-document domain(google.com) {
+  body {
+    background: var(--site-bg) !important;
+  }
+  :root {
+    --xhUGwc: var(--site-bg) !important;
+  }
+  #appbar {
+    background: var(--site-bg) !important;
+  }
+  #taw > div > div {
+    background: var(--site-bg) !important;
+  }
+  #rso > div {
+    background: var(--site-bg) !important;
+  }
+  #searchform > div:first-child {
+    background: var(--site-bg) !important;
+  }
+}
+
+@-moz-document domain(youtube.com) {
+  :root, html, [dark] {
+    --yt-spec-base-background: var(--site-bg) !important;
+    --yt-frosted-glass-desktop: var(--site-bg) !important;
+  }
+
+  #cinematics > div > div {
+    display: none;
+  }
+}
+
+@-moz-document domain(neovim.io) {
+  :root {
+    --bg-color: var(--site-bg) !important;
+  }
+}
+
+@-moz-document domain(github.com) {
+  :root {
+    --bgColor-default: var(--site-bg) !important;
+    --bgColor-inset: var(--site-bg) !important;
+    --AppHeader-bg: var(--site-bg) !important;
+  }
+}
+
+@-moz-document domain(noogle.dev) {
+  body {
+    background-color: var(--site-bg) !important;
+  }
+}
+
+@-moz-document regexp(moz-extension://.*/vomnibar.html) {
+  html, body {
+    zoom: unset !important;
+  }
+}
+
+/* VIMIUM */
+div > .vimiumHintMarker {
+  /* linkhint boxes */
+  background: var(--vimium-hint-bg) !important;
+  border: 1px solid var(--vimium-hint-border) !important;
+  border-radius: 0 !important;
+  padding: 3px !important;
+}
+
+div > .vimiumHintMarker span {
+  /* linkhint text */
+  color: var(--vimium-hint-fg) !important;
+  font-family: var(--vimium-font-family) !important;
+  font-weight: bold !important;
+  font-size: 18px !important;
+}
+
+div > .vimiumHintMarker > .matchingCharacter {
+}
+
+#vomnibar {
+  zoom: unset !important;
+  background-color: var(--vimium-search-area-bg) !important;
+  font-family: var(--vimium-font-family) !important;
+  border-radius: 0 !important;
+  border: 2px solid var(--vimium-border-color) !important;
+}
+
+.vomnibarSearchArea {
+  background-color: var(--vimium-search-area-bg) !important;
+}
+
+#vomnibar > ul > li:not(.selected, .vomnibarSelected) {
+  background-color: var(--vimium-search-result-bg) !important;
+  color: var(--vimium-search-result-fg) !important;
+}
+
+#vomnibar > ul > li:not(.selected, .vomnibarSelected) .source,
+#vomnibar > ul > li:not(.selected, .vomnibarSelected) .vomnibarSource {
+  color: var(--vimium-search-result-source-fg) !important;
+}
+
+#vomnibar > ul > li:not(.selected, .vomnibarSelected) .url,
+#vomnibar > ul > li:not(.selected, .vomnibarSelected) .vomnibarUrl {
+  color: var(--vimium-search-result-url-fg) !important;
+}
+
+#vomnibar > ul > li.selected,
+#vomnibar > ul > li.vomnibarSelected {
+  background-color: var(--vimium-search-result-active-bg) !important;
+  color: var(--vimium-search-result-active-fg) !important;
+}
+
+#vomnibar > ul > li.selected .source,
+#vomnibar > ul > li.vomnibarSelected .vomnibarSource {
+  color: var(--vimium-search-result-active-fg) !important;
+}
+
+#vomnibar > ul > li.selected .url,
+#vomnibar > ul > li.vomnibarSelected .vomnibarUrl {
+  color: var(--vimium-search-result-active-fg) !important;
+}
+
+#vomnibar input {
+  font-family: var(--vimium-font-family) !important;
+  background-color: var(--vimium-search-area-input-bg) !important;
+  color: var(--vimium-search-area-input-fg) !important;
+}
+

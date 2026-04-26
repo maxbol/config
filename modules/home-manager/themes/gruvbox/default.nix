@@ -1,0 +1,281 @@
+{
+  pkgs,
+  self,
+  luminanceVariant ? "dark",
+  accent ? "aqua",
+  accent2 ? "orange",
+  accent3 ? "blue",
+  accent4 ? "red",
+  accent5 ? "purple",
+  hyprlandOverrides ? p: {},
+  hyprpanelTheme ? "gruvbox",
+  waybarOverrides ? p: {},
+  rofiOverrides ? p: {},
+  tmuxOverrides ? p: {},
+  sketchybarOverrides ? p: {},
+  neovimOverrides ? p: {},
+  makeDesktop,
+  ...
+}: let
+  capitalize = str: "${pkgs.lib.toUpper (builtins.substring 0 1 str)}${builtins.substring 1 (builtins.stringLength str) str}";
+
+  palette_ = {
+    dark0 = "282828"; # "#282828"
+    dark1 = "3c3836"; # "#3c3836"
+    dark2 = "504945"; # "#504945"
+    light0 = "fbf1c7"; # "#fbf1c7"
+    light1 = "ebdbb2"; # "#ebdbb2"
+    light2 = "d5c4a1"; # "#d5c4a1"
+    brightred = "fb4934"; # "#fb4934"
+    brightgreen = "b8bb26"; # "#b8bb26"
+    brightyellow = "fabd2f"; # "#fabd2f"
+    brightblue = "83a598"; # "#83a598"
+    brightpurple = "d3869b"; # "#d3869b"
+    brightaqua = "8ec07c"; # "#8ec07c"
+    brightorange = "fe8019"; # "#fe8019"
+    neutralred = "cc241d"; # "#cc241d"
+    neutralgreen = "98971a"; # "#98971a"
+    neutralyellow = "d79921"; # "#d79921"
+    neutralblue = "458588"; # "#458588"
+    neutralpurple = "b16286"; # "#b16286"
+    neutralaqua = "689d6a"; # "#689d6a"
+    neutralorange = "d65d0e"; # "#d65d0e"
+    fadedred = "9d0006"; # "#9d0006"
+    fadedgreen = "79740e"; # "#79740e"
+    fadedyellow = "b57614"; # "#b57614"
+    fadedblue = "076678"; # "#076678"
+    fadedpurple = "8f3f71"; # "#8f3f71"
+    fadedaqua = "427b58"; # "#427b58"
+    fadedorange = "af3a03"; # "#af3a03"
+  };
+
+  telaMap = {
+    "red" = "red";
+    "green" = "green";
+    "yellow" = "yellow";
+    "blue" = "blue";
+    "purple" = "purple";
+    "aqua" = "green";
+    "orange" = "orange";
+  };
+
+  globalaccents = {
+    inherit (palette_) brightred brightgreen brightyellow brightblue brightpurple brightaqua brightorange neutralred neutralgreen neutralyellow neutralblue neutralpurple neutralaqua neutralorange fadedred fadedgreen fadedyellow fadedblue fadedpurple fadedaqua fadedorange;
+  };
+
+  palette_dark = rec {
+    colors = {
+      red = palette_.brightred;
+      green = palette_.brightgreen;
+      yellow = palette_.brightyellow;
+      blue = palette_.brightblue;
+    };
+
+    accents =
+      {
+        inherit (colors) red green yellow blue;
+        purple = palette_.brightpurple;
+        aqua = palette_.brightaqua;
+        orange = palette_.brightorange;
+      }
+      // globalaccents;
+
+    semantic = {
+      text = palette_.light0;
+      text1 = palette_.light1;
+      text2 = palette_.light2;
+      overlay = palette_.dark2;
+      surface = palette_.dark1;
+      background = palette_.dark0;
+      accent1 = accents.${accent};
+      accent2 = accents.${accent2};
+      accent3 = accents.${accent3};
+      accent4 = accents.${accent4};
+      accent5 = accents.${accent5};
+    };
+  };
+
+  palette_light = rec {
+    colors = {
+      red = palette_.fadedred;
+      green = palette_.fadedgreen;
+      yellow = palette_.fadedyellow;
+      blue = palette_.fadedblue;
+    };
+
+    accents =
+      {
+        inherit (colors) red green yellow blue;
+        purple = palette_.fadedpurple;
+        aqua = palette_.fadedaqua;
+        orange = palette_.fadedorange;
+      }
+      // globalaccents;
+
+    semantic = {
+      text = palette_.dark0;
+      text1 = palette_.dark1;
+      text2 = palette_.dark2;
+      overlay = palette_.light2;
+      surface = palette_.light1;
+      background = palette_.light0;
+      accent1 = accents.${accent};
+      accent2 = accents.${accent2};
+      accent3 = accents.${accent3};
+      accent4 = accents.${accent4};
+      accent5 = accents.${accent5};
+    };
+  };
+
+  Luminance = capitalize luminanceVariant;
+
+  mkStarshipPalette = name: palette: ''
+    [palettes.${name}]
+    text = "#${palette.semantic.text}"
+    subtext0 = "#${palette.semantic.text1}"
+    subtext1 = "#${palette.semantic.text2}"
+    surface0 = "#${palette.semantic.background}"
+    surface1 = "#${palette.semantic.surface}"
+    surface2 = "#${palette.semantic.surface}"
+    overlay0 = "#${palette.semantic.overlay}"
+    overlay1 = "#${palette.semantic.overlay}"
+    overlay2 = "#${palette.semantic.overlay}"
+    red = "#${palette.colors.red}"
+    green = "#${palette.colors.green}"
+    yellow = "#${palette.colors.yellow}"
+    blue = "#${palette.colors.blue}"
+    purple = "#${palette.accents.purple}"
+    aqua = "#${palette.accents.aqua}"
+    orange = "#${palette.accents.orange}"
+  '';
+
+  starshipPalettes = pkgs.writeText "starship-palettes.toml" ''
+    ${mkStarshipPalette "gruvbox-dark" palette_dark}
+    ${mkStarshipPalette "gruvbox-light" palette_light}
+  '';
+
+  tmTheme = pkgs.fetchFromGitHub {
+    owner = "subnut";
+    repo = "gruvbox-tmTheme";
+    rev = "64c47250e54298b91e2cf8d401320009aba9f991";
+    hash = "sha256-aw6uFn9xGhyv4TJwNgLUQbP72hoB7d+79X9jVcEQAM4=";
+  };
+in rec {
+  palette =
+    if luminanceVariant == "dark"
+    then palette_dark
+    else palette_light;
+
+  hyprland.colorOverrides =
+    {
+      active1 = "90ceaa"; # "#90ceaa";
+      active2 = "ecd3a0"; # "#ecd3a0";
+      inactive1 = "1e8b50"; # "#1e8b50";
+      inactive2 = "50b050"; # "#50b050";
+    }
+    // (hyprlandOverrides palette);
+
+  waybar.colorOverrides =
+    {
+      accent4 = palette.semantic.accent5;
+    }
+    // (waybarOverrides palette);
+
+  waybar.opacity = 0.0;
+
+  hyprpanel.theme = {
+    package = self.hyprpanel-themes;
+    name = hyprpanelTheme;
+  };
+
+  rofi.colorOverrides =
+    {
+      main-background = palette.semantic.background;
+      text = palette.semantic.text1;
+      border = palette.semantic.surface;
+      highlight = palette.accents.neutralblue;
+      highlight-text = palette.semantic.text1;
+    }
+    // (rofiOverrides palette);
+
+  tmux.colorOverrides = tmuxOverrides palette;
+  sketchybar.colorOverrides = sketchybarOverrides palette;
+
+  yazi.colorOverrides = {
+    filetype_fallback_dir_fg = palette.accents.aqua;
+  };
+  yazi.syntectTheme = "${tmTheme}/gruvbox-${luminanceVariant}.tmTheme";
+
+  neovim =
+    {
+      colorscheme = "gruvbox-material";
+      background = luminanceVariant;
+      hlGroupsFg = {
+        HLChunk1 = "#8ec07c";
+        HLLineNum1 = "#8ec07c";
+        BlinkCmpGhostText = "#" + palette.semantic.text1;
+      };
+      hlGroupsBg = {
+        TelescopeSelection = "#427b58";
+      };
+    }
+    // (neovimOverrides palette);
+
+  desktop = makeDesktop {
+    inherit accent;
+    iconTheme = {
+      package = pkgs.gruvbox-plus-icons;
+      name = "Gruvbox-Plus-Dark";
+    };
+  };
+
+  gtk = {
+    theme.package = pkgs
+      .gruvbox-gtk-theme
+      .overrideAttrs (prev: {propagatedUserEnvPkgs = prev.propagatedUserEnvPkgs ++ [pkgs.gnome-themes-extra];});
+    theme.name = "Gruvbox-${Luminance}";
+    hasGtk4Theme = true;
+    documentFont = desktop.font;
+    colorScheme = "prefer-${luminanceVariant}";
+  };
+
+  qt = {
+    kvantum = {
+      package = self.hyprdots-kvantum;
+      name = "Gruvbox-Retro";
+    };
+
+    qtct = {
+      package = self.hyprdots-qt5ct;
+      name = "Gruvbox-Retro";
+    };
+  };
+
+  kitty = let
+    themeFile = "${pkgs.kitty-themes}/share/kitty-themes/themes/gruvbox-${luminanceVariant}.conf";
+    themeConf = builtins.readFile themeFile;
+
+    themeSource = pkgs.writeText "theme.conf" ''
+      ${themeConf}
+      # background_blur 10
+    '';
+  in {
+    file."theme.conf".source = themeSource;
+  };
+
+  starship.palette = {
+    file = starshipPalettes;
+    name = "gruvbox-${luminanceVariant}";
+  };
+
+  bat.theme = {
+    src = tmTheme;
+    file = "gruvbox-${luminanceVariant}.tmTheme";
+  };
+
+  macoswallpaper = {
+    wallpaper = ./wallpapers/wallpaper.jpg;
+  };
+
+  swim.wallpaperDirectory = ./wallpapers;
+}

@@ -1,0 +1,8 @@
+vim.cmd("highlight clear")
+vim.cmd("colorscheme rose-pine-moon")
+vim.cmd("set background=dark")
+vim.cmd("hi HLChunk1 guifg=#c4a7e7")
+vim.cmd("hi HLLineNum1 guifg=#c4a7e7")
+vim.cmd("hi Cursor guibg=#6e6a86")
+vim.cmd("hi CursorLine guibg=#44415a")
+vim.cmd("hi Folded guibg=#44415a")
