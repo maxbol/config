@@ -1,8 +1,4 @@
-{
-  lib-mine,
-  pkgs,
-  ...
-}: let
+{lib-mine, ...}: let
 in
   lib-mine.mkFeature "features.desktop-config.core-desktop" {
     # The name is a remnant of former times. This just enables graphical sessions.
@@ -16,6 +12,9 @@ in
 
       # Nicer fonts in Java apps
       _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
+
+      # Better cursor scaling in java apps
+      # XCURSOR_SIZE = 28;
     };
 
     programs.dconf.enable = true;
@@ -26,4 +25,7 @@ in
 
     # Required by end-4's AGS config. I'm not sure what for.
     users.users.max.extraGroups = ["video" "input"];
+
+    # Required for uniform cursor scaling in Jetbrains apps
+    # services.xserver.dpi = 122;
   }

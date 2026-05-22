@@ -80,10 +80,18 @@ in {
           then ((import ./theme-template.nix) lib opts.palette config.colorOverrides)
           else config.themeSettings;
 
+        cursorEnv = lib.mkIf (opts.desktop.cursorTheme != null) {
+          environment = with opts.desktop.cursorTheme; {
+            XCURSOR_THEME = name;
+            XCURSOR_SIZE = toString size;
+          };
+        };
+
         settingsFile = makeNiriConfig niri-cfg.package (
           lib.mkMerge [
             cfg.niri.baseConfig
             themeSettings
+            cursorEnv
           ]
         );
 

@@ -195,7 +195,7 @@ in
             # mode = "preferred";
             scale = 1.25;
             position = {
-              x = 2560;
+              x = 2048;
               y = 0;
             };
           };
@@ -204,7 +204,7 @@ in
             # mode = "preferred";
             scale = 1.25;
             position = {
-              x = 2560;
+              x = 2048;
               y = 0;
             };
           };
@@ -213,7 +213,7 @@ in
             # mode = "preferred";
             scale = 1.25;
             position = {
-              x = 2560;
+              x = 2048;
               y = 0;
             };
           };

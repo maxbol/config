@@ -47,6 +47,8 @@
     luajitPackages.tiktoken_core
 
     # Language tooling - migration from Mason
+    buf
+    cargo
     clang-tools
     deno
     eslint
@@ -55,21 +57,20 @@
     lldb_20
     mesonlsp
     prettierd
+    rust-analyzer
+    rustc
+    rustfmt
+    shellcheck
     shfmt
     sql-formatter
     sqlfluff
+    tinymist
     typescript-language-server
+    typstyle
     vala-language-server
     vscode-lldb-neovim
     vtsls
-    tinymist
-    typstyle
     websocat
-    cargo
-    rustc
-    rust-analyzer
-    rustfmt
-    shellcheck
 
     ocamlPackages.ocaml-lsp
     ocamlPackages.earlybird

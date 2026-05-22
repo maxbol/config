@@ -37,6 +37,10 @@ local options = {
       "ocamlformat",
     },
 
+    proto = {
+      "buf",
+    },
+
     -- cs = {
     --   "csharpier",
     -- },
