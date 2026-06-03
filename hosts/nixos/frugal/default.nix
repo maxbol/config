@@ -13,7 +13,7 @@
     shell = pkgs.zsh;
   };
 
-  environment.systemPackages = with pkgs; [vim openssl];
+  environment.systemPackages = with pkgs; [vim openssl lm_sensors];
 
   environment.variables = {
     NH_OS_FLAKE = "/home/max/src/config";
