@@ -275,6 +275,7 @@ in
           "Mod+Q".action = close-window;
 
           "Ctrl+Shift+T".action = spawn "kitty";
+          "Ctrl+Alt+T".action = spawn ["kitty" "bash"];
           "Ctrl+Shift+F".action = spawn "nautilus";
           "Ctrl+Shift+B".action = spawn "firefox";
 
@@ -545,10 +546,17 @@ in
 
       home.packages =
         (with pkgs; [
-          playerctl
           bluetui
-          impala
+          brightnessctl
+          cliphist
           gpu-screen-recorder
+          impala
+          kdePackages.plasma-workspace # necessary for xembedsniproxy, to get wine tray into hyprpanel
+          playerctl
+          procps
+          swappy
+          wl-clipboard
+          wl-clipboard-x11
         ])
         ++ [
           pkgs-unstable.quickshell

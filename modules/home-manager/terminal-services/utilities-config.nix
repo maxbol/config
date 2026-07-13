@@ -86,6 +86,7 @@ in {
     # Yazi
     programs.yazi = {
       enable = true;
+      shellWrapperName = "yy";
       settings = {
         preview = {
           max_width = 1000;
@@ -109,7 +110,6 @@ in {
       lsd
       self.clockify-cli
       ncdu
-      neofetch
       nil
       nix-info
       nnn

@@ -106,7 +106,7 @@ in
 
       programs.zsh = {
         enable = true;
-        dotDir = "./";
+        dotDir = config.home.homeDirectory;
         autosuggestion.enable = true;
         enableCompletion = true;
         inherit shellAliases;
@@ -185,8 +185,6 @@ in
               if [ -f ~/.config/cachix/cachix.dhall ]; then
                 export CACHIX_AUTH_TOKEN="$(awk '/authToken/{getline; gsub(/[[:space:]"]/,"",$0); print}' ~/.config/cachix/cachix.dhall)"
               fi
-
-              # eval "$(${lib.getExe devenv} hook zsh)"
 
               # export KUBECONFIG=/home/max/.kube/config:/etc/kubernetes/cluster-admin.kubeconfig
             ''

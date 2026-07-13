@@ -1,6 +1,6 @@
 {lib-mine, ...}:
 lib-mine.barrelGroup {
   here = ./.;
-  submodules = ["firefox" "google-chrome"];
+  submodules = ["firefox" "helium" "google-chrome"];
   path = "features.browser-config";
 }

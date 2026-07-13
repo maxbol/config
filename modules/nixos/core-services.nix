@@ -98,6 +98,7 @@ lib-mine.mkFeature "features.core-services" {
   virtualisation = {
     docker.rootless = {
       enable = true;
+      package = pkgs.docker_29;
       setSocketVariable = true;
     };
   };
@@ -109,7 +110,7 @@ lib-mine.mkFeature "features.core-services" {
 
   networking = {
     networkmanager.enable = true;
-    wireless.iwd.enable = true;
+    # wireless.iwd.enable = true;
     nameservers = ["8.8.4.4" "8.8.8.8"];
   };
 

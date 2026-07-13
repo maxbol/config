@@ -81,6 +81,7 @@ in
     config = {
       programs.firefox = {
         enable = true;
+        configPath = ".mozilla/firefox";
         inherit package;
         profiles = {
           ${profileName} = {

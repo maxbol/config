@@ -30,6 +30,7 @@ in rec {
   features.linux-desktop.notifications.enable = false;
   features.linux-desktop.waybar.enable = false;
   features.linux-desktop.walker.enable = false;
+  features.linux-desktop.wm.hyprland.enable = false;
   features.nix-services.enable = true;
   features.terminal-services.enable = true;
   features.terminal-services.terminal-config.enable = true;
@@ -74,10 +75,11 @@ in rec {
   # need/gain anything from having a separate feature module
   home.packages = with pkgs; let
     azure = azure-cli.withExtensions (with azure-cli.extensions; [
-      containerapp
-      k8s-extension
+      # containerapp
+      # k8s-extension
       k8s-runtime
       fzf
+      quota
     ]);
   in [
     aseprite
@@ -92,6 +94,7 @@ in rec {
     file
     file-roller
     gettext
+    ghostscript
     grim
     inkscape
     kooha

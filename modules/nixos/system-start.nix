@@ -80,7 +80,6 @@ in {
 
     services.xserver.displayManager.gdm = {
       enable = true;
-      wayland = true;
     };
 
     # services.displayManager.sddm = {

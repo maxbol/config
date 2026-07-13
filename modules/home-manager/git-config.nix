@@ -46,6 +46,8 @@ lib-mine.mkFeature "features.git-config" {
 
   programs.mergiraf = {
     enable = true;
+    enableGitIntegration = true;
+    enableJujutsuIntegration = true;
   };
 
   programs.git = {

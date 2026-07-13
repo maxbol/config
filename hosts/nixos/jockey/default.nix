@@ -31,7 +31,7 @@
   config.users.users.max = {
     isNormalUser = true;
     description = "Max Bolotin";
-    extraGroups = ["networkmanager" "wheel" "docker" "plugdev"];
+    extraGroups = ["networkmanager" "wheel" "plugdev"];
     packages = [];
     shell = pkgs.zsh;
   };

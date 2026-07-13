@@ -52,9 +52,8 @@ in
         # NodeJS
         nodejs_22
         yarn
-        yarn2nix
         vscode-langservers-extracted
-        nodePackages.fixjson
+        fixjson
         # nodePackages.ts-node
         asdf
         asdf-vm

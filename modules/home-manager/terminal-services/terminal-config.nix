@@ -2,11 +2,9 @@
   config,
   lib,
   pkgs,
-  origin,
   ...
 }: let
   cfg = config.features;
-  nixpkgs-unstable = origin.inputs.nixpkgs-unstable.legacyPackages.${pkgs.system};
 in {
   options = with lib; {
     features.terminal-services.terminal-config = {
@@ -29,7 +27,7 @@ in {
         ];
         programs.kitty = {
           enable = true;
-          package = nixpkgs-unstable.kitty;
+          package = pkgs.kitty;
           settings = {
             background_blur = 64;
             text_composition_strategy = "3 0";

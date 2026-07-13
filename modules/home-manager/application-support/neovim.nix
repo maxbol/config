@@ -56,6 +56,7 @@
     html-tidy
     lldb_20
     mesonlsp
+    presenterm
     prettierd
     rust-analyzer
     rustc
@@ -86,7 +87,10 @@ in
 
     programs.neovim = {
       enable = true;
+      sideloadInitLua = true;
       package = neovim-unwrapped;
+      withRuby = true;
+      withPython3 = true;
       inherit extraPackages extraLuaPackages;
     };
 

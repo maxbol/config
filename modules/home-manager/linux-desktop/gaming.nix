@@ -20,7 +20,7 @@ in
 
     extraPkgs = _:
       with pkgs; [
-        wineWowPackages.stableFull
+        wineWow64Packages.stableFull
         libgudev
         libvdpau
         # TODO: Check if lutris/heroic still works with libsoup 3, otherwise we have to allow libsoup 2 as an insecure package
