@@ -168,6 +168,8 @@ in rec {
 
   waybar.colorOverrides = waybarOverrides palette;
 
+  dms.luminance = luminanceVariant;
+
   rofi.colorOverrides = rofiOverrides palette;
 
   tmux.colorOverrides = tmuxOverrides palette;

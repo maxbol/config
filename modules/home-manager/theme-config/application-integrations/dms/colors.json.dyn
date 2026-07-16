@@ -1,0 +1,55 @@
+---
+defines:
+    dBackground: background
+    dBackgroundText: text
+    dSurface: background:polarize(0.4)
+    dSurfaceText: text
+    dSurfaceVariant: overlay
+    dSurfaceVariantText: text1
+    dSurfaceTint: accent1
+    dSurfaceContainerLowest: background:polarize(0.5)
+    dSurfaceContainerLow: background:polarize(0.35)
+    dSurfaceContainer: background:polarize(0.25)
+    dSurfaceContainerHigh: background:polarize(0.1)
+    dSurfaceContainerHighest: background
+    dPrimary: accent1
+    dPrimaryText: background
+    dPrimaryContainer: accent1:darken(0.3)
+    dSecondary: accent3
+    dSecondaryContainer: overlay
+    dTertiary: accent2
+    dTertiaryContainer: overlay
+    dOutline: text2
+    dOutlineVariant: text2:depolarize(0.3)
+    dError: red
+    dWarning: yellow
+    dInfo: blue
+    dSuccess: green
+---
+{
+    "primary": "#⟨dPrimary:hex⟩",
+    "primaryText": "#⟨dPrimaryText:hex⟩",
+    "primaryContainer": "#⟨dPrimaryContainer:hex⟩",
+    "secondary": "#⟨dSecondary:hex⟩",
+    "secondaryContainer": "#⟨dSecondaryContainer:hex⟩",
+    "tertiary": "#⟨dTertiary:hex⟩",
+    "tertiaryContainer": "#⟨dTertiaryContainer:hex⟩",
+    "surface": "#⟨dSurface:hex⟩",
+    "surfaceText": "#⟨dSurfaceText:hex⟩",
+    "surfaceVariant": "#⟨dSurfaceVariant:hex⟩",
+    "surfaceVariantText": "#⟨dSurfaceVariantText:hex⟩",
+    "surfaceTint": "#⟨dSurfaceTint:hex⟩",
+    "surfaceContainerLowest": "#⟨dSurfaceContainerLowest:hex⟩",
+    "surfaceContainerLow": "#⟨dSurfaceContainerLow:hex⟩",
+    "surfaceContainer": "#⟨dSurfaceContainer:hex⟩",
+    "surfaceContainerHigh": "#⟨dSurfaceContainerHigh:hex⟩",
+    "surfaceContainerHighest": "#⟨dSurfaceContainerHighest:hex⟩",
+    "background": "#⟨dBackground:hex⟩",
+    "backgroundText": "#⟨dBackgroundText:hex⟩",
+    "outline": "#⟨dOutline:hex⟩",
+    "outlineVariant": "#⟨dOutlineVariant:hex⟩",
+    "error": "#⟨dError:hex⟩",
+    "warning": "#⟨dWarning:hex⟩",
+    "info": "#⟨dInfo:hex⟩",
+    "success": "#⟨dSuccess:hex⟩"
+}

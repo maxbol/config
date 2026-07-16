@@ -122,6 +122,8 @@
 in rec {
   palette = allPalettes.${luminanceVariant};
 
+  dms.luminance = luminanceVariant;
+
   desktop = makeDesktop {inherit accent;};
 
   gtk = {

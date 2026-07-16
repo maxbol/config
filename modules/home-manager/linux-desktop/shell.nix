@@ -24,10 +24,6 @@ in
         systemd.enable = true;
       };
 
-      home.packages = [
-        pkgs.matugen
-      ];
-
       # home.packages = [
       #   pkgs-unstable.quickshell
       # ];

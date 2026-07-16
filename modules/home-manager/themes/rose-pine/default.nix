@@ -221,6 +221,8 @@ in rec {
     }
     // (noctaliaOverrides palette);
 
+  dms.luminance = luminanceVariant;
+
   rofi.colorOverrides = rofiOverrides palette;
 
   tmux.colorOverrides = tmuxOverrides palette;

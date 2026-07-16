@@ -229,6 +229,8 @@ in rec {
     };
   };
 
+  dms.luminance = luminanceVariant;
+
   gtk = {
     theme.package = pkgs
       .gruvbox-gtk-theme

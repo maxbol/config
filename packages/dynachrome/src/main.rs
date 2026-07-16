@@ -22,6 +22,24 @@ impl HsvColor {
     fn lighten(&mut self, factor: f64) {
         self.2 = f64::min(self.2 + (self.2 * factor), 1.);
     }
+    /// Pushes the brightness away from the middle: dark colors get darker,
+    /// light colors get lighter.
+    fn polarize(&mut self, factor: f64) {
+        if self.2 < 0.5 {
+            self.darken(factor);
+        } else {
+            self.lighten(factor);
+        }
+    }
+    /// Pulls the brightness towards the middle: dark colors get lighter,
+    /// light colors get darker.
+    fn depolarize(&mut self, factor: f64) {
+        if self.2 < 0.5 {
+            self.lighten(factor);
+        } else {
+            self.darken(factor);
+        }
+    }
 }
 
 #[derive(Debug, Clone, thiserror::Error)]
@@ -299,6 +317,12 @@ fn main() -> anyhow::Result<()> {
                             }
                             "lighten" => {
                                 hsv_color.lighten(arg.unwrap_or(0.));
+                            }
+                            "polarize" => {
+                                hsv_color.polarize(arg.unwrap_or(0.));
+                            }
+                            "depolarize" => {
+                                hsv_color.depolarize(arg.unwrap_or(0.));
                             }
                             _ => {}
                         }

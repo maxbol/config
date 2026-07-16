@@ -2,6 +2,7 @@
   imports = [
     ./bat
     ./desktop.nix
+    ./dms
     ./dunst.nix
     ./dynawall
     ./firefox

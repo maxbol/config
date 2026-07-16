@@ -127,6 +127,8 @@
 in rec {
   palette = allPalettes.${luminanceVariant};
 
+  dms.luminance = luminanceVariant;
+
   desktop = makeDesktop {inherit accent telaMap;};
 
   # TODO(2025-05-19, Max Bolotin): Copying this from gruvbox for now, should be replace with theme specific
