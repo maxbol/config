@@ -8,7 +8,7 @@
   users.users.max = {
     isNormalUser = true;
     description = "Max Bolotin";
-    extraGroups = ["networkmanager" "wheel" "docker" "plugdev" "input"];
+    extraGroups = ["networkmanager" "wheel" "docker" "plugdev" "input" "greeter"];
     packages = [];
     shell = pkgs.zsh;
   };

@@ -123,31 +123,31 @@ in
     #   '';
     # };
 
-    services.hypridle = {
-      enable = true;
-      package = pkgs.hypridle;
-      settings = {
-        general = {
-          after_sleep_cmd = "${config.programs.niri.package}/bin/niri msg action power-on-monitors";
-          before_sleep_cmd = "${pkgs.systemd}/bin/loginctl lock-session";
-          lock_cmd = "${vendor.noctalia.default}/bin/noctalia-shell ipc call lockScreen lock";
-        };
-
-        listener =
-          [
-            {
-              timeout = 300;
-              on-timeout = "${vendor.noctalia.default}/bin/noctalia-shell ipc call lockScreen lock";
-            }
-          ]
-          ++ (lib.optional suspendEnabled {
-            timeout = 1790;
-            on-timeout = "${lib.getExe pkgs.playerctl} pause";
-          })
-          ++ (lib.optional suspendEnabled {
-            timeout = 1800;
-            on-timeout = "${pkgs.systemd}/bin/systemctl suspend";
-          });
-      };
-    };
+    # services.hypridle = {
+    #   enable = true;
+    #   package = pkgs.hypridle;
+    #   settings = {
+    #     general = {
+    #       after_sleep_cmd = "${config.programs.niri.package}/bin/niri msg action power-on-monitors";
+    #       before_sleep_cmd = "${pkgs.systemd}/bin/loginctl lock-session";
+    #       lock_cmd = "${vendor.noctalia.default}/bin/noctalia-shell ipc call lockScreen lock";
+    #     };
+    #
+    #     listener =
+    #       [
+    #         {
+    #           timeout = 300;
+    #           on-timeout = "${vendor.noctalia.default}/bin/noctalia-shell ipc call lockScreen lock";
+    #         }
+    #       ]
+    #       ++ (lib.optional suspendEnabled {
+    #         timeout = 1790;
+    #         on-timeout = "${lib.getExe pkgs.playerctl} pause";
+    #       })
+    #       ++ (lib.optional suspendEnabled {
+    #         timeout = 1800;
+    #         on-timeout = "${pkgs.systemd}/bin/systemctl suspend";
+    #       });
+    #   };
+    # };
   }

@@ -1,4 +1,5 @@
 {
+  origin,
   lib,
   lib-mine,
   self,
@@ -8,6 +9,9 @@
 lib-mine.mkFeature "features.system-start" ({config, ...}: let
   cfg = config.features.system-start;
 in {
+  imports = [
+    origin.inputs.dms.nixosModules.greeter
+  ];
   options = with lib; {
     defaultUser = mkOption {
       type = types.str;
@@ -78,9 +82,17 @@ in {
 
     programs.uwsm.enable = true;
 
-    services.xserver.displayManager.gdm = {
+    services.displayManager.dms-greeter = {
       enable = true;
+      compositor = {
+        name = "niri";
+      };
+      configHome = "/home/max";
     };
+
+    # services.xserver.displayManager.gdm = {
+    #   enable = true;
+    # };
 
     # services.displayManager.sddm = {
     #   enable = true;

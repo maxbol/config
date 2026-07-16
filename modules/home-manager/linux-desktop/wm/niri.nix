@@ -11,6 +11,7 @@
   pkgs-unstable = origin.inputs.nixpkgs-unstable.legacyPackages.${pkgs.system};
 
   noctalia-shell-dir = "${vendor.noctalia.default}/share/noctalia-shell";
+  dms-ipc = call: config.lib.niri.actions.spawn (["dms" "ipc" "call"] ++ call);
 
   noctalia-ipc-call = args:
     config.lib.niri.actions.spawn ([
@@ -230,6 +231,15 @@ in
           };
         };
         binds = with config.lib.niri.actions; {
+          "Ctrl+Space".action = dms-ipc ["spotlight" "toggle"];
+          "Shift+Mod+V".action = dms-ipc ["clipboard" "toggle"];
+          "Ctrl+Shift+O".action = dms-ipc ["tmux" "toggle"];
+          "XF86AudioLowerVolume".action = dms-ipc ["audio" "decrement" "3"];
+          "XF86AudioRaiseVolume".action = dms-ipc ["audio" "increment" "3"];
+          "XF86AudioMute".action = dms-ipc ["audio" "mute"];
+          "XF86MonBrightnessUp".action = dms-ipc ["brightness" "increment" "5" ""];
+          "XF86MonBrightnessDown".action = dms-ipc ["brightness" "decrement" "5" ""];
+
           "Ctrl+Shift+H".action = focus-column-or-monitor-left {skip-animation = true;};
           "Ctrl+Shift+J".action = focus-window-or-workspace-down {skip-animation = true;};
           "Ctrl+Shift+K".action = focus-window-or-workspace-up {skip-animation = true;};
@@ -269,7 +279,7 @@ in
 
           # "Ctrl+Space".action = noctalia-ipc-call ["launcher" "toggle"];
           # "Ctrl+Space".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "d"];
-          "Ctrl+Space".action = spawn ["vicinae" "toggle"];
+          # "Ctrl+Space".action = spawn ["vicinae" "toggle"];
           "Ctrl+Mod+Space".action = spawn ["1password" "--quick-access"];
 
           "Mod+Q".action = close-window;
@@ -292,7 +302,7 @@ in
           "Shift+Mod+T".action = spawn "${self.rofi-launchers-hyprdots}/bin/themeselect.sh";
           # "Shift+Mod+V".action = spawn ["${self.rofi-launchers-hyprdots}/bin/cliphist.sh" "c"];
           # "Shift+Mod+V".action = noctalia-ipc-call ["launcher" "clipboard"];
-          "Shift+Mod+V".action = spawn ["vicinae" "vicinae://extensions/vicinae/clipboard/history"];
+          # "Shift+Mod+V".action = spawn ["vicinae" "vicinae://extensions/vicinae/clipboard/history"];
           "Shift+Mod+C".action = center-window;
 
           "Shift+Mod+A".action = set-dynamic-cast-window;
@@ -302,12 +312,12 @@ in
 
           "Shift+Mod+M".action = toggle-column-tabbed-display;
 
-          "XF86AudioMute".action = noctalia-ipc-call ["volume" "muteOutput"];
-          "XF86AudioMicMute".action = noctalia-ipc-call ["volume" "muteInput"];
+          # "XF86AudioMute".action = noctalia-ipc-call ["volume" "muteOutput"];
+          # "XF86AudioMicMute".action = noctalia-ipc-call ["volume" "muteInput"];
           # "XF86AudioMute".action = spawn ["volumecontrol.sh" "-o" "m"];
           # "XF86AudioMicMute".action = spawn ["volumecontrol.sh" "-i" "m"];
-          "XF86AudioLowerVolume".action = noctalia-ipc-call ["volume" "decrease"];
-          "XF86AudioRaiseVolume".action = noctalia-ipc-call ["volume" "increase"];
+          # "XF86AudioLowerVolume".action = noctalia-ipc-call ["volume" "decrease"];
+          # "XF86AudioRaiseVolume".action = noctalia-ipc-call ["volume" "increase"];
           # "XF86AudioLowerVolume".action = spawn ["volumecontrol.sh" "-o" "d"];
           # "XF86AudioRaiseVolume".action = spawn ["volumecontrol.sh" "-o" "i"];
           "XF86AudioPlay".action = spawn ["playerctl" "play-pause"];
@@ -392,6 +402,22 @@ in
           #   ];
           #   opacity = 0.9;
           # }
+          {
+            matches = [
+              {
+                app-id = "^org\.gnome\.";
+              }
+            ];
+            draw-border-with-background = false;
+          }
+          {
+            matches = [
+              {
+                app-id = "org.quickshell$";
+              }
+            ];
+            open-floating = true;
+          }
           {
             matches = [
               {
@@ -521,6 +547,15 @@ in
       };
 
       theme-config.niri.extraConfigTxt = ''
+        include "dms/alttab.kdl"
+        include "dms/binds.kdl"
+        include "dms/colors.kdl"
+        include "dms/cursor.kdl"
+        include "dms/layout.kdl"
+        include "dms/outputs.kdl"
+        include "dms/windowrules.kdl"
+        include "dms/wpblur.kdl"
+
         recent-windows {
           binds {
             Mod+Tab { next-window; }
@@ -544,22 +579,19 @@ in
       services.blueman-applet.enable = true;
       services.playerctld.enable = true;
 
-      home.packages =
-        (with pkgs; [
-          bluetui
-          brightnessctl
-          cliphist
-          gpu-screen-recorder
-          impala
-          kdePackages.plasma-workspace # necessary for xembedsniproxy, to get wine tray into hyprpanel
-          playerctl
-          procps
-          swappy
-          wl-clipboard
-          wl-clipboard-x11
-        ])
-        ++ [
-          pkgs-unstable.quickshell
-        ];
+      home.packages = with pkgs; [
+        bluetui
+        brightnessctl
+        cliphist
+        gpu-screen-recorder
+        impala
+        kdePackages.plasma-workspace # necessary for xembedsniproxy, to get wine tray into hyprpanel
+        playerctl
+        procps
+        swappy
+        wl-clipboard
+        wl-clipboard-x11
+        quickshell
+      ];
     };
   }

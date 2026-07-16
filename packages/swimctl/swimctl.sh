@@ -25,10 +25,10 @@ activateWallpaper() {
   # done)
   #
 
-  NOCTALIA_WP=$(readlink "${SWIM_STATE_DIR}/active/wallpaper")
+  WP=$(readlink "${SWIM_STATE_DIR}/active/wallpaper")
 
   # ln -s "${SWIM_STATE_DIR/active/wallpaper}"
-  noctalia-shell ipc call wallpaper set "$NOCTALIA_WP" all
+  dms ipc call wallpaper set "$WP"
 
   # swww \
   #   img "${SWIM_STATE_DIR}/active/wallpaper" \
