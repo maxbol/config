@@ -131,7 +131,7 @@ in
           firefoxMacOSCmd)
       ];
 
-      home.sessionVariables.BROWSER = "firefox";
+      home.sessionVariables.BROWSER = "helium";
 
       home.activation.installFirefoxJSLoader =
         lib.hm.dag.entryAfter ["linkGeneration"]

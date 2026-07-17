@@ -18,7 +18,7 @@ in {
   config = lib.mkIf (cfg.terminal-services.utilities-config.enable) {
     home.sessionVariables = {
       EDITOR = "nvim";
-      BROWSER = "firefox";
+      BROWSER = "helium";
       TERMINAL = "kitty";
       HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND = "fg=green,bold";
       HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND = "fg=red,bold";

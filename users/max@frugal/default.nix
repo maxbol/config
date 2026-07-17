@@ -27,6 +27,7 @@ in rec {
   features.streaming.enable = true;
   features.git-config.enable = true;
   features.linux-desktop.enable = true;
+  features.linux-desktop.lockscreen.enable = false;
   features.linux-desktop.notifications.enable = false;
   features.linux-desktop.waybar.enable = false;
   features.linux-desktop.walker.enable = false;
@@ -55,7 +56,7 @@ in rec {
       lib-mine.mime.bindImageTypes ["org.libvips.vipsdisp.desktop"]
       // lib-mine.mime.bindVideoTypes ["io.github.celluloid_player.Celluloid.desktop"]
       // lib-mine.mime.bindTextTypes ["nvim.desktop"]
-      // lib-mine.mime.bindBrowserTypes ["firefox.desktop"]
+      // lib-mine.mime.bindBrowserTypes ["helium.desktop"]
       // {
         "application/pdf" = ["org.pwmt.zathura.desktop"];
         "model/obj" = ["blender.desktop"];
