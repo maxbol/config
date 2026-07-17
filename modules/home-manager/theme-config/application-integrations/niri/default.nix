@@ -28,6 +28,22 @@
     package
     eval.config.programs.niri.finalConfig
   );
+
+  baseConfigFile = makeNiriConfig niri-cfg.package cfg.niri.baseConfig;
+
+  # The extra parts are appended after validation of the base config, since
+  # the theme include target only exists at runtime. The theme include comes
+  # last so that theme values win over both the base config and the extra
+  # config text (niri merges repeated sections field by field, later files
+  # taking precedence).
+  configFile = pkgs.runCommand "niri-config.kdl" {} ''
+    cat ${baseConfigFile} ${pkgs.writeText "niri-config-extra.kdl" ''
+
+
+      ${lib.optionalString (cfg.niri.extraConfigTxt != null) cfg.niri.extraConfigTxt}
+      include "${cfg.themeDirectory}/active/niri/theme.kdl"
+    ''} > $out
+  '';
 in {
   options = with lib; {
     theme-config.niri = {
@@ -40,7 +56,11 @@ in {
       baseConfig = mkOption {
         type = types.attrs;
         default = {};
-        description = ''Base config to apply to the config.kdl - should be set globally for the niri installation'';
+        description = ''
+          The complete, theme-independent niri config - should be set globally
+          for the niri installation. The per-theme theme.kdl is pulled in via
+          an include at the end of the generated config.kdl.
+        '';
       };
 
       extraConfigTxt = mkOption {
@@ -54,16 +74,6 @@ in {
   config = {
     theme-config.programs.niri = {
       themeOptions = with lib; {
-        themeSettings = mkOption {
-          type = types.nullOr types.attrs;
-          default = null;
-        };
-
-        # themeKdl = mkOption {
-        #   type = types.nullOr (types.either types.str kdl.types.kdl-document);
-        #   default = null;
-        # };
-
         colorOverrides = mkOption {
           type = types.attrsOf lib-mine.types.colorType;
           default = {};
@@ -75,40 +85,24 @@ in {
         opts,
         ...
       }: let
-        themeSettings =
-          if config.themeSettings == null
-          then ((import ./theme-template.nix) lib opts.palette config.colorOverrides)
-          else config.themeSettings;
+        themeKdl = (import ./theme-template.nix) lib opts.palette config.colorOverrides;
 
-        cursorEnv = lib.mkIf (opts.desktop.cursorTheme != null) {
-          environment = with opts.desktop.cursorTheme; {
-            XCURSOR_THEME = name;
-            XCURSOR_SIZE = toString size;
-          };
-        };
+        cursorKdl = lib.optionalString (opts.desktop.cursorTheme != null) ''
+          environment {
+              XCURSOR_THEME "${opts.desktop.cursorTheme.name}"
+              XCURSOR_SIZE "${toString opts.desktop.cursorTheme.size}"
+          }
+        '';
 
-        settingsFile = makeNiriConfig niri-cfg.package (
-          lib.mkMerge [
-            cfg.niri.baseConfig
-            themeSettings
-            cursorEnv
-          ]
-        );
-
-        mergedSettingsFile =
-          if cfg.niri.extraConfigTxt == null
-          then settingsFile
-          else
-            pkgs.runCommand "niri-config" {} ''
-              touch $out
-              cat ${settingsFile} >> $out
-              cat >> $out << EOF
-
-              ${cfg.niri.extraConfigTxt}
-              EOF
-            '';
+        themeFile = pkgs.writeText "niri-theme.kdl" (themeKdl + cursorKdl);
       in {
-        file."config.kdl".source = mergedSettingsFile;
+        file."theme.kdl" = {
+          required = true;
+          source = pkgs.runCommand "niri-theme-validated.kdl" {} ''
+            ${lib.getExe' niri-cfg.package "niri"} validate --config ${themeFile}
+            cp ${themeFile} $out
+          '';
+        };
       };
     };
   };
@@ -116,7 +110,7 @@ in {
   imports = [
     (
       lib.mkIf cfg.niri.enable {
-        xdg.configFile."niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "${config.theme-config.themeDirectory}/active/niri/config.kdl";
+        xdg.configFile."niri/config.kdl".source = configFile;
       }
     )
   ];

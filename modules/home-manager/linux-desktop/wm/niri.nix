@@ -3,25 +3,11 @@
   lib-mine,
   lib,
   origin,
-  vendor,
   pkgs,
   self,
   ...
 }: let
-  pkgs-unstable = origin.inputs.nixpkgs-unstable.legacyPackages.${pkgs.system};
-
-  noctalia-shell-dir = "${vendor.noctalia.default}/share/noctalia-shell";
   dms-ipc = call: config.lib.niri.actions.spawn (["dms" "ipc" "call"] ++ call);
-
-  noctalia-ipc-call = args:
-    config.lib.niri.actions.spawn ([
-        "${pkgs-unstable.quickshell}/bin/qs"
-        "-p"
-        noctalia-shell-dir
-        "ipc"
-        "call"
-      ]
-      ++ args);
 
   doubletapServer = pkgs.writeShellScript "doubletap-server" ''
     export TMPDIR=''${TMPDIR:-/run/user/$UID}
@@ -296,9 +282,9 @@ in
           "Ctrl+Shift+Alt+P".action.screenshot-window = [{write-to-disk = true;}];
           "Ctrl+Shift+Mod+P".action.screenshot-screen = [{write-to-disk = true;}];
 
-          "Shift+Mod+W".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "w"];
-          "Shift+Mod+E".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "f"];
-          "Shift+Mod+R".action = spawn "${self.rofi-launchers-hyprdots}/bin/rofiselect.sh";
+          # "Shift+Mod+W".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "w"];
+          # "Shift+Mod+E".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "f"];
+          # "Shift+Mod+R".action = spawn "${self.rofi-launchers-hyprdots}/bin/rofiselect.sh";
           "Shift+Mod+T".action = spawn "${self.rofi-launchers-hyprdots}/bin/themeselect.sh";
           # "Shift+Mod+V".action = spawn ["${self.rofi-launchers-hyprdots}/bin/cliphist.sh" "c"];
           # "Shift+Mod+V".action = noctalia-ipc-call ["launcher" "clipboard"];
@@ -325,7 +311,7 @@ in
           "XF86AudioNext".action = spawn ["playerctl" "next"];
           "XF86AudioPrev".action = spawn ["playerctl" "previous"];
 
-          "Mod+Shift+Return".action = noctalia-ipc-call ["sessionMenu" "toggle"];
+          "Mod+Shift+Return".action = dms-ipc ["powermenu" "toggle"];
 
           "MouseMiddle".action = spawn "${doubletapClient}";
         };
@@ -338,6 +324,11 @@ in
           default-column-display = "tabbed";
           # default-column-display = "normal";
           background-color = "transparent";
+
+          # Gaps and border/focus-ring widths are managed by dms (through the
+          # dms/*.kdl includes), their colors by the Chroma theme.kdl include.
+          # border.enable = false;
+          # focus-ring.enable = false;
 
           tab-indicator = {
             hide-when-single-tab = true;
@@ -369,6 +360,9 @@ in
           }
           {
             matches = [
+              {
+                namespace = "quickshell";
+              }
               {
                 namespace = "swww-daemon";
               }
@@ -495,6 +489,31 @@ in
             shadow.enable = false;
             # block-out-from = "screencast";
             tiled-state = false;
+          }
+          # Make windows translucent unless they are both active and focused.
+          {
+            matches = [
+              {
+                is-focused = true;
+              }
+            ];
+            excludes = [
+              {
+                is-active = true;
+              }
+            ];
+            opacity = 0.99;
+          }
+          {
+            excludes = [
+              {
+                is-active = true;
+              }
+              {
+                is-focused = true;
+              }
+            ];
+            opacity = 0.95;
           }
         ];
         input = {

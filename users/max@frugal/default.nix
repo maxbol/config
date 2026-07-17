@@ -27,6 +27,7 @@ in rec {
   features.streaming.enable = true;
   features.git-config.enable = true;
   features.linux-desktop.enable = true;
+  features.linux-desktop.launcher.enable = false;
   features.linux-desktop.lockscreen.enable = false;
   features.linux-desktop.notifications.enable = false;
   features.linux-desktop.waybar.enable = false;

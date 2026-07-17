@@ -31,6 +31,7 @@
   features.application-config.enable = true;
   features.core-services.enable = true;
   features.desktop-config.enable = true;
+  features.desktop-config.hyprland.enable = false;
   features.hardware-support.enable = true;
   features.graphics-config.enable = true;
   features.localsend.enable = true;
