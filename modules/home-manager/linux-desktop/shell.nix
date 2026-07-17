@@ -22,6 +22,10 @@ in
         enable = true;
         enableSystemMonitoring = true;
         systemd.enable = true;
+        # Keeps matugen off the PATH so dms doesn't try to generate GTK/Qt
+        # system themes on every theme switch (Chroma owns those files as
+        # read-only store links, so generation would fail with an OSD error).
+        enableDynamicTheming = false;
       };
 
       # home.packages = [
