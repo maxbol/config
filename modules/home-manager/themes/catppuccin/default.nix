@@ -132,6 +132,8 @@ in rec {
     };
   };
 
+  ghostty.autoGenerate.enable = true;
+
   kitty = let
     themeFile = "${pkgs.kitty-themes}/share/kitty-themes/themes/Catppuccin-${Variant}.conf";
     themeConf = builtins.readFile themeFile;

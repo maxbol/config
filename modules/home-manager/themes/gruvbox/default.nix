@@ -253,6 +253,8 @@ in rec {
     };
   };
 
+  ghostty.autoGenerate.enable = true;
+
   kitty = let
     themeFile = "${pkgs.kitty-themes}/share/kitty-themes/themes/gruvbox-${luminanceVariant}.conf";
     themeConf = builtins.readFile themeFile;

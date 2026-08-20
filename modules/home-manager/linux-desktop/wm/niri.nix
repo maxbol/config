@@ -136,88 +136,88 @@ in
       programs.niri.enable = true;
       programs.niri.package = pkgs.niri-unstable;
 
-      services.kanshi = {
-        enable = true;
-        systemdTarget = "niri.service";
-        profiles = {
-          backDocked = {
-            exec = "${self.swimctl}/bin/swimctl activate";
-            outputs = [
-              {
-                criteria = "eDP-2";
-              }
-              {
-                criteria = "DP-1";
-              }
-            ];
-          };
-          sideDocked = {
-            exec = "${self.swimctl}/bin/swimctl activate";
-            outputs = [
-              {
-                criteria = "eDP-2";
-              }
-              {
-                criteria = "DP-3";
-              }
-            ];
-          };
-          dp4Docked = {
-            exec = "${self.swimctl}/bin/swimctl activate";
-            outputs = [
-              {
-                criteria = "eDP-2";
-              }
-              {
-                criteria = "DP-4";
-              }
-            ];
-          };
-        };
-      };
+      # services.kanshi = {
+      #   enable = true;
+      #   systemdTarget = "niri.service";
+      #   profiles = {
+      #     backDocked = {
+      #       exec = "${self.swimctl}/bin/swimctl activate";
+      #       outputs = [
+      #         {
+      #           criteria = "eDP-2";
+      #         }
+      #         {
+      #           criteria = "DP-1";
+      #         }
+      #       ];
+      #     };
+      #     sideDocked = {
+      #       exec = "${self.swimctl}/bin/swimctl activate";
+      #       outputs = [
+      #         {
+      #           criteria = "eDP-2";
+      #         }
+      #         {
+      #           criteria = "DP-3";
+      #         }
+      #       ];
+      #     };
+      #     dp4Docked = {
+      #       exec = "${self.swimctl}/bin/swimctl activate";
+      #       outputs = [
+      #         {
+      #           criteria = "eDP-2";
+      #         }
+      #         {
+      #           criteria = "DP-4";
+      #         }
+      #       ];
+      #     };
+      #   };
+      # };
 
       theme-config.niri.baseConfig = {
-        outputs = {
-          "DP-1" = {
-            # mode = "preferred";
-            scale = 1.25;
-            position = {
-              x = 2048;
-              y = 0;
-            };
-          };
-          "DP-3" = {
-            variable-refresh-rate = true;
-            # mode = "preferred";
-            scale = 1.25;
-            position = {
-              x = 2048;
-              y = 0;
-            };
-          };
-          "DP-4" = {
-            variable-refresh-rate = true;
-            # mode = "preferred";
-            scale = 1.25;
-            position = {
-              x = 2048;
-              y = 0;
-            };
-          };
-          "eDP-2" = {
-            scale = 1.25;
-            position = {
-              x = 0;
-              y = 0;
-            };
-            transform = {
-              # flipped = true;
-              # rotation = 90;
-            };
-          };
-        };
+        # outputs = {
+        #   "DP-1" = {
+        #     # mode = "preferred";
+        #     scale = 1.25;
+        #     position = {
+        #       x = 2048;
+        #       y = 0;
+        #     };
+        #   };
+        #   "DP-3" = {
+        #     variable-refresh-rate = true;
+        #     # mode = "preferred";
+        #     scale = 1.25;
+        #     position = {
+        #       x = 2048;
+        #       y = 0;
+        #     };
+        #   };
+        #   "DP-4" = {
+        #     variable-refresh-rate = true;
+        #     # mode = "preferred";
+        #     scale = 1.25;
+        #     position = {
+        #       x = 2048;
+        #       y = 0;
+        #     };
+        #   };
+        #   "eDP-2" = {
+        #     scale = 1.25;
+        #     position = {
+        #       x = 0;
+        #       y = 0;
+        #     };
+        #     transform = {
+        #       # flipped = true;
+        #       # rotation = 90;
+        #     };
+        #   };
+        # };
         binds = with config.lib.niri.actions; {
-          "Ctrl+Space".action = dms-ipc ["spotlight" "toggle"];
+          "Ctrl+Space".action = dms-ipc ["spotlight-bar" "toggle"];
           "Shift+Mod+V".action = dms-ipc ["clipboard" "toggle"];
           "Ctrl+Shift+O".action = dms-ipc ["tmux" "toggle"];
           "XF86AudioLowerVolume".action = dms-ipc ["audio" "decrement" "3"];
@@ -273,7 +273,7 @@ in
           "Ctrl+Shift+T".action = spawn "kitty";
           "Ctrl+Alt+T".action = spawn ["kitty" "bash"];
           "Ctrl+Shift+F".action = spawn "nautilus";
-          "Ctrl+Shift+B".action = spawn "firefox";
+          "Ctrl+Shift+B".action = spawn "helium";
 
           "Shift+Mod+B".action = spawn ["kitty" "--app-id" "bluetui" "bluetui"];
           "Ctrl+Mod+N".action = spawn ["kitty" "--app-id" "impala" "impala"];
@@ -494,6 +494,7 @@ in
           {
             matches = [
               {
+                app-id = "kitty";
                 is-focused = true;
               }
             ];
@@ -505,6 +506,11 @@ in
             opacity = 0.99;
           }
           {
+            matches = [
+              {
+                app-id = "kitty";
+              }
+            ];
             excludes = [
               {
                 is-active = true;

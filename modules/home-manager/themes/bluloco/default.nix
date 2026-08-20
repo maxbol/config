@@ -206,6 +206,8 @@ in rec {
     };
   };
 
+  ghostty.autoGenerate.enable = true;
+
   kitty = {
     autoGenerate = {
       enable = true;

@@ -154,6 +154,8 @@ in rec {
   #   mSurface = "04080a";
   # };
 
+  ghostty.autoGenerate.enable = true;
+
   kitty = {
     autoGenerate = {
       enable = true;

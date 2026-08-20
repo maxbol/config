@@ -1,0 +1,54 @@
+---
+defines:
+  foreground: text
+  background: background
+  selection_foreground: text2
+  selection_background: overlay
+  cursor: text
+  cursor_text_color: background
+  color0: background
+  color1: background
+  color2: background
+  color3: background
+  color4: background
+  color5: background
+  color6: background
+  color7: background
+  color8: background
+  color9: background
+  color10: background
+  color11: background
+  color12: background
+  color13: background
+  color14: background
+  color15: background
+---
+
+# name: gruber-darker
+# author: Max Bolotin
+# license: MIT
+foreground = #⟨foreground:hex⟩
+background = #⟨background:hex⟩
+selection-foreground = #⟨selection_foreground:hex⟩
+selection-background = #⟨selection_background:hex⟩
+# Cursor colors
+cursor-color = #⟨cursor:hex⟩
+cursor-text = #⟨cursor_text_color:hex⟩
+
+# Terminal palette colors
+palette = 0=#⟨color0:hex⟩
+palette = 1=#⟨color1:hex⟩
+palette = 2=#⟨color2:hex⟩
+palette = 3=#⟨color3:hex⟩
+palette = 4=#⟨color4:hex⟩
+palette = 5=#⟨color5:hex⟩
+palette = 6=#⟨color6:hex⟩
+palette = 7=#⟨color7:hex⟩
+palette = 8=#⟨color8:hex⟩
+palette = 9=#⟨color9:hex⟩
+palette = 10=#⟨color10:hex⟩
+palette = 11=#⟨color11:hex⟩
+palette = 12=#⟨color12:hex⟩
+palette = 13=#⟨color13:hex⟩
+palette = 14=#⟨color14:hex⟩
+palette = 15=#⟨color15:hex⟩

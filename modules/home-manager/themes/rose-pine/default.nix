@@ -268,6 +268,8 @@ in rec {
     ];
   };
 
+  ghostty.autoGenerate.enable = true;
+
   kitty =
     {
       file."theme.conf".source = "${pkgs.kitty-themes}/share/kitty-themes/themes/${kittyThemeFileName}";

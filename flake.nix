@@ -54,6 +54,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    dankcalendar = {
+      url = "github:AvengeMedia/dankcalendar";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -361,7 +366,6 @@
 
   nixConfig = {
     extra-substituters = [
-      "https://cache.garnix.io"
       "https://devenv.cachix.org"
       "https://nix-community.cachix.org"
       "https://maxbol.cachix.org"
@@ -371,7 +375,6 @@
     ];
 
     extra-trusted-public-keys = [
-      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
       "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "maxbol.cachix.org-1:Rlo1/Hw2jg0bxRoB/w1d9PXAc0kpyJ2uKFAdLkVygU0="

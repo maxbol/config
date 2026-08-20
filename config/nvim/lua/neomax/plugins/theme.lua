@@ -17,7 +17,23 @@ return {
         },
         config = function()
           require("lualine").setup({
-            theme = "auto",
+            options = {
+              -- Per-colorscheme lualine theme override. Chroma (the Nix
+              -- theming system) can register an explicit theme table under
+              -- `vim.g.neomax_lualine[<colorscheme>]` for colorschemes that
+              -- ship no lualine theme of their own (e.g. oh-lucy, whose `auto`
+              -- theme renders grey blocks). Keyed by colorscheme name so it
+              -- never leaks into other themes -- anything unregistered falls
+              -- back to "auto".
+              theme = function()
+                local overrides = vim.g.neomax_lualine
+                local name = vim.g.colors_name
+                if type(overrides) == "table" and name and overrides[name] then
+                  return overrides[name]
+                end
+                return "auto"
+              end,
+            },
             sections = {
               lualine_a = { "mode" },
               lualine_b = {

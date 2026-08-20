@@ -128,6 +128,8 @@ in rec {
     ];
   };
 
+  ghostty.autoGenerate.enable = true;
+
   kitty = {
     font = {
       name = "PxPlus IBM VGA 9x16";

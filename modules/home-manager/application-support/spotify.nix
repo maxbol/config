@@ -18,7 +18,7 @@ in {
       theme = let
         text-theme = pkgs-spicetify-nix.themes.text;
       in
-        pkgs-spicetify-nix.themes.text;
+        pkgs-spicetify-nix.themes.hazy;
       # colorScheme = "RosePine";
     };
 

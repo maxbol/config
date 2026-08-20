@@ -92,7 +92,7 @@ in {
           cmd = "${lib.getExe nvim-colorctl} --emit-lua ${homeDirectory}/.config/nvim/lua/neomax/color/init.lua -s ${config.colorscheme} -b ${config.background}${fgGroups}${bgGroups}${clearGroups}${extraCmds}";
         in {
           required = true;
-          source = mkDefault (pkgs.writeShellScript "colorctl" "echo \"${cmd}\" && ${cmd} && echo \"Done\".");
+          source = mkDefault (pkgs.writeShellScript "colorctl" "echo ${lib.escapeShellArg cmd} && ${cmd} && echo \"Done\".");
         };
       };
 

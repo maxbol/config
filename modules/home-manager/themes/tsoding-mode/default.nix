@@ -163,6 +163,8 @@ in rec {
     ];
   };
 
+  ghostty.autoGenerate.enable = true;
+
   kitty = let
     themeFile = ./kitty.conf;
     themeConf = builtins.readFile themeFile;

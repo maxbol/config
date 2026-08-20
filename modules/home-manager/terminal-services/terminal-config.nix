@@ -25,6 +25,11 @@ in {
           # Necessary for Nautilus and other GNOME apps to correctly use kitty to open .desktop files with Terminal=true
           pkgs.imagemagick
         ];
+
+        programs.ghostty = {
+          enable = true;
+        };
+
         programs.kitty = {
           enable = true;
           package = pkgs.kitty;

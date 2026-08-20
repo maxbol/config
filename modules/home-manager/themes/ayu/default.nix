@@ -213,6 +213,8 @@ in rec {
     name = kvantumThemeVariant;
   };
 
+  ghostty.autoGenerate.enable = true;
+
   kitty = let
     confName =
       if variant == "dark"

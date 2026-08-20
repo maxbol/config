@@ -154,6 +154,8 @@ in rec {
     }
     // (neovimOverrides palette);
 
+  ghostty.autoGenerate.enable = true;
+
   kitty = {
     autoGenerate = {
       enable = true;

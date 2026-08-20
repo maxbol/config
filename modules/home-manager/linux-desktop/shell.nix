@@ -1,7 +1,7 @@
 {
-  pkgs,
   lib-mine,
   origin,
+  vendor,
   ...
 }: let
   # pkgs-unstable = origin.inputs.nixpkgs-unstable.legacyPackages.${pkgs.system};
@@ -27,6 +27,10 @@ in
         # read-only store links, so generation would fail with an OSD error).
         enableDynamicTheming = false;
       };
+
+      home.packages = [
+        vendor.dankcalendar.default
+      ];
 
       # home.packages = [
       #   pkgs-unstable.quickshell

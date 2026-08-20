@@ -7,6 +7,7 @@
     ./dynawall
     ./firefox
     ./fish.nix
+    ./ghostty
     ./gtk.nix
     ./hyprland
     ./hyprpanel

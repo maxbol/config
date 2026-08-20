@@ -188,34 +188,62 @@ in rec {
 
   palette = allPalettes.${variant};
 
+  # oh-lucy.nvim ships no lualine theme, so lualine falls back to its `auto`
+  # theme, which derives section colors from grey source highlights (PmenuSel,
+  # StatusLine, ...) and leaves grey blocks smattered across the statusline.
+  # Patching individual `lualine_*` highlight groups is unreliable because
+  # lualine caches its lazily-created separator ("transitional") highlights and
+  # regenerates them from the section groups on redraw, clobbering post-hoc
+  # `:hi` overrides. Instead we hand lualine a complete theme *table*, which it
+  # uses to regenerate every group (sections, components and separators)
+  # consistently. `neomax/plugins/theme.lua` reads this table back per
+  # colorscheme from `vim.g.neomax_lualine`, so it never leaks into other
+  # themes.
   neovim = let
-    c_section_bg = "#" + palette.semantic.surface;
+    p = palette;
+    hex = c: "#" + c;
 
-    applyCol = col: groups: (builtins.foldl' (acc: group: acc // {${group} = col;}) {} groups);
+    bgColor = hex p.semantic.background;
+    surfaceColor = hex p.semantic.surface;
+    textColor = hex p.semantic.text;
+    subtleColor = hex p.semantic.text1;
+    dimColor = hex p.semantic.text2;
+
+    # Per-mode accent for the `a`/`z` (mode indicator) sections.
+    modeColors = {
+      normal = p.semantic.accent1;
+      insert = p.accents.green;
+      visual = p.accents.mauve;
+      replace = p.accents.orange;
+      command = p.accents.yellow;
+      terminal = p.accents.teal;
+    };
+
+    # A lua fragment `<mode>={a=..,b=..,c=..}` for one active mode. Sections:
+    # a = mode accent (dark bold text), b = dark surface, c = background.
+    luaMode = mode: accent: ''
+      ${mode}={a={fg='${bgColor}',bg='${hex accent}',gui='bold'},b={fg='${textColor}',bg='${surfaceColor}'},c={fg='${subtleColor}',bg='${bgColor}'}}'';
+
+    modeFragments =
+      pkgs.lib.mapAttrsToList luaMode modeColors
+      # Inactive window: fully muted, no accent.
+      ++ ["inactive={a={fg='${dimColor}',bg='${surfaceColor}'},b={fg='${dimColor}',bg='${surfaceColor}'},c={fg='${dimColor}',bg='${bgColor}'}}"];
+
+    themeTable = "{${pkgs.lib.concatStringsSep "," modeFragments}}";
+
+    colorscheme = (neovimOverrides palette).colorscheme or "oh-lucy";
+
+    registerLualineTheme = "lua local o=vim.g.neomax_lualine or {}; o['${colorscheme}']=${themeTable}; vim.g.neomax_lualine=o; require('lualine').setup()";
   in
     {
-      hlGroupsBg =
-        {
-          Cursor = "#" + palette.semantic.text2;
-        }
-        // (applyCol c_section_bg [
-          "lualine_c_normal"
-          "lualine_c_command"
-          "lualine_c_insert"
-          "lualine_c_visual"
-          "lualine_c_replace"
-          "lualine_c_inactive"
-          "lualine_c_terminal"
-          "lualine_transitional_lualine_b_normal_to_lualine_c_normal"
-          "lualine_transitional_lualine_b_command_to_lualine_c_command"
-          "lualine_transitional_lualine_b_insert_to_lualine_c_insert"
-          "lualine_transitional_lualine_b_visual_to_lualine_c_visual"
-          "lualine_transitional_lualine_b_replace_to_lualine_c_replace"
-          "lualine_transitional_lualine_b_inactive_to_lualine_c_inactive"
-          "lualine_transitional_lualine_b_terminal_to_lualine_c_terminal"
-        ]);
+      hlGroupsBg = {
+        Cursor = dimColor;
+      };
+      extraCmds = [registerLualineTheme];
     }
     // (neovimOverrides palette);
+
+  ghostty.autoGenerate.enable = true;
 
   kitty = {
     autoGenerate = {
