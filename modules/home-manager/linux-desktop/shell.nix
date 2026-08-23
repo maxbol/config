@@ -32,6 +32,9 @@ in
         vendor.dankcalendar.default
       ];
 
+      # dankcalendar has no module of its own to hang this off of.
+      theme-config.dankcal.enable = true;
+
       # home.packages = [
       #   pkgs-unstable.quickshell
       # ];

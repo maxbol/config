@@ -1,6 +1,7 @@
 {...}: {
   imports = [
     ./bat
+    ./dankcal
     ./desktop.nix
     ./dms
     ./dunst.nix
