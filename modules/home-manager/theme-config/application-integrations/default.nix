@@ -21,7 +21,6 @@
     ./obsidian
     ./palette.nix
     ./qt
-    ./rofi
     ./sketchybar
     ./starship.nix
     ./swaync

@@ -15,11 +15,8 @@ in {
   hyprscroller = addPackage ./hyprscroller;
   libadwaita-without-adwaita = addPackage ./libadwaita-without-adwaita;
   misc-scripts-hyprdots = addPackage ./misc-scripts-hyprdots;
-  nailgun = addPackage ./nailgun;
   nancy = addPackage ./nancy;
   openssl_1_0 = addPackage ./openssl_1_0;
-  rofi-launchers-hyprdots = addPackage ./rofi-launchers-hyprdots;
-  rofi-wayland = addPackage ./rofi-wayland;
   runcached = addPackage ./runcached;
   sddm-theme-corners = addPackage ./sddm-theme-cornersnix packageArgs;
   synp = addPackage ./synp;

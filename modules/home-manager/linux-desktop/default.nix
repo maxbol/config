@@ -10,7 +10,6 @@ lib-mine.barrelGroup {
     "lockscreen"
     "notifications"
     "panel"
-    "rofi"
     "shell"
     "shutdown"
     "ui-toolkits"
