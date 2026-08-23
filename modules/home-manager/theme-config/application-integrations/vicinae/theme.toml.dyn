@@ -1,0 +1,45 @@
+---
+defines:
+    vAccent: accent1
+    vAccentText: background
+    vBackground: background
+    vForeground: text
+    vSecondaryBackground: surface
+    vBorder: overlay
+    vTextMuted: text1
+    vTextPlaceholder: text2
+    vMagenta: accent2
+    vPurple: accent2
+    vOrange: yellow
+    vCyan: blue
+---
+# Vicinae derives every other color from the core and accent colors below, so
+# only the ones that would otherwise derive badly are spelled out.
+
+[colors.core]
+accent = "#⟨vAccent:hex⟩"
+accent_foreground = "#⟨vAccentText:hex⟩"
+background = "#⟨vBackground:hex⟩"
+foreground = "#⟨vForeground:hex⟩"
+secondary_background = "#⟨vSecondaryBackground:hex⟩"
+border = "#⟨vBorder:hex⟩"
+
+[colors.accents]
+blue = "#⟨blue:hex⟩"
+green = "#⟨green:hex⟩"
+red = "#⟨red:hex⟩"
+yellow = "#⟨yellow:hex⟩"
+magenta = "#⟨vMagenta:hex⟩"
+purple = "#⟨vPurple:hex⟩"
+orange = "#⟨vOrange:hex⟩"
+cyan = "#⟨vCyan:hex⟩"
+
+[colors.text]
+muted = "#⟨vTextMuted:hex⟩"
+placeholder = "#⟨vTextPlaceholder:hex⟩"
+
+[colors.input]
+border_focus = "#⟨vAccent:hex⟩"
+
+[colors.loading]
+bar = "#⟨vAccent:hex⟩"

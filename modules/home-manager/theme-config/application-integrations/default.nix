@@ -16,7 +16,7 @@
     ./macos-wallpaper.nix
     ./neovim.nix
     ./niri
-    ./noctalia
+    # ./noctalia
     ./obsidian
     ./palette.nix
     ./qt
@@ -25,6 +25,7 @@
     ./starship.nix
     ./swaync
     ./tmux
+    ./vicinae
     ./vscode.nix
     ./waybar
     ./wezterm.nix

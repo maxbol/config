@@ -1,4 +1,4 @@
-vim.o.guifont = "Aporetic Sans Mono:h18" -- text below applies for VimScript
+vim.o.guifont = "Aporetic Sans Mono:h13" -- text below applies for VimScript
 vim.g.neovide_window_blurred = false
 vim.g.neovide_opacity = 1.0
 vim.g.neovide_normal_opacity = 1.0

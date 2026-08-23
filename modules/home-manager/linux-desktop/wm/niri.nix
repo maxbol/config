@@ -217,7 +217,7 @@ in
         #   };
         # };
         binds = with config.lib.niri.actions; {
-          "Ctrl+Space".action = dms-ipc ["spotlight-bar" "toggle"];
+          # "Ctrl+Space".action = dms-ipc ["spotlight-bar" "toggle"];
           "Shift+Mod+V".action = dms-ipc ["clipboard" "toggle"];
           "Ctrl+Shift+O".action = dms-ipc ["tmux" "toggle"];
           "XF86AudioLowerVolume".action = dms-ipc ["audio" "decrement" "3"];
@@ -265,7 +265,7 @@ in
 
           # "Ctrl+Space".action = noctalia-ipc-call ["launcher" "toggle"];
           # "Ctrl+Space".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "d"];
-          # "Ctrl+Space".action = spawn ["vicinae" "toggle"];
+          "Ctrl+Space".action = spawn ["vicinae" "toggle"];
           "Ctrl+Mod+Space".action = spawn ["1password" "--quick-access"];
 
           "Mod+Q".action = close-window;
@@ -282,6 +282,7 @@ in
           "Ctrl+Shift+Alt+P".action.screenshot-window = [{write-to-disk = true;}];
           "Ctrl+Shift+Mod+P".action.screenshot-screen = [{write-to-disk = true;}];
 
+          "Shift+Mod+W".action = dms-ipc ["dankdash" "wallpaper"];
           # "Shift+Mod+W".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "w"];
           # "Shift+Mod+E".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "f"];
           # "Shift+Mod+R".action = spawn "${self.rofi-launchers-hyprdots}/bin/rofiselect.sh";

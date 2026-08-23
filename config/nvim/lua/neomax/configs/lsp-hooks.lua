@@ -48,7 +48,17 @@ M.on_attach = function(client, bufnr)
 
   -- map("n", "<leader>ra", "<cmd>Lspsaga rename ++project<CR>", opts("Rename code symbol"))
 
-  map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts("Lsp Code action"))
+  -- diffview's merge tool maps <leader>ca (conflict choose all) buffer-locally,
+  -- but this map is set after diffview's and would replace it. Dispatch at press
+  -- time instead: inside a diffview view, defer to diffview; otherwise code action.
+  map("n", "<leader>ca", function()
+    if package.loaded["diffview"] and require("diffview.lib").get_current_view() then
+      require("diffview.config").actions.conflict_choose("all")()
+      return
+    end
+    vim.lsp.buf.code_action()
+  end, opts("Lsp Code action"))
+  map("v", "<leader>ca", vim.lsp.buf.code_action, opts("Lsp Code action"))
   -- map("n", "gr", "<cmd>Lspsaga finder<CR>")
 
   map("n", "<leader>lf", vim.diagnostic.open_float, { desc = "Lsp floating diagnostics" })
