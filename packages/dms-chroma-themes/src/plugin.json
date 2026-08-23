@@ -1,0 +1,18 @@
+{
+    "id": "chromaThemes",
+    "name": "Chroma Themes",
+    "description": "Switch Chroma themes, previewed by each theme's wallpaper, and remember a wallpaper per theme",
+    "version": "0.2.0",
+    "author": "Max Bolotin",
+    "icon": "palette",
+    "type": "composite",
+    "capabilities": ["launcher", "daemon"],
+    "components": {
+        "launcher": "./ChromaThemes.qml",
+        "daemon": "./ChromaWallpaperDaemon.qml"
+    },
+    "trigger": "#theme",
+    "viewMode": "tile",
+    "viewModeEnforced": true,
+    "permissions": ["process", "settings_read", "settings_write"]
+}

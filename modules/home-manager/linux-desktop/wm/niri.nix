@@ -286,7 +286,7 @@ in
           # "Shift+Mod+W".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "w"];
           # "Shift+Mod+E".action = spawn ["${self.rofi-launchers-hyprdots}/bin/rofilaunch.sh" "f"];
           # "Shift+Mod+R".action = spawn "${self.rofi-launchers-hyprdots}/bin/rofiselect.sh";
-          "Shift+Mod+T".action = spawn "${self.rofi-launchers-hyprdots}/bin/themeselect.sh";
+          "Shift+Mod+T".action = dms-ipc ["spotlight" "toggleQuery" "#theme "];
           # "Shift+Mod+V".action = spawn ["${self.rofi-launchers-hyprdots}/bin/cliphist.sh" "c"];
           # "Shift+Mod+V".action = noctalia-ipc-call ["launcher" "clipboard"];
           # "Shift+Mod+V".action = spawn ["vicinae" "vicinae://extensions/vicinae/clipboard/history"];

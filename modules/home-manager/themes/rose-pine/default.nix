@@ -288,5 +288,5 @@ in rec {
 
   macoswallpaper.wallpaper = wallpaper;
 
-  swim.wallpaperDirectory = lib-mine.path.dirname wallpaper;
+  wallpapers.wallpaperDirectory = lib-mine.path.dirname wallpaper;
 }

@@ -84,6 +84,7 @@ in rec {
       quota
     ]);
   in [
+    alacritty
     aseprite
     azure
     blender
@@ -107,6 +108,9 @@ in rec {
     mpv
     nautilus
     nixpkgs-unstable.claude-code
+    opencode
+    opencode-desktop
+    pi-coding-agent
     postman
     self.wayscriber
     slack

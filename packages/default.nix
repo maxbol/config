@@ -5,6 +5,7 @@ in {
   chromactl = addPackage ./chromactl;
   clockify-cli = addPackage ./clockify-cli;
   clockify-tmux = addPackage ./clockify-tmux;
+  dms-chroma-themes = addPackage ./dms-chroma-themes;
   dynachrome = addPackage ./dynachrome;
   gamescope-reaperpatch = addPackage ./gamescope-reaperpatch;
   gtkrc-reload = addPackage ./gtkrc-reload;
@@ -21,7 +22,6 @@ in {
   rofi-wayland = addPackage ./rofi-wayland;
   runcached = addPackage ./runcached;
   sddm-theme-corners = addPackage ./sddm-theme-cornersnix packageArgs;
-  swimctl = addPackage ./swimctl;
   synp = addPackage ./synp;
   systemctl-toggle = addPackage ./systemctl-toggle;
   waybar-confgen-hyprdots = addPackage ./waybar-confgen-hyprdots;

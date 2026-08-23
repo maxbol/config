@@ -192,5 +192,5 @@ in rec {
     colorOverrides = {};
   };
 
-  swim.wallpaperDirectory = ./wallpapers;
+  wallpapers.wallpaperDirectory = ./wallpapers;
 }

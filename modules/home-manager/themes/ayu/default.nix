@@ -256,5 +256,5 @@ in rec {
     inherit wallpaper;
   };
 
-  swim.wallpaperDirectory = lib-mine.path.dirname wallpaper;
+  wallpapers.wallpaperDirectory = lib-mine.path.dirname wallpaper;
 }

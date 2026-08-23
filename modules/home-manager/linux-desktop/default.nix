@@ -13,7 +13,6 @@ lib-mine.barrelGroup {
     "rofi"
     "shell"
     "shutdown"
-    "swim"
     "ui-toolkits"
     "walker"
     "waybar"

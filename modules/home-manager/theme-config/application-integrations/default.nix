@@ -28,6 +28,7 @@
     ./tmux
     ./vicinae
     ./vscode.nix
+    ./wallpapers
     ./waybar
     ./wezterm.nix
     ./wlogout

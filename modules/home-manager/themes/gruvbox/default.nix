@@ -281,5 +281,5 @@ in rec {
     wallpaper = ./wallpapers/wallpaper.jpg;
   };
 
-  swim.wallpaperDirectory = ./wallpapers;
+  wallpapers.wallpaperDirectory = ./wallpapers;
 }

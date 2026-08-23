@@ -84,6 +84,12 @@ in {
 
     services.displayManager.dms-greeter = {
       enable = true;
+      # Without this the greeter falls back to nixpkgs' dms-shell, which is
+      # older than the one the session runs: its generated niri config still
+      # carries a `debug { keep-max-bpc-unchanged }` node that niri has since
+      # removed, so the greeter's niri rejects the config and comes up
+      # unconfigured, never spawning the greeter itself.
+      package = origin.inputs.dms.packages.${pkgs.stdenv.hostPlatform.system}.dms-shell;
       compositor = {
         name = "niri";
       };

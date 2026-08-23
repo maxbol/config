@@ -197,5 +197,5 @@ in rec {
     wallpaper = ./wallpapers/wallpaper.png;
   };
 
-  swim.wallpaperDirectory = ./wallpapers;
+  wallpapers.wallpaperDirectory = ./wallpapers;
 }

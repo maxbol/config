@@ -38,17 +38,9 @@ lib-mine.mkFeature "features.linux-desktop.rofi" {
 
     home.packages = [
       self.rofi-launchers-hyprdots
-      self.nailgun
       pkgs.iosevka
       vendor.aporetic-kitty.default
     ];
 
-    theme-config.extraActivationCommands = theme: ''
-      ${lib.getExe self.nailgun} thumbnails-for-theme "${config.theme-config.themeDirectory}/active/swim/wallpapers" >/dev/null &
-    '';
-
-    programs.swim.wallpaperActivationCommands = ''
-      ${lib.getExe self.nailgun} activate-wallpaper "$WALLPAPER" >/dev/null &
-    '';
   };
 }

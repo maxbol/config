@@ -201,5 +201,5 @@ in rec {
   #   enableSiteColors = enable;
   # };
 
-  swim.wallpaperDirectory = lib-mine.path.dirname wallpaper;
+  wallpapers.wallpaperDirectory = lib-mine.path.dirname wallpaper;
 }

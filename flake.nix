@@ -46,7 +46,12 @@
 
     # NixOS desktop environment
     niri = {
-      url = "github:maxbol/niri-flake/niri-20260311";
+      url = "github:sodiboo/niri-flake";
+      # Upstream niri plus a skip-animation property on the focus actions,
+      # which is not upstream. Nothing else is carried: the blur and xray work
+      # this used to be forked for landed in niri v26.04. niri-flake types
+      # actions generically, so the extra property needs no fork of it.
+      inputs.niri-unstable.url = "github:maxbol/niri/feature/allow-overriding-animation-for-actions@updated";
     };
 
     dms = {
