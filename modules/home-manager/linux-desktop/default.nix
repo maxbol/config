@@ -3,6 +3,7 @@ lib-mine.barrelGroup {
   here = ./.;
   path = "features.linux-desktop";
   submodules = [
+    "connect"
     "default-application-handling"
     "fonts"
     "gaming"

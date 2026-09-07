@@ -8,6 +8,20 @@
     if pkgs.stdenv.hostPlatform.isDarwin
     then "/private/tmp/"
     else "/run/user/";
+
+  # devenv 2's `direnv-export` reads stdin while it evaluates, swallowing
+  # keystrokes queued in the pane while the direnv hook runs — i.e. the pane
+  # commands workmux types at window creation. Scope the stdin detach to that
+  # window only: fresh shells (DIRENV_DIR unset) inside workmux sessions
+  # (window_prefix, default wm-). There the progress UI degrades to a plain
+  # log; every other activation passes through with the animated TUI.
+  devenvDirenvSafe = pkgs.writeShellScriptBin "devenv-direnv-safe" ''
+    if [[ -n ''${TMUX_PANE:-} && -z ''${DIRENV_DIR:-} ]] \
+        && tmux display-message -p -t "$TMUX_PANE" '#{session_name}' 2>/dev/null | grep -q '^wm-'; then
+      exec "$(command -v devenv)" "$@" </dev/null
+    fi
+    exec "$(command -v devenv)" "$@"
+  '';
 in
   lib-mine.mkFeature "features.nix-services.direnv-config" (lib.mkMerge [
     {
@@ -28,6 +42,11 @@ in
               echo "''${DIRENV_DIR}/direnv/''${hash}''${path}"
               )}"
           }
+
+          # devenv's direnvrc honors DEVENV_BIN; route it through the safe wrapper.
+          if [[ -z ''${DEVENV_BIN:-} ]] && command -v devenv >/dev/null; then
+              DEVENV_BIN="${devenvDirenvSafe}/bin/devenv-direnv-safe"
+          fi
         '';
       };
 

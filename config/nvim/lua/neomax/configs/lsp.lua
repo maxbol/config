@@ -34,7 +34,16 @@ local servers = {
   "buf_ls",
   "vtsls",
   "nixd",
-  "gopls",
+  {
+    "gopls",
+    {
+      settings = {
+        gopls = {
+          buildFlags = { "-tags=integration" },
+        },
+      },
+    },
+  },
   "golangci_lint_ls",
   "zls",
   "dockerls",

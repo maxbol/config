@@ -599,6 +599,12 @@ in
             xray false
           }
         }
+
+        // niri-flake does not know this property yet, so it cannot go into
+        // the typed baseConfig window-rules.
+        window-rule {
+          on-xdg-activate "focus"
+        }
       '';
 
       services.network-manager-applet.enable = true;

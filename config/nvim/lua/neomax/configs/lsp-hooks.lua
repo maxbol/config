@@ -19,6 +19,14 @@ M.on_init = function(client, _)
 end
 
 M.on_attach = function(client, bufnr)
+  -- Scratch buffers (fugitive://, diffview://, neogit diffs, etc.) are not
+  -- real files: servers like clangd reject their URIs outright
+  -- ("clangd only supports 'file' URI scheme ..."), so don't attach to them.
+  if vim.bo[bufnr].buftype ~= "" or not vim.startswith(vim.uri_from_bufnr(bufnr), "file://") then
+    client:stop()
+    return
+  end
+
   local function opts(desc)
     return { buffer = bufnr, desc = desc }
   end
