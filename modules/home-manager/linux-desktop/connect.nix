@@ -1,6 +1,7 @@
 {lib-mine, ...}:
 lib-mine.mkFeature "features.linux-desktop.connect" {
-  services.kde-connect = {
+  services.kdeconnect = {
     enable = true;
+    indicator = true;
   };
 }

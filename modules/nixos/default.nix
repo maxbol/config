@@ -5,6 +5,7 @@
     ./desktop-config
     ./graphics-config.nix
     ./hardware-support
+    ./kde-connect-firewall.nix
     ./localsend.nix
     ./localisation.nix
     ./nix-registry.nix
