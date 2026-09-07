@@ -108,15 +108,16 @@ in rec {
     mpv
     nautilus
     nixpkgs-unstable.claude-code
-    opencode
-    opencode-desktop
-    pi-coding-agent
+    nixpkgs-unstable.opencode
+    nixpkgs-unstable.opencode-desktop
+    nixpkgs-unstable.pi-coding-agent
     postman
     self.wayscriber
     slack
     slurp
     thunderbird
     unzip
+    vendor.autolith.default
     vendor.wooz.default
     vendor.zen-browser.default
     vipsdisp

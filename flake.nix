@@ -87,6 +87,8 @@
 
     workmux.url = "github:raine/workmux";
 
+    autolith.url = "github:lambda-symbolics/autolith";
+
     custom-udev-rules.url = "github:MalteT/custom-udev-rules";
 
     nur.url = "github:nix-community/NUR";
