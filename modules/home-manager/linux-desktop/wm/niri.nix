@@ -52,6 +52,29 @@
     # Send doubletap message to server
     echo "doubletap" | ${pkgs.libressl.nc}/bin/nc -UN "$SOCKET_PATH"
   '';
+
+  # DMS has no keyboard layout OSD (upstream feature request #1351), so watch
+  # niri's event stream (which reports layout changes from xkb grp: toggles as
+  # well as switch-layout actions) and surface them as DMS toasts. NIRI_SOCKET
+  # comes from the systemd user manager environment, which niri --session
+  # populates via import-environment (same mechanism dms.service relies on).
+  #
+  # niri's IPC only reports xkb display names ("Swedish"), not layout codes,
+  # but the codes are the index-order of this string, which is defined once
+  # here and used for input.keyboard.xkb.layout as well.
+  xkbLayouts = "us,se";
+
+  layoutOsdWatcher = pkgs.writeShellScript "layout-osd-watcher" ''
+    IFS=',' read -r -a codes <<< "${xkbLayouts}"
+    while IFS= read -r line; do
+      case "$line" in
+        *"Keyboard layout switched"*)
+          idx=''${line##*: }
+          dms ipc call toast infoWith "Keyboard layout: ''${codes[$idx]:-$idx}" "" "" kblayout
+          ;;
+      esac
+    done < <(${pkgs.niri-unstable}/bin/niri msg event-stream)
+  '';
 in
   lib-mine.mkFeature "features.linux-desktop.wm.niri" {
     imports = [
@@ -59,6 +82,29 @@ in
     ];
 
     config = {
+      systemd.user.services.niri-layout-osd = {
+        Unit = {
+          Description = "DMS toast on niri keyboard layout change";
+          PartOf = [config.wayland.systemd.target];
+          After = [config.wayland.systemd.target];
+        };
+
+        Service = {
+          # "always" rather than "on-failure": the event stream read returns
+          # cleanly (exit 0) whenever niri exits, but the watcher must come
+          # back with the next session.
+          Restart = "always";
+          RestartSec = "2s";
+          ExecStart = "${layoutOsdWatcher}";
+          # The script resolves `dms` here; niri is referenced by store path.
+          # /run/current-system/sw/bin is needed for the coreutils used by the
+          # script, which the systemd user manager env does not provide.
+          Environment = "PATH=${config.home.profileDirectory}/bin:/run/current-system/sw/bin";
+        };
+
+        Install.WantedBy = [config.wayland.systemd.target];
+      };
+
       systemd.user.services.xwayland-env-init = {
         Unit = {
           Before = ["app-org.kde.xwaylandvideobridge@autostart.service"];
@@ -115,6 +161,52 @@ in
 
         Install.WantedBy = ["niri.service"];
       };
+
+      # systemd.user.services.gvfs-nautilus-prewarm = {
+      #   Unit = {
+      #     Description = "pre-activate gvfs daemons and warm nautilus for fast cold start";
+      #     After = ["niri.service"];
+      #   };
+      #
+      #   Service = {
+      #     Type = "oneshot";
+      #     ExecStart = let
+      #       warmup = pkgs.writeShellScript "gvfs-nautilus-prewarm.sh" ''
+      #         export PATH=${config.home.profileDirectory}/bin:/run/current-system/sw/bin:$PATH
+      #         gio mount -l 2>&1 || true
+      #         nautilus -q 2>&1 || true
+      #       '';
+      #     in
+      #       warmup;
+      #   };
+      #
+      #   Install.WantedBy = ["niri.service"];
+      # };
+
+      # systemd.user.services.nautilus-keepwarm = {
+      #   Unit = {
+      #     Description = "pin nautilus and its libraries in memory for instant cold start";
+      #     After = ["gvfs-nautilus-prewarm.service"];
+      #   };
+      #
+      #   Service = {
+      #     Type = "simple";
+      #     LimitMEMLOCK = "512M";
+      #     ExecStart = let
+      #       keepwarm = pkgs.writeShellScript "nautilus-keepwarm.sh" ''
+      #         export PATH=${config.home.profileDirectory}/bin:/run/current-system/sw/bin:$PATH
+      #         bin=$(dirname "$(readlink -f "$(command -v nautilus)")")/.nautilus-wrapped
+      #         libs=$(ldd "$bin" | awk '$3 ~ /^\// {print $3}' | sort -u)
+      #         exec ${pkgs.vmtouch}/bin/vmtouch -l -f "$bin" $libs /run/opengl-driver/lib/libvulkan_asahi.so
+      #       '';
+      #     in
+      #       keepwarm;
+      #     Restart = "on-failure";
+      #     RestartSec = "30s";
+      #   };
+      #
+      #   Install.WantedBy = ["niri.service"];
+      # };
 
       systemd.user.services.doubletap-server = {
         Unit = {
@@ -226,10 +318,10 @@ in
           "XF86MonBrightnessUp".action = dms-ipc ["brightness" "increment" "5" ""];
           "XF86MonBrightnessDown".action = dms-ipc ["brightness" "decrement" "5" ""];
 
-          "Ctrl+Shift+H".action = focus-column-or-monitor-left {skip-animation = true;};
-          "Ctrl+Shift+J".action = focus-window-or-workspace-down {skip-animation = true;};
-          "Ctrl+Shift+K".action = focus-window-or-workspace-up {skip-animation = true;};
-          "Ctrl+Shift+L".action = focus-column-or-monitor-right {skip-animation = true;};
+          "Ctrl+Shift+H".action = focus-column-or-monitor-left {skip-animation = false;};
+          "Ctrl+Shift+J".action = focus-window-or-workspace-down {skip-animation = false;};
+          "Ctrl+Shift+K".action = focus-window-or-workspace-up {skip-animation = false;};
+          "Ctrl+Shift+L".action = focus-column-or-monitor-right {skip-animation = false;};
 
           "Ctrl+Alt+H".action = set-column-width "-5%";
           "Ctrl+Alt+J".action = set-window-height "+5%";
@@ -526,7 +618,7 @@ in
         input = {
           keyboard = {
             xkb = {
-              layout = "us,se";
+              layout = xkbLayouts;
               options = "grp:shift_caps_toggle";
             };
           };

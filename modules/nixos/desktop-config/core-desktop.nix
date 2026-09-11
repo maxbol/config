@@ -19,6 +19,10 @@ in
 
     programs.dconf.enable = true;
 
+    # # Raise the default 8M memlock limit (inherited by user@.service and thus
+    # # user units) so nautilus-keepwarm can pin nautilus + its libs in RAM.
+    # systemd.extraConfig = "DefaultLimitMEMLOCK=512M";
+
     # Required to allow swaylock/hyprlock to unlock.
     security.pam.services.swaylock = {};
     security.pam.services.hyprlock = {};

@@ -43,10 +43,10 @@ in
               )}"
           }
 
-          # devenv's direnvrc honors DEVENV_BIN; route it through the safe wrapper.
-          if [[ -z ''${DEVENV_BIN:-} ]] && command -v devenv >/dev/null; then
-              DEVENV_BIN="${devenvDirenvSafe}/bin/devenv-direnv-safe"
-          fi
+          # # devenv's direnvrc honors DEVENV_BIN; route it through the safe wrapper.
+          # if [[ -z ''${DEVENV_BIN:-} ]] && command -v devenv >/dev/null; then
+          #     DEVENV_BIN="${devenvDirenvSafe}/bin/devenv-direnv-safe"
+          # fi
         '';
       };
 

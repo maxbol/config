@@ -1,5 +1,7 @@
 local dap = require("dap")
 
+dap.defaults.lldb.auto_continue_if_many_stopped = false
+
 -- local env = {}
 --
 -- if vim.fn.has("macunix") then

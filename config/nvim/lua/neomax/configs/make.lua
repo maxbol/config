@@ -146,7 +146,7 @@ function M.make(cwd, statusmsg, makecmd, grepcmd, on_success, on_failure)
           local parts = vim.split(v, ":")
           local p1 = parts[1]
           if
-            p1 ~= nil --[[ and looks_like_path(p1) ]]
+            p1 ~= nil and string.sub(p1, 1, 1) ~= "/" --[[ and looks_like_path(p1) ]]
           then
             local path = vim.fs.joinpath(cwd, p1)
             parts[1] = vim.fs.relpath(editor_cwd, path)
@@ -480,7 +480,7 @@ M.makeLanguage({
   grepcmd = "2>&1 | grep -E '^.+:[0-9]+:[0-9]+'",
   makecmd = "make",
   runcmd = "./out",
-  cwd_roots = { "Makefile", "compile_commands.json" },
+  cwd_roots = { "Makefile", "compile_commands.json", "build.zig" },
 })
 
 M.makeLanguage({
