@@ -230,6 +230,7 @@ in rec {
   };
 
   dms.luminance = luminanceVariant;
+  dms.invertSemantics = luminanceVariant == "light";
 
   gtk = {
     theme.package = pkgs

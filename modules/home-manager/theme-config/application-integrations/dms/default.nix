@@ -52,6 +52,11 @@ in {
             Color overrides to apply to the palette-generated theme.
           '';
         };
+
+        invertSemantics = mkOption {
+          type = types.bool;
+          default = false;
+        };
       };
 
       themeConfig = {
@@ -62,6 +67,7 @@ in {
         colors = opts.palette.generateDynamic {
           template = ./colors.json.dyn;
           paletteOverrides = config.colorOverrides;
+          invertSemantics = config.invertSemantics;
         };
 
         colorsJson = builtins.fromJSON (builtins.readFile colors);

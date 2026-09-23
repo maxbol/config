@@ -222,6 +222,7 @@ in rec {
     // (noctaliaOverrides palette);
 
   dms.luminance = luminanceVariant;
+  dms.invertSemantics = luminanceVariant == "light";
 
   rofi.colorOverrides = rofiOverrides palette;
 

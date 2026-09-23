@@ -23,7 +23,7 @@ lib-mine.mkFeature "features.linux-desktop.launcher" {
       Install.WantedBy = ["vicinae.service"];
     };
 
-    services.vicinae = {
+    programs.vicinae = {
       enable = true;
       systemd = {
         enable = true;

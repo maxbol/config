@@ -1,13 +1,7 @@
---[[ local parser_install_dir = vim.fn.stdpath("cache") .. "/treesitters"
-vim.fn.mkdir(parser_install_dir, "p")
-vim.opt.runtimepath:append(parser_install_dir) ]]
-
 return {
   "nvim-treesitter/nvim-treesitter",
-  commit = "4916d6592ede8c07973490d9322f187e07dfefac",
+  branch = "main",
   lazy = false,
-  -- event = { "BufReadPost", "BufNewFile" },
-  cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
   build = ":TSUpdate",
   -- opts = {
   --   -- parser_install_dir = parser_install_dir,

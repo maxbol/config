@@ -14,6 +14,17 @@ with lib; let
       example = "ff0000";
       description = "The color used for ${name}.";
     };
+
+  invertSemantics = semantic:
+    semantic
+    // {
+      text = semantic.background;
+      text1 = semantic.surface;
+      text2 = semantic.overlay;
+      overlay = semantic.text2;
+      surface = semantic.text1;
+      background = semantic.text;
+    };
 in {
   options = {
     theme-config.palette.enable = mkOption {
@@ -91,16 +102,21 @@ in {
           config,
           opts,
           ...
-        }: {
+        }: let
+        in {
           generateDynamic = {
             template,
             paletteOverrides,
             executable ? false,
+            invertSemantics ? false,
           }:
             with lib; let
               templateName = baseNameOf (toString template);
               name = substring 0 (stringLength templateName - 4) templateName;
-              palette = config.file."palette.json".source;
+              palette =
+                if invertSemantics
+                then config.file."palette-inverted.json".source
+                else config.file."palette.json".source;
               overrides = concatStringsSep " " (mapAttrsToList (k: v: "--override ${k}=${v}") paletteOverrides);
             in
               pkgs.runCommand name {} ''
@@ -116,6 +132,10 @@ in {
               '';
 
           file."palette.json".text = builtins.toJSON {inherit (config) semantic colors accents;};
+          file."palette-inverted.json".text = builtins.toJSON {
+            inherit (config) colors accents;
+            semantic = invertSemantics config.semantic;
+          };
         };
       };
     }

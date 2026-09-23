@@ -9,7 +9,7 @@
   accent5 ? "blossom",
   neovimOverrides ? p: {},
   makeDesktop,
-  lib-mine,
+  dmsColorOverrides ? p: {},
   ...
 }: let
   luminanceOptions = [
@@ -123,6 +123,8 @@ in rec {
   palette = allPalettes.${luminanceVariant};
 
   dms.luminance = luminanceVariant;
+  dms.invertSemantics = luminanceVariant == "light";
+  # dms.colorOverrides = dmsColorOverrides palette;
 
   desktop = makeDesktop {inherit accent;};
 

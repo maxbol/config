@@ -538,7 +538,7 @@ in
                 app-id = "org.libvips.vipsdisp";
               }
               {
-                app-id = "Bitwarden";
+                app-id = "bitwarden";
               }
               {
                 app-id = "1password";

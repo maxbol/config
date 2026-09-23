@@ -128,6 +128,7 @@ in rec {
   palette = allPalettes.${luminanceVariant};
 
   dms.luminance = luminanceVariant;
+  dms.invertSemantics = luminanceVariant == "light";
 
   desktop = makeDesktop {inherit accent telaMap;};
 
