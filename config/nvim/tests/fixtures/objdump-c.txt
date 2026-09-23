@@ -1,0 +1,211 @@
+
+demo:	file format elf64-x86-64
+
+Disassembly of section .init:
+
+0000000000001000 <_init>:
+; _init():
+    1000:      	endbr64
+    1004:      	subq	$0x8, %rsp
+    1008:      	movq	, %rax <printf@GLIBC_2.2.5+0x3fd0>
+    100f:      	testq	%rax, %rax
+    1012:      	je	 <L0>
+    1014:      	callq	*%rax
+<L0>:
+    1016:      	addq	$0x8, %rsp
+    101a:      	retq
+
+Disassembly of section .plt:
+
+0000000000001020 <.plt>:
+    1020:      	pushq	 <_GLOBAL_OFFSET_TABLE_+0x8>
+    1026:      	jmpq	* <_GLOBAL_OFFSET_TABLE_+0x10>
+    102c:      	nopl	(%rax)
+
+0000000000001030 <printf@plt>:
+    1030:      	jmpq	* <_GLOBAL_OFFSET_TABLE_+0x18>
+    1036:      	pushq	$0x0
+    103b:      	jmp	 <.plt>
+
+0000000000001040 <__isoc23_strtol@plt>:
+    1040:      	jmpq	* <_GLOBAL_OFFSET_TABLE_+0x20>
+    1046:      	pushq	$0x1
+    104b:      	jmp	 <.plt>
+
+Disassembly of section .plt.got:
+
+0000000000001050 <__cxa_finalize@plt>:
+    1050:      	jmpq	* <printf@GLIBC_2.2.5+0x3fe0>
+    1056:      	nop
+
+Disassembly of section .text:
+
+0000000000001060 <main>:
+; main():
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:14
+    1060:      	pushq	%rbp
+    1061:      	movl	$0xa, %ecx
+    1066:      	movq	%rsp, %rbp
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:15
+    1069:      	cmpl	$0x1, %edi
+    106c:      	jg	 <L3>
+<L0>:
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:7
+    106e:      	xorl	%esi, %esi
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:8
+    1070:      	xorl	%eax, %eax
+    1072:      	nopl	(%rax)
+    1075:      	nopw	%cs:(%rax,%rax)
+<L1>:
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:4
+    1080:      	movl	%eax, %edx
+    1082:      	imull	%eax, %edx
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:8
+    1085:      	addl	$0x1, %eax
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:9
+    1088:      	addl	%edx, %esi
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:8
+    108a:      	cmpl	%ecx, %eax
+    108c:      	jne	 <L1>
+<L2>:
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:16
+    108e:      	leaq	, %rdi <_IO_stdin_used+0x4>
+    1095:      	xorl	%eax, %eax
+    1097:      	callq	 <printf@plt>
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:18
+    109c:      	xorl	%eax, %eax
+    109e:      	popq	%rbp
+    109f:      	retq
+<L3>:
+; /nix/store/nl1lkxkfx6466dlbv0v1azh2dqa7j1k6-glibc-2.42-84-dev/include/stdlib.h:483
+    10a0:      	movq	0x8(%rsi), %rdi
+    10a4:      	movl	$0xa, %edx
+    10a9:      	xorl	%esi, %esi
+    10ab:      	callq	 <__isoc23_strtol@plt>
+    10b0:      	movl	%eax, %ecx
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:8
+    10b2:      	testl	%eax, %eax
+    10b4:      	jg	 <L0>
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:7
+    10b6:      	xorl	%esi, %esi
+    10b8:      	jmp	 <L2>
+    10ba:      	nopw	(%rax,%rax)
+
+00000000000010c0 <_start>:
+; _start():
+    10c0:      	endbr64
+    10c4:      	xorl	%ebp, %ebp
+    10c6:      	movq	%rdx, %r9
+    10c9:      	popq	%rsi
+    10ca:      	movq	%rsp, %rdx
+    10cd:      	andq	$-0x10, %rsp
+    10d1:      	pushq	%rax
+    10d2:      	pushq	%rsp
+    10d3:      	xorl	%r8d, %r8d
+    10d6:      	xorl	%ecx, %ecx
+    10d8:      	leaq	, %rdi <main>
+    10df:      	callq	* <printf@GLIBC_2.2.5+0x3fc0>
+    10e5:      	hlt
+    10e6:      	nopw	%cs:(%rax,%rax)
+
+00000000000010f0 <deregister_tm_clones>:
+; deregister_tm_clones():
+    10f0:      	leaq	, %rdi <completed.0>
+    10f7:      	leaq	, %rax <completed.0>
+    10fe:      	cmpq	%rdi, %rax
+    1101:      	je	 <L0>
+    1103:      	movq	, %rax <printf@GLIBC_2.2.5+0x3fc8>
+    110a:      	testq	%rax, %rax
+    110d:      	je	 <L0>
+    110f:      	jmpq	*%rax
+    1111:      	nopl	(%rax)
+<L0>:
+    1118:      	retq
+    1119:      	nopl	(%rax)
+
+0000000000001120 <register_tm_clones>:
+; register_tm_clones():
+    1120:      	leaq	, %rdi <completed.0>
+    1127:      	leaq	, %rsi <completed.0>
+    112e:      	subq	%rdi, %rsi
+    1131:      	movq	%rsi, %rax
+    1134:      	shrq	$0x3f, %rsi
+    1138:      	sarq	$0x3, %rax
+    113c:      	addq	%rax, %rsi
+    113f:      	sarq	%rsi
+    1142:      	je	 <L0>
+    1144:      	movq	, %rax <printf@GLIBC_2.2.5+0x3fd8>
+    114b:      	testq	%rax, %rax
+    114e:      	je	 <L0>
+    1150:      	jmpq	*%rax
+    1152:      	nopw	(%rax,%rax)
+<L0>:
+    1158:      	retq
+    1159:      	nopl	(%rax)
+
+0000000000001160 <__do_global_dtors_aux>:
+; __do_global_dtors_aux():
+    1160:      	endbr64
+    1164:      	cmpb	$0x0,  <completed.0>
+    116b:      	jne	 <L1>
+    116d:      	pushq	%rbp
+    116e:      	cmpq	$0x0,  <printf@GLIBC_2.2.5+0x3fe0>
+    1176:      	movq	%rsp, %rbp
+    1179:      	je	 <L0>
+    117b:      	movq	, %rdi <__dso_handle>
+    1182:      	callq	 <__cxa_finalize@plt>
+<L0>:
+    1187:      	callq	 <deregister_tm_clones>
+    118c:      	movb	$0x1,  <completed.0>
+    1193:      	popq	%rbp
+    1194:      	retq
+    1195:      	nopl	(%rax)
+<L1>:
+    1198:      	retq
+    1199:      	nopl	(%rax)
+
+00000000000011a0 <frame_dummy>:
+; frame_dummy():
+    11a0:      	endbr64
+    11a4:      	jmp	 <register_tm_clones>
+    11a9:      	nopl	(%rax)
+
+00000000000011b0 <sum_squares>:
+; sum_squares():
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:8
+    11b0:      	testl	%edi, %edi
+    11b2:      	jle	 <L1>
+    11b4:      	xorl	%eax, %eax
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:7
+    11b6:      	xorl	%edx, %edx
+    11b8:      	nopl	(%rax,%rax)
+<L0>:
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:4
+    11c0:      	movl	%eax, %ecx
+    11c2:      	imull	%eax, %ecx
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:8
+    11c5:      	addl	$0x1, %eax
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:9
+    11c8:      	addl	%ecx, %edx
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:8
+    11ca:      	cmpl	%eax, %edi
+    11cc:      	jne	 <L0>
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:12
+    11ce:      	movl	%edx, %eax
+    11d0:      	retq
+    11d1:      	nopl	(%rax)
+<L1>:
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:7
+    11d8:      	xorl	%edx, %edx
+; /tmp/claude-1000/-home-max-src-config/3f46b98c-d3be-4993-b4b2-eaa8d5ae6b7c/scratchpad/asmtest/demo.c:12
+    11da:      	movl	%edx, %eax
+    11dc:      	retq
+
+Disassembly of section .fini:
+
+00000000000011e0 <_fini>:
+; _fini():
+    11e0:      	endbr64
+    11e4:      	subq	$0x8, %rsp
+    11e8:      	addq	$0x8, %rsp
+    11ec:      	retq

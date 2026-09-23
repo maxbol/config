@@ -1,0 +1,585 @@
+-- The side-by-side source/assembly view.
+--
+-- Two layers, deliberately independent:
+--
+--   1. Line correlation, always on. Moving the cursor in either window
+--      highlights the matching lines in the other. No subprocess, no
+--      re-disassembly -- it is table lookups against the parsed model.
+--   2. Scope re-targeting, governed by pin/follow. Changes *which* symbol is
+--      rendered. Follow tracks the enclosing symbol rather than the cursor
+--      line, because per-line retargeting would thrash for no benefit.
+
+local disasm = require("neomax.configs.asm.disasm")
+local model_mod = require("neomax.configs.asm.model")
+local lines_mod = require("neomax.configs.asm.lines")
+local render = require("neomax.configs.asm.render")
+
+local M = {}
+
+local ns = vim.api.nvim_create_namespace("neomax_asm")
+local group = vim.api.nvim_create_augroup("NeomaxAsmView", { clear = true })
+
+vim.api.nvim_set_hl(0, "NeomaxAsmCorrelated", { default = true, link = "Visual" })
+vim.api.nvim_set_hl(0, "NeomaxAsmSibling", { default = true, link = "CursorLine" })
+
+---Whether a freshly opened view tracks the cursor across functions. Set to
+---false in your config to open pinned instead.
+M.follow_by_default = true
+
+---Only one view at a time: a second would have no unambiguous source window.
+---@type table|nil
+M.state = nil
+
+---Forward declared: goto_source re-attaches after switching the source file.
+local attach
+
+---The symbol currently rendered, if any. Used to hold your place across a
+---rebuild at a different optimisation level.
+---@return string|nil
+function M.current_scope()
+  local st = M.state
+  if M.is_open() and st.scope and st.scope.kind == "symbol" then
+    return st.scope.name
+  end
+end
+
+function M.is_open()
+  local st = M.state
+  return st ~= nil and vim.api.nvim_win_is_valid(st.asm_win) and vim.api.nvim_buf_is_valid(st.asm_buf)
+end
+
+--- Path plumbing -----------------------------------------------------------
+
+---Maps a buffer path onto the key the compiler recorded in the line table.
+---They differ whenever the build ran from another directory, so fall back to
+---matching on trailing path components.
+---@return string|nil
+---@diagnostic disable-next-line: duplicate-set-field
+function M.resolve_file(model, bufpath)
+  if bufpath == nil or bufpath == "" then
+    return nil
+  end
+
+  model._filekey = model._filekey or {}
+  local cached = model._filekey[bufpath]
+  if cached ~= nil then
+    return cached ~= false and cached or nil
+  end
+
+  local real = vim.uv.fs_realpath(bufpath) or bufpath
+  local found = model.by_src[real] and real or nil
+
+  if not found then
+    for key in pairs(model.by_src) do
+      local kreal = vim.uv.fs_realpath(key) or key
+      if kreal == real then
+        found = key
+        break
+      end
+      if vim.endswith(real, "/" .. key) or vim.endswith(key, "/" .. real) then
+        found = found or key
+      end
+    end
+  end
+
+  model._filekey[bufpath] = found or false
+  return found
+end
+
+--- Window helpers ----------------------------------------------------------
+
+local function ensure_visible(win, line)
+  if not vim.api.nvim_win_is_valid(win) then
+    return
+  end
+
+  local buf = vim.api.nvim_win_get_buf(win)
+  line = math.max(1, math.min(line, vim.api.nvim_buf_line_count(buf)))
+
+  local view = vim.api.nvim_win_call(win, function()
+    return { top = vim.fn.line("w0"), bottom = vim.fn.line("w$") }
+  end)
+
+  vim.api.nvim_win_set_cursor(win, { line, 0 })
+
+  -- Only recentre when the target actually scrolled off, so ordinary
+  -- navigation inside the visible range doesn't jump the other pane around.
+  if line < view.top or line > view.bottom then
+    vim.api.nvim_win_call(win, function()
+      vim.cmd("normal! zz")
+    end)
+  end
+end
+
+local function clear_marks()
+  local st = M.state
+  if not st then
+    return
+  end
+  for _, buf in ipairs({ st.asm_buf, st.src_buf }) do
+    if vim.api.nvim_buf_is_valid(buf) then
+      vim.api.nvim_buf_clear_namespace(buf, ns, 0, -1)
+    end
+  end
+end
+
+local function mark(buf, line, hl)
+  if vim.api.nvim_buf_is_valid(buf) and line >= 1 and line <= vim.api.nvim_buf_line_count(buf) then
+    vim.api.nvim_buf_set_extmark(buf, ns, line - 1, 0, { line_hl_group = hl })
+  end
+end
+
+--- Correlation -------------------------------------------------------------
+
+---Source cursor moved: light up every instruction that line produced.
+local function sync_from_source(line)
+  local st = M.state
+  clear_marks()
+
+  local file = st.file
+  if not file then
+    return
+  end
+
+  local per_file = st.render_model.by_src[file]
+  local idxs = per_file and per_file[line]
+  if not idxs or #idxs == 0 then
+    return
+  end
+
+  local first
+  for _, idx in ipairs(idxs) do
+    local asm_line = st.row_to_line[idx]
+    if asm_line then
+      mark(st.asm_buf, asm_line, "NeomaxAsmCorrelated")
+      first = first or asm_line
+    end
+  end
+
+  if first then
+    ensure_visible(st.asm_win, first)
+  end
+end
+
+---Assembly cursor moved: highlight the source line, and the sibling
+---instructions that came from it, so the whole block is visible at once.
+local function sync_from_asm(line)
+  local st = M.state
+  clear_marks()
+
+  local idx = st.line_to_row[line]
+  local row = idx and st.render_model.rows[idx]
+  if not row or not row.file or not row.line then
+    return
+  end
+
+  local per_file = st.render_model.by_src[row.file]
+  for _, sibling in ipairs((per_file and per_file[row.line]) or {}) do
+    local asm_line = st.row_to_line[sibling]
+    if asm_line and asm_line ~= line then
+      mark(st.asm_buf, asm_line, "NeomaxAsmSibling")
+    end
+  end
+
+  -- Only drive the source pane when it is showing the file this row came
+  -- from; inlined code legitimately points into a different file.
+  if st.file and row.file == st.file and vim.api.nvim_win_is_valid(st.src_win) then
+    mark(st.src_buf, row.line, "NeomaxAsmCorrelated")
+    ensure_visible(st.src_win, row.line)
+  end
+end
+
+--- Scope -------------------------------------------------------------------
+
+---Renders `scope` from `model` into the assembly buffer.
+---@return string|nil err
+local function render_scope(model, scope)
+  local st = M.state
+  local rows, err = model_mod.slice(model, scope)
+  if not rows then
+    return err
+  end
+
+  local lines, line_to_row, row_to_line = render.render(model, rows, { relative_to = st.root })
+
+  vim.bo[st.asm_buf].modifiable = true
+  vim.api.nvim_buf_set_lines(st.asm_buf, 0, -1, false, lines)
+  vim.bo[st.asm_buf].modifiable = false
+
+  st.render_model = model
+  st.line_to_row = line_to_row
+  st.row_to_line = row_to_line
+  st.scope = scope
+  st.file = M.resolve_file(model, vim.api.nvim_buf_get_name(st.src_buf))
+
+  local title = scope.kind == "symbol" and scope.name or "all"
+  pcall(vim.api.nvim_buf_set_name, st.asm_buf, "asm://" .. vim.fs.basename(st.artifact) .. " " .. title)
+  return nil
+end
+
+---Fetches the whole-binary model, which is what makes "which symbol is this
+---line in?" answerable from the line table instead of guessed from names.
+---Cached by artifact mtime, so this is paid once per build.
+local function ensure_index(cb)
+  local st = M.state
+  if st.index_model then
+    return cb(st.index_model)
+  end
+
+  -- Cached models come back synchronously, so only announce indexing when it
+  -- is actually going to take a moment.
+  local settled = false
+  vim.defer_fn(function()
+    if not settled then
+      vim.notify("asm: indexing " .. vim.fs.basename(st.artifact) .. "...", vim.log.levels.INFO)
+    end
+  end, 150)
+
+  disasm.disassemble(st.artifact, {}, function(m, err)
+    settled = true
+    if err then
+      return vim.notify("asm: " .. err, vim.log.levels.ERROR)
+    end
+    if M.state == st then
+      st.index_model = m
+      cb(m)
+    end
+  end)
+end
+
+---Shows `symbol`, disassembling just it when no whole-binary model is loaded.
+---@param symbol string
+---@param on_done? fun()
+local function retarget(symbol, on_done)
+  local st = M.state
+
+  if st.index_model then
+    local err = render_scope(st.index_model, { kind = "symbol", name = symbol })
+    if err then
+      return vim.notify("asm: " .. err, vim.log.levels.ERROR)
+    end
+    return on_done and on_done()
+  end
+
+  disasm.disassemble(st.artifact, { symbol = symbol }, function(m, err)
+    if err then
+      return vim.notify("asm: " .. err, vim.log.levels.ERROR)
+    end
+    if M.state ~= st then
+      return
+    end
+    local rerr = render_scope(m, { kind = "symbol", name = symbol })
+    if rerr then
+      return vim.notify("asm: " .. rerr, vim.log.levels.ERROR)
+    end
+    if on_done then
+      on_done()
+    end
+  end)
+end
+
+---Re-targets the view at the symbol containing the cursor.
+---
+---Resolves through the line table rather than a full disassembly: the answer
+---is the same, and it does not require indexing the whole binary first.
+---@param opts? { silent?: boolean }
+function M.pin(opts)
+  opts = opts or {}
+  if not M.is_open() then
+    return
+  end
+
+  local st = M.state
+  local line = vim.api.nvim_win_get_cursor(st.src_win)[1]
+  local src_name = vim.api.nvim_buf_get_name(st.src_buf)
+
+  lines_mod.resolve(st.artifact, src_name, line, function(best, err)
+    if M.state ~= st then
+      return
+    end
+    if err then
+      return vim.notify("asm: " .. err, vim.log.levels.ERROR)
+    end
+    if not best then
+      if not opts.silent then
+        vim.notify("asm: no code near line " .. line .. " in " .. vim.fs.basename(st.artifact), vim.log.levels.WARN)
+      end
+      return
+    end
+    if st.scope.kind == "symbol" and st.scope.name == best then
+      return
+    end
+
+    retarget(best, function()
+      sync_from_source(line)
+    end)
+  end)
+end
+
+---Jumps to the branch target of the instruction under the cursor.
+function M.goto_target()
+  if not M.is_open() then
+    return
+  end
+  local st = M.state
+
+  local idx = st.line_to_row[vim.api.nvim_win_get_cursor(st.asm_win)[1]]
+  local row = idx and st.render_model.rows[idx]
+  if not row or not row.ref then
+    return vim.notify("asm: no branch target on this line", vim.log.levels.WARN)
+  end
+
+  -- Local labels are indexed by name; anything else is a symbol reference,
+  -- possibly with an offset, which is out of scope for the current render.
+  local target = st.render_model.labels[row.ref]
+  local target_line = target and st.row_to_line[target]
+  if not target_line then
+    return vim.notify("asm: target not in view: " .. row.ref, vim.log.levels.WARN)
+  end
+
+  vim.api.nvim_win_set_cursor(st.asm_win, { target_line, 0 })
+  vim.api.nvim_win_call(st.asm_win, function()
+    vim.cmd("normal! zz")
+  end)
+end
+
+---Switches the view between symbol, file and whole-binary scope.
+function M.select_scope()
+  if not M.is_open() then
+    return
+  end
+  local st = M.state
+
+  vim.ui.select({ "symbol under cursor", "this file", "whole binary" }, { prompt = "Assembly scope:" }, function(choice)
+    if not choice or not M.is_open() then
+      return
+    end
+
+    if choice == "symbol under cursor" then
+      return M.pin()
+    end
+
+    -- File and binary scopes need every instruction, so these are the only
+    -- paths that pay for a full disassembly.
+    ensure_index(function(index)
+      st.follow = false -- only meaningful when one symbol is shown
+      local scope
+      if choice == "this file" then
+        local file = M.resolve_file(index, vim.api.nvim_buf_get_name(st.src_buf))
+        if not file then
+          return vim.notify(
+            "asm: this file contributed no code to " .. vim.fs.basename(st.artifact),
+            vim.log.levels.WARN
+          )
+        end
+        scope = { kind = "file", file = file }
+      else
+        scope = { kind = "all" }
+      end
+
+      local err = render_scope(index, scope)
+      if err then
+        return vim.notify("asm: " .. err, vim.log.levels.ERROR)
+      end
+      sync_from_source(vim.api.nvim_win_get_cursor(st.src_win)[1])
+    end)
+  end)
+end
+
+---Opens the source location an assembly line came from, following it into
+---another file when the code was inlined from one.
+function M.goto_source()
+  if not M.is_open() then
+    return
+  end
+  local st = M.state
+
+  local idx = st.line_to_row[vim.api.nvim_win_get_cursor(st.asm_win)[1]]
+  local row = idx and st.render_model.rows[idx]
+  if not row or not row.file or not row.line then
+    return vim.notify("asm: this line has no source position", vim.log.levels.WARN)
+  end
+
+  if vim.fn.filereadable(row.file) == 0 then
+    return vim.notify("asm: source not available: " .. row.file, vim.log.levels.WARN)
+  end
+
+  vim.api.nvim_set_current_win(st.src_win)
+  if vim.api.nvim_buf_get_name(st.src_buf) ~= row.file then
+    vim.cmd("edit " .. vim.fn.fnameescape(row.file))
+    -- The view now belongs to a different source file.
+    st.src_buf = vim.api.nvim_get_current_buf()
+    st.file = M.resolve_file(st.render_model, row.file)
+    attach(st)
+  end
+  vim.api.nvim_win_set_cursor(st.src_win, { row.line, 0 })
+  vim.cmd("normal! zz")
+end
+
+function M.toggle_follow()
+  if not M.is_open() then
+    return
+  end
+  local st = M.state
+  st.follow = not st.follow
+  vim.notify("asm: follow " .. (st.follow and "on" or "off"))
+  if st.follow then
+    M.pin({ silent = true })
+  end
+end
+
+--- Lifecycle ---------------------------------------------------------------
+
+function M.close()
+  local st = M.state
+  if not st then
+    return
+  end
+
+  M.state = nil
+  pcall(vim.api.nvim_del_augroup_by_id, st.augroup)
+  if st.follow_timer then
+    st.follow_timer:stop()
+  end
+  if vim.api.nvim_buf_is_valid(st.src_buf) then
+    vim.api.nvim_buf_clear_namespace(st.src_buf, ns, 0, -1)
+  end
+  if vim.api.nvim_win_is_valid(st.asm_win) then
+    vim.api.nvim_win_close(st.asm_win, true)
+  end
+end
+
+function attach(st)
+  local au = vim.api.nvim_create_augroup("NeomaxAsmView:" .. st.asm_buf, { clear = true })
+  st.augroup = au
+
+  -- The window check is the loop guard: moving the cursor in the other pane
+  -- fires its CursorMoved too, but that pane is not the focused one.
+  vim.api.nvim_create_autocmd("CursorMoved", {
+    group = au,
+    buffer = st.src_buf,
+    callback = function()
+      if not M.is_open() or vim.api.nvim_get_current_win() ~= st.src_win then
+        return
+      end
+      local line = vim.api.nvim_win_get_cursor(st.src_win)[1]
+      sync_from_source(line)
+
+      if st.follow then
+        st.follow_timer:stop()
+        st.follow_timer:start(
+          120,
+          0,
+          vim.schedule_wrap(function()
+            if M.is_open() and st.follow then
+              M.pin({ silent = true })
+            end
+          end)
+        )
+      end
+    end,
+  })
+
+  vim.api.nvim_create_autocmd("CursorMoved", {
+    group = au,
+    buffer = st.asm_buf,
+    callback = function()
+      if not M.is_open() or vim.api.nvim_get_current_win() ~= st.asm_win then
+        return
+      end
+      sync_from_asm(vim.api.nvim_win_get_cursor(st.asm_win)[1])
+    end,
+  })
+
+  vim.api.nvim_create_autocmd({ "BufWipeout", "BufUnload" }, {
+    group = au,
+    buffer = st.asm_buf,
+    callback = function()
+      vim.schedule(M.close)
+    end,
+  })
+
+  local map = function(lhs, rhs, desc)
+    for _, buf in ipairs({ st.src_buf, st.asm_buf }) do
+      vim.keymap.set("n", lhs, rhs, { buffer = buf, desc = desc })
+    end
+  end
+  map("<leader>yp", M.pin, "Asm: pin to symbol under cursor")
+  map("<leader>yf", M.toggle_follow, "Asm: toggle follow mode")
+  map("<leader>ys", M.select_scope, "Asm: select scope (symbol/file/binary)")
+
+  vim.keymap.set("n", "q", M.close, { buffer = st.asm_buf, desc = "Asm: close view" })
+  vim.keymap.set("n", "<CR>", M.goto_source, { buffer = st.asm_buf, desc = "Asm: jump to source" })
+  vim.keymap.set("n", "gd", M.goto_target, { buffer = st.asm_buf, desc = "Asm: follow branch target" })
+end
+
+---Opens the split view.
+---@param opts { artifact: string, model: table, symbol?: string, root?: string, follow?: boolean }
+---@return boolean ok
+function M.open(opts)
+  M.close()
+
+  local src_win = vim.api.nvim_get_current_win()
+  local src_buf = vim.api.nvim_win_get_buf(src_win)
+
+  local asm_buf = vim.api.nvim_create_buf(false, true)
+  vim.bo[asm_buf].buftype = "nofile"
+  vim.bo[asm_buf].swapfile = false
+  render.attach_highlight(asm_buf)
+
+  vim.cmd("vsplit")
+  local asm_win = vim.api.nvim_get_current_win()
+  vim.api.nvim_win_set_buf(asm_win, asm_buf)
+  vim.wo[asm_win].wrap = false
+  vim.wo[asm_win].number = false
+  vim.wo[asm_win].relativenumber = false
+  vim.api.nvim_set_current_win(src_win)
+
+  local scope = opts.symbol and { kind = "symbol", name = opts.symbol } or { kind = "all" }
+
+  -- Follow defaults on, because tracking the cursor across functions is the
+  -- normal way to read this. Not when the whole binary was asked for though:
+  -- collapsing that to a single function on the first cursor move would
+  -- undo what was explicitly requested.
+  local follow
+  if opts.follow ~= nil then
+    follow = opts.follow
+  else
+    follow = M.follow_by_default and scope.kind == "symbol"
+  end
+
+  M.state = {
+    artifact = opts.artifact,
+    root = opts.root or vim.fn.getcwd(),
+    src_buf = src_buf,
+    src_win = src_win,
+    asm_buf = asm_buf,
+    asm_win = asm_win,
+    follow = follow,
+    follow_timer = vim.uv.new_timer(),
+    -- Whether the model spans the whole binary is a property of the MODEL,
+    -- not of the scope being rendered: opening aimed at one function is
+    -- routinely done with a full model, and that model is the index.
+    index_model = opts.model.symbol == nil and opts.model or nil,
+  }
+
+  local err = render_scope(opts.model, scope)
+  if err then
+    M.close()
+    vim.notify("asm: " .. err, vim.log.levels.ERROR)
+    return false
+  end
+
+  if not opts.model.has_debug_info then
+    vim.notify(
+      "asm: no line table in " .. vim.fs.basename(opts.artifact) .. " -- build with -g for source correlation",
+      vim.log.levels.WARN
+    )
+  end
+
+  attach(M.state)
+  sync_from_source(vim.api.nvim_win_get_cursor(src_win)[1])
+  return true
+end
+
+return M

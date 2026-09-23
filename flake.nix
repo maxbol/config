@@ -51,7 +51,7 @@
       # which is not upstream. Nothing else is carried: the blur and xray work
       # this used to be forked for landed in niri v26.04. niri-flake types
       # actions generically, so the extra property needs no fork of it.
-      inputs.niri-unstable.url = "github:maxbol/niri/feature/allow-overriding-animation-for-actions@updated";
+      # inputs.niri-unstable.url = "github:maxbol/niri/feature/allow-overriding-animation-for-actions@updated";
     };
 
     dms = {

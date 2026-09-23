@@ -132,4 +132,5 @@ end
 vim.cmd([[DoMatchParen]])
 
 require("neomax.configs.make")
+require("neomax.configs.asm")
 require("neomax.modules.obsidian")

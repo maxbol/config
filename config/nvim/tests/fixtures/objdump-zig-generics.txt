@@ -1,0 +1,66 @@
+
+main:	file format elf64-x86-64
+
+Disassembly of section .text:
+
+000000000102b090 <multi_array_list.MultiArrayList(array_hash_map.Custom(u64,debug.Dwarf.CompileUnit.SrcLocCache.LineEntry,array_hash_map.AutoContext(u64),false).Data).sortInternal__anon_9859__struct_9860.swap>:
+; multi_array_list.MultiArrayList(array_hash_map.Custom(u64,debug.Dwarf.CompileUnit.SrcLocCache.LineEntry,array_hash_map.AutoContext(u64),false).Data).sortInternal__anon_9859__struct_9860.swap():
+; /nix/store/9zyky24fffkbhnkmjcnrjcl3dmvx6w9x-zig-0.16.0/lib/std/multi_array_list.zig:591
+ 102b090:      	pushq	%rbp
+ 102b091:      	movq	%rsp, %rbp
+; /nix/store/9zyky24fffkbhnkmjcnrjcl3dmvx6w9x-zig-0.16.0/lib/std/multi_array_list.zig:102
+ 102b094:      	cmpq	$0x0, 0x30(%rdi)
+ 102b099:      	movl	$0x8, %eax
+ 102b09e:      	movl	$0x4, %r9d
+ 102b0a4:      	cmovneq	0x18(%rdi), %rax
+ 102b0a9:      	cmovneq	0x20(%rdi), %r9
+; /nix/store/9zyky24fffkbhnkmjcnrjcl3dmvx6w9x-zig-0.16.0/lib/std/mem.zig:3863
+ 102b0ae:      	movq	(%rax,%rsi,8), %rcx
+; /nix/store/9zyky24fffkbhnkmjcnrjcl3dmvx6w9x-zig-0.16.0/lib/std/mem.zig:3864
+ 102b0b2:      	movq	(%rax,%rdx,8), %r8
+ 102b0b6:      	movq	%r8, (%rax,%rsi,8)
+; /nix/store/9zyky24fffkbhnkmjcnrjcl3dmvx6w9x-zig-0.16.0/lib/std/mem.zig:3865
+ 102b0ba:      	movq	%rcx, (%rax,%rdx,8)
+; /nix/store/9zyky24fffkbhnkmjcnrjcl3dmvx6w9x-zig-0.16.0/lib/std/multi_array_list.zig:596
+ 102b0be:      	leaq	(%rsi,%rsi,2), %rax
+ 102b0c2:      	leaq	(%rdx,%rdx,2), %rcx
+; /nix/store/9zyky24fffkbhnkmjcnrjcl3dmvx6w9x-zig-0.16.0/lib/std/mem.zig:3863
+ 102b0c6:      	movq	(%r9,%rax,4), %rdx
+; /nix/store/9zyky24fffkbhnkmjcnrjcl3dmvx6w9x-zig-0.16.0/lib/std/mem.zig:3864
+ 102b0ca:      	movq	(%r9,%rcx,4), %rsi
+ 102b0ce:      	movq	%rsi, (%r9,%rax,4)
+; /nix/store/9zyky24fffkbhnkmjcnrjcl3dmvx6w9x-zig-0.16.0/lib/std/mem.zig:3865
+ 102b0d2:      	movq	%rdx, (%r9,%rcx,4)
+; /nix/store/9zyky24fffkbhnkmjcnrjcl3dmvx6w9x-zig-0.16.0/lib/std/mem.zig:3863
+ 102b0d6:      	movl	0x8(%r9,%rax,4), %edx
+; /nix/store/9zyky24fffkbhnkmjcnrjcl3dmvx6w9x-zig-0.16.0/lib/std/mem.zig:3864
+ 102b0db:      	movl	0x8(%r9,%rcx,4), %esi
+ 102b0e0:      	movl	%esi, 0x8(%r9,%rax,4)
+; /nix/store/9zyky24fffkbhnkmjcnrjcl3dmvx6w9x-zig-0.16.0/lib/std/mem.zig:3865
+ 102b0e5:      	movl	%edx, 0x8(%r9,%rcx,4)
+; /nix/store/9zyky24fffkbhnkmjcnrjcl3dmvx6w9x-zig-0.16.0/lib/std/multi_array_list.zig:598
+ 102b0ea:      	popq	%rbp
+ 102b0eb:      	retq
+ 102b0ec:      	nopl	(%rax)
+
+
+000000000102b610 <array_list.Aligned(debug.Dwarf.FileEntry,null).ensureUnusedCapacity>:
+; array_list.Aligned(debug.Dwarf.FileEntry,null).ensureUnusedCapacity():
+; /nix/store/9zyky24fffkbhnkmjcnrjcl3dmvx6w9x-zig-0.16.0/lib/std/array_list.zig:1249
+ 102b610:      	pushq	%rbp
+ 102b611:      	movq	%rsp, %rbp
+; /nix/store/9zyky24fffkbhnkmjcnrjcl3dmvx6w9x-zig-0.16.0/lib/std/array_list.zig:1422
+ 102b614:      	addq	0x8(%rdi), %rdx
+ 102b618:      	setb	%al
+ 102b61b:      	setb	-0x8(%rbp)
+ 102b61f:      	setb	-0x9(%rbp)
+; /nix/store/9zyky24fffkbhnkmjcnrjcl3dmvx6w9x-zig-0.16.0/lib/std/array_list.zig:1423
+ 102b623:      	testb	%al, %al
+ 102b625:      	je	0x102b62d <array_list.Aligned(debug.Dwarf.FileEntry,null).ensureUnusedCapacity+0x1d>
+; /nix/store/9zyky24fffkbhnkmjcnrjcl3dmvx6w9x-zig-0.16.0/lib/std/array_list.zig:1250
+ 102b627:      	movw	$0x1a, %ax
+ 102b62b:      	popq	%rbp
+ 102b62c:      	retq
+ 102b62d:      	popq	%rbp
+ 102b62e:      	jmp	0x102b630 <array_list.Aligned(debug.Dwarf.FileEntry,null).ensureTotalCapacity>
+
