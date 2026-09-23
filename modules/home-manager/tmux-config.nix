@@ -75,6 +75,7 @@ in
         # PartOf = ["graphical-session.target"];
         After = ["clockifyd.service" "graphical-session-pre.target"];
         # After = ["niri.service"];
+        X-SwitchMethod = "keep-old";
       };
 
       Service = {
