@@ -18,7 +18,8 @@ guard that matters: they pin down how `llvm-objdump` and `llvm-dwarfdump`
 output is parsed, which is where breakage will come from when a compiler
 changes its formatting.
 
-**Integration specs** — `disasm_spec`, `view_spec`, `integration_spec` — drive
+**Integration specs** — `disasm_spec`, `view_spec`, `decorate_spec`,
+`integration_spec` — drive
 real binaries, so they need the sample programs built first:
 
 ```sh

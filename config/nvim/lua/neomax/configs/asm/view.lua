@@ -17,14 +17,25 @@ local render = require("neomax.configs.asm.render")
 local M = {}
 
 local ns = vim.api.nvim_create_namespace("neomax_asm")
+-- Separate namespace: decorations persist while the cursor-driven correlation
+-- marks are cleared and rewritten on every move.
+local ns_decor = vim.api.nvim_create_namespace("neomax_asm_decor")
 local group = vim.api.nvim_create_augroup("NeomaxAsmView", { clear = true })
 
 vim.api.nvim_set_hl(0, "NeomaxAsmCorrelated", { default = true, link = "Visual" })
 vim.api.nvim_set_hl(0, "NeomaxAsmSibling", { default = true, link = "CursorLine" })
+vim.api.nvim_set_hl(0, "NeomaxAsmDensity", { default = true, link = "Comment" })
 
 ---Whether a freshly opened view tracks the cursor across functions. Set to
 ---false in your config to open pinned instead.
 M.follow_by_default = true
+
+---Colour-bands each source line and its instructions so the correspondence is
+---visible without moving the cursor. Off by default: it is deliberately loud.
+M.banding_by_default = false
+
+---Shows how many instructions each source line produced, as end-of-line text.
+M.density_by_default = false
 
 ---Only one view at a time: a second would have no unambiguous source window.
 ---@type table|nil
@@ -32,6 +43,15 @@ M.state = nil
 
 ---Forward declared: goto_source re-attaches after switching the source file.
 local attach
+
+---`a and a.x or default` silently drops an explicit false, so options that may
+---legitimately be false go through here.
+local function opt(value, fallback)
+  if value ~= nil then
+    return value
+  end
+  return fallback
+end
 
 ---The symbol currently rendered, if any. Used to hold your place across a
 ---rebuild at a different optimisation level.
@@ -125,8 +145,106 @@ end
 
 local function mark(buf, line, hl)
   if vim.api.nvim_buf_is_valid(buf) and line >= 1 and line <= vim.api.nvim_buf_line_count(buf) then
-    vim.api.nvim_buf_set_extmark(buf, ns, line - 1, 0, { line_hl_group = hl })
+    vim.api.nvim_buf_set_extmark(buf, ns, line - 1, 0, { line_hl_group = hl, priority = 200 })
   end
+end
+
+--- Decorations --------------------------------------------------------------
+
+local BARS = { "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" }
+
+---Assigns every source line in view a band, and paints it on both panes.
+---
+---Bands run in source-line order so neighbouring lines never share a colour,
+---which is what makes a block of assembly readable as "this came from those
+---three lines" at a glance.
+local function apply_bands(st)
+  if not st.banding or not st.file then
+    return
+  end
+
+  local seen = {}
+  for _, idx in pairs(st.line_to_row) do
+    local row = st.render_model.rows[idx]
+    if row.kind == "insn" and row.file == st.file and row.line then
+      seen[row.line] = true
+    end
+  end
+
+  local ordered = vim.tbl_keys(seen)
+  table.sort(ordered)
+
+  local band_of = {}
+  for i, src_line in ipairs(ordered) do
+    band_of[src_line] = "NeomaxAsmBand" .. ((i - 1) % render.band_count + 1)
+  end
+
+  local function paint(buf, line, hl)
+    if vim.api.nvim_buf_is_valid(buf) and line >= 1 and line <= vim.api.nvim_buf_line_count(buf) then
+      vim.api.nvim_buf_set_extmark(buf, ns_decor, line - 1, 0, { line_hl_group = hl, priority = 100 })
+    end
+  end
+
+  for asm_line, idx in pairs(st.line_to_row) do
+    local row = st.render_model.rows[idx]
+    if row.kind == "insn" and row.file == st.file and row.line and band_of[row.line] then
+      paint(st.asm_buf, asm_line, band_of[row.line])
+    end
+  end
+  for src_line, hl in pairs(band_of) do
+    paint(st.src_buf, src_line, hl)
+  end
+end
+
+---Marks each source line with how many instructions it produced, scaled
+---against the heaviest line in view. The cheapest possible answer to "what did
+---this line actually cost me", without opening the assembly pane at all.
+local function apply_density(st)
+  if not st.density or not st.file then
+    return
+  end
+
+  local per_file = st.render_model.by_src[st.file]
+  if not per_file then
+    return
+  end
+
+  -- Count only what is actually rendered, so the numbers match the pane.
+  local counts, heaviest = {}, 0
+  for line, idxs in pairs(per_file) do
+    local n = 0
+    for _, idx in ipairs(idxs) do
+      if st.row_to_line[idx] then
+        n = n + 1
+      end
+    end
+    if n > 0 then
+      counts[line] = n
+      heaviest = math.max(heaviest, n)
+    end
+  end
+
+  local total = vim.api.nvim_buf_line_count(st.src_buf)
+  for line, n in pairs(counts) do
+    if line >= 1 and line <= total then
+      local bar = BARS[math.min(#BARS, math.max(1, math.ceil(n / heaviest * #BARS)))]
+      vim.api.nvim_buf_set_extmark(st.src_buf, ns_decor, line - 1, 0, {
+        virt_text = { { ("  %s %d"):format(bar, n), "NeomaxAsmDensity" } },
+        virt_text_pos = "eol",
+        priority = 100,
+      })
+    end
+  end
+end
+
+local function apply_decorations(st)
+  for _, buf in ipairs({ st.asm_buf, st.src_buf }) do
+    if vim.api.nvim_buf_is_valid(buf) then
+      vim.api.nvim_buf_clear_namespace(buf, ns_decor, 0, -1)
+    end
+  end
+  apply_bands(st)
+  apply_density(st)
 end
 
 --- Correlation -------------------------------------------------------------
@@ -214,6 +332,8 @@ local function render_scope(model, scope)
 
   local title = scope.kind == "symbol" and scope.name or "all"
   pcall(vim.api.nvim_buf_set_name, st.asm_buf, "asm://" .. vim.fs.basename(st.artifact) .. " " .. title)
+
+  apply_decorations(st)
   return nil
 end
 
@@ -416,6 +536,26 @@ function M.goto_source()
   vim.cmd("normal! zz")
 end
 
+---Toggles per-source-line colour banding across both panes.
+function M.toggle_banding()
+  if not M.is_open() then
+    return
+  end
+  M.state.banding = not M.state.banding
+  apply_decorations(M.state)
+  vim.notify("asm: banding " .. (M.state.banding and "on" or "off"))
+end
+
+---Toggles the per-line instruction-count hints in the source pane.
+function M.toggle_density()
+  if not M.is_open() then
+    return
+  end
+  M.state.density = not M.state.density
+  apply_decorations(M.state)
+  vim.notify("asm: density hints " .. (M.state.density and "on" or "off"))
+end
+
 function M.toggle_follow()
   if not M.is_open() then
     return
@@ -443,6 +583,7 @@ function M.close()
   end
   if vim.api.nvim_buf_is_valid(st.src_buf) then
     vim.api.nvim_buf_clear_namespace(st.src_buf, ns, 0, -1)
+    vim.api.nvim_buf_clear_namespace(st.src_buf, ns_decor, 0, -1)
   end
   if vim.api.nvim_win_is_valid(st.asm_win) then
     vim.api.nvim_win_close(st.asm_win, true)
@@ -507,6 +648,8 @@ function attach(st)
   map("<leader>yp", M.pin, "Asm: pin to symbol under cursor")
   map("<leader>yf", M.toggle_follow, "Asm: toggle follow mode")
   map("<leader>ys", M.select_scope, "Asm: select scope (symbol/file/binary)")
+  map("<leader>yc", M.toggle_banding, "Asm: toggle colour banding")
+  map("<leader>yd", M.toggle_density, "Asm: toggle density hints")
 
   vim.keymap.set("n", "q", M.close, { buffer = st.asm_buf, desc = "Asm: close view" })
   vim.keymap.set("n", "<CR>", M.goto_source, { buffer = st.asm_buf, desc = "Asm: jump to source" })
@@ -514,7 +657,7 @@ function attach(st)
 end
 
 ---Opens the split view.
----@param opts { artifact: string, model: table, symbol?: string, root?: string, follow?: boolean }
+---@param opts { artifact: string, model: table, symbol?: string, root?: string, follow?: boolean, banding?: boolean, density?: boolean }
 ---@return boolean ok
 function M.open(opts)
   M.close()
@@ -541,12 +684,7 @@ function M.open(opts)
   -- normal way to read this. Not when the whole binary was asked for though:
   -- collapsing that to a single function on the first cursor move would
   -- undo what was explicitly requested.
-  local follow
-  if opts.follow ~= nil then
-    follow = opts.follow
-  else
-    follow = M.follow_by_default and scope.kind == "symbol"
-  end
+  local follow = opt(opts.follow, M.follow_by_default and scope.kind == "symbol")
 
   M.state = {
     artifact = opts.artifact,
@@ -556,6 +694,8 @@ function M.open(opts)
     asm_buf = asm_buf,
     asm_win = asm_win,
     follow = follow,
+    banding = opt(opts.banding, M.banding_by_default),
+    density = opt(opts.density, M.density_by_default),
     follow_timer = vim.uv.new_timer(),
     -- Whether the model spans the whole binary is a property of the MODEL,
     -- not of the scope being rendered: opening aimed at one function is
