@@ -157,6 +157,52 @@ move(win, 15)
 vim.wait(500)
 H.eq(view.state.scope.name, "sum_squares", "follow off freezes the scope")
 
+-- === instruction documentation ===
+do
+  local docs = require("neomax.configs.asm.docs")
+  H.eq(view.state.render_model.arch, "x86_64", "model carries the architecture")
+  local bound = {}
+  for _, km in ipairs(vim.api.nvim_buf_get_keymap(view.state.asm_buf, "n")) do
+    bound[km.lhs] = true
+  end
+  H.ok(bound["gm"], "gm is bound inside the assembly pane")
+  H.ok(bound["gd"] and bound["q"], "so are gd and q")
+  -- and only there: the global gm keeps working everywhere else
+  local src_bound = {}
+  for _, km in ipairs(vim.api.nvim_buf_get_keymap(view.state.src_buf, "n")) do
+    src_bound[km.lhs] = true
+  end
+  H.ok(not src_bound["gm"], "the source pane keeps the global gm")
+
+  -- resolve against the committed page list rather than the installed pages
+  local pages = {}
+  for _, name in ipairs(H.read_fixture("x86-manpages-list.txt")) do
+    pages[name] = true
+  end
+  local real = docs.has_page
+  docs.has_page = function(page)
+    return pages[page] == true
+  end
+  docs.clear_cache()
+
+  local resolved, unresolved = 0, 0
+  for _, idx in pairs(view.state.line_to_row) do
+    local row = view.state.render_model.rows[idx]
+    if row.kind == "insn" then
+      if docs.resolve(view.state.render_model.arch, row) then
+        resolved = resolved + 1
+      else
+        unresolved = unresolved + 1
+      end
+    end
+  end
+  H.ok(resolved > 0, "instructions in the pane resolve to manual pages", resolved)
+  H.ok(resolved > unresolved, "most of them resolve", ("%d resolved, %d not"):format(resolved, unresolved))
+
+  docs.has_page = real
+  docs.clear_cache()
+end
+
 -- === jumping into a file the code was inlined from ===
 view.close()
 vim.cmd("edit " .. SRC)

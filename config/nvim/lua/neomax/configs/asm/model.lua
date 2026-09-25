@@ -15,6 +15,35 @@ local SECTION = "^Disassembly of section (.+):$"
 local FUNC = "^; (.+)%(%):$"
 local SRC = "^; (.+):(%d+)$"
 local SRC_DISC = "^; (.+):(%d+) %(discriminator %d+%)$"
+local FORMAT = "^.+:\tfile format (.+)$"
+
+-- objdump names the target in its header; normalising it here is what lets
+-- per-architecture features (documentation lookup, scheduling models) exist
+-- without the rest of the module knowing about any instruction set.
+local ARCH_FORMATS = {
+  { pattern = "x86%-64", arch = "x86_64" },
+  { pattern = "i386", arch = "x86" },
+  { pattern = "aarch64", arch = "aarch64" },
+  { pattern = "arm", arch = "arm" },
+  { pattern = "riscv", arch = "riscv" },
+  { pattern = "powerpc64", arch = "powerpc64" },
+  { pattern = "powerpc", arch = "powerpc" },
+}
+
+---@param format string e.g. "elf64-x86-64", "elf64-littleaarch64"
+---@return string arch normalised name, or "unknown"
+function M.normalise_arch(format)
+  for _, entry in ipairs(ARCH_FORMATS) do
+    if format:find(entry.pattern) then
+      -- riscv and arm come in 32- and 64-bit flavours; keep the width.
+      if entry.arch == "riscv" then
+        return format:find("elf64") and "riscv64" or "riscv32"
+      end
+      return entry.arch
+    end
+  end
+  return "unknown"
+end
 
 ---Splits an instruction body into mnemonic, operands and a branch target.
 ---@param body string
@@ -41,6 +70,7 @@ function M.parse(lines)
   -- Reset at every symbol boundary: a symbol built without debug info must
   -- not inherit the previous symbol's position.
   local file, line, sym
+  local arch, arch_raw
 
   local function push(row)
     rows[#rows + 1] = row
@@ -50,8 +80,16 @@ function M.parse(lines)
   for _, raw in ipairs(lines) do
     local text = raw:gsub("%s+$", "")
 
-    if text == "" or text:match("^.+:\tfile format ") then -- nothing to index
+    if text == "" then
       goto continue
+    end
+
+    do
+      local format = text:match(FORMAT)
+      if format then
+        arch, arch_raw = M.normalise_arch(format), format
+        goto continue
+      end
     end
 
     do
@@ -154,7 +192,15 @@ function M.parse(lines)
     sym.last_row = syms[i + 1] and (syms[i + 1].row - 1) or #rows
   end
 
-  return { rows = rows, by_src = by_src, by_addr = by_addr, syms = syms, labels = labels }
+  return {
+    rows = rows,
+    by_src = by_src,
+    by_addr = by_addr,
+    syms = syms,
+    labels = labels,
+    arch = arch or "unknown",
+    arch_raw = arch_raw,
+  }
 end
 
 ---@param model table

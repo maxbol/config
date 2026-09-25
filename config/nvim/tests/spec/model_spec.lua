@@ -22,6 +22,19 @@ for f in pairs(c.by_src) do
 end
 
 H.ok(#c.rows > 0, "parses rows")
+H.eq(c.arch, "x86_64", "detects the architecture from the objdump header")
+H.eq(c.arch_raw, "elf64-x86-64", "keeps the raw format string")
+for format, want in pairs({
+  ["elf64-x86-64"] = "x86_64",
+  ["elf32-i386"] = "x86",
+  ["elf64-littleaarch64"] = "aarch64",
+  ["elf64-littleriscv"] = "riscv64",
+  ["elf32-littleriscv"] = "riscv32",
+  ["elf32-littlearm"] = "arm",
+  ["not-an-elf"] = "unknown",
+}) do
+  H.eq(model.normalise_arch(format), want, "normalises " .. format)
+end
 H.eq(#c.syms, 13, "finds every symbol")
 H.ok(demo ~= nil, "indexes the source file")
 H.eq(sym(c, "sum_squares").addr, 0x11b0, "records symbol addresses")

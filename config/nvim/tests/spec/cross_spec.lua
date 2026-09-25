@@ -10,8 +10,8 @@ local lines = require("neomax.configs.asm.lines")
 local model = require("neomax.configs.asm.model")
 
 local TARGETS = {
-  { name = "aarch64", binary = "demo-aarch64-linux" },
-  { name = "riscv64", binary = "demo-riscv64-linux" },
+  { name = "aarch64", binary = "demo-aarch64-linux", arch = "aarch64" },
+  { name = "riscv64", binary = "demo-riscv64-linux", arch = "riscv64" },
 }
 
 for _, target in ipairs(TARGETS) do
@@ -34,6 +34,7 @@ for _, target in ipairs(TARGETS) do
           end
         end
       end
+      H.eq(m.arch, target.arch, target.name .. ": detects its architecture")
       H.ok(insns > 0, target.name .. ": parses instructions", insns)
       H.eq(mapped, insns, target.name .. ": every instruction carries a source position")
 

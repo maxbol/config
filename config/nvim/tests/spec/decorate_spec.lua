@@ -148,6 +148,49 @@ vim.wait(30000, function()
 end, 20)
 H.ok(#marks(st.src_buf, decor) >= before, "density re-applied for the new scope", #marks(st.src_buf, decor))
 
+-- === cycle costs ===
+local cycles_ns = vim.api.nvim_create_namespace("neomax_asm_cycles")
+if vim.fn.executable("llvm-mca") == 1 then
+  vim.wait(30000, function()
+    return view.state.cycle_summary ~= nil
+  end, 50)
+
+  H.ok(st.cycles, "cycle costs on by default")
+  H.ok(st.cycle_summary ~= nil, "block summary arrived", st.cycle_error)
+
+  local annotations = marks(st.asm_buf, cycles_ns)
+  H.ok(#annotations > 0, "instructions annotated with cycle costs", #annotations)
+  local sample, hot = nil, false
+  for _, mark in ipairs(annotations) do
+    local text, hl = mark[4].virt_text[1][1], mark[4].virt_text[1][2]
+    sample = sample or text
+    if hl == "NeomaxAsmCyclesHot" then
+      hot = true
+    end
+  end
+  H.ok(sample and sample:match("%d+c · [%d%.]+"), "annotation shows latency and throughput", sample)
+  H.ok(hot, "expensive instructions are marked hot")
+
+  local winbar = vim.wo[st.asm_win].winbar
+  H.ok(winbar:find("cyc/iter"), "winbar carries cycles per iteration", winbar)
+  H.ok(winbar:find("IPC"), "winbar carries IPC", winbar)
+
+  -- annotations live in their own namespace, so decoration toggles leave them
+  view.toggle_banding()
+  H.eq(#marks(st.asm_buf, cycles_ns), #annotations, "banding does not disturb cycle annotations")
+  view.toggle_banding()
+
+  view.toggle_cycles()
+  H.eq(#marks(st.asm_buf, cycles_ns), 0, "cycle costs toggle off cleanly")
+  view.toggle_cycles()
+  vim.wait(30000, function()
+    return #marks(st.asm_buf, cycles_ns) > 0
+  end, 50)
+  H.ok(#marks(st.asm_buf, cycles_ns) > 0, "and back on")
+else
+  H.skip("cycle costs", "llvm-mca not on PATH")
+end
+
 view.close()
 H.eq(#marks(vim.api.nvim_get_current_buf(), decor), 0, "closing clears decorations from the source buffer")
 

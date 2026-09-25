@@ -2,6 +2,7 @@
   imports = [
     ./application-modules
     ./application-support
+    ./asm-reference.nix
     ./browser-config
     ./darwin-desktop
     ./default-development-environment.nix
