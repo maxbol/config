@@ -1,7 +1,3 @@
 vim.cmd("highlight clear")
-vim.cmd("colorscheme gruvbox-material")
+vim.cmd("colorscheme neobones")
 vim.cmd("set background=dark")
-vim.cmd("hi BlinkCmpGhostText guifg=#ebdbb2")
-vim.cmd("hi HLChunk1 guifg=#8ec07c")
-vim.cmd("hi HLLineNum1 guifg=#8ec07c")
-vim.cmd("hi TelescopeSelection guibg=#427b58")

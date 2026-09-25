@@ -16,7 +16,15 @@ fi
 if command -v zig >/dev/null; then
   (cd src/zig && zig build-exe main.zig -O ReleaseFast -femit-bin=../../build/demo-zig >/dev/null 2>&1) \
     && echo "built build/demo-zig (Zig)" || echo "skip: zig build failed"
-  rm -f src/zig/main.zig.o build/demo-zig.o
+  # Cross-compiled targets prove the pipeline is not x86-specific. Zig ships
+  # its own cross toolchain, so these need nothing else installed.
+  for target in aarch64-linux riscv64-linux; do
+    (cd src/zig && zig build-exe main.zig -target "$target" -O ReleaseFast \
+      -femit-bin="../../build/demo-$target" >/dev/null 2>&1) \
+      && echo "built build/demo-$target (Zig, cross)" \
+      || echo "skip: zig cross build for $target failed"
+  done
+  rm -f src/zig/*.o build/*.o
 else
   echo "skip: zig not found"
 fi

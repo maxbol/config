@@ -52,6 +52,24 @@ function M.artifact_key(artifact)
   return table.concat({ artifact, st.mtime.sec, st.size }, "\0")
 end
 
+---Assembler bookkeeping that is never a useful disassembly target.
+---
+---`.L*` are GAS local labels and `$a`/`$d`/`$t`/`$x` are ELF mapping symbols
+---marking code-vs-data boundaries on ARM, AArch64 and RISC-V. A RISC-V build
+---of the test fixture carries 61k of them, and because they sit at arbitrary
+---addresses they shadow the real function in an address lookup.
+---@param name string
+---@return boolean
+local function internal_symbol(name)
+  return name:match("^%.L") ~= nil or name:match("^%$[adtx]$") ~= nil or name:match("^%$[adtx]%.") ~= nil
+end
+
+---Higher is a better answer for "which symbol owns this address": a sized
+---symbol beats a marker, and a global beats a local alias of it.
+local function rank(sym)
+  return (sym.size > 0 and 2 or 0) + (sym.local_ and 0 or 1)
+end
+
 ---Lists the function symbols in an artifact, address-ordered, with sizes.
 ---Names are as the linker spells them, not demangled.
 ---@param artifact string
@@ -81,7 +99,7 @@ function M.symbols(artifact, cb)
           addr, kind, name = line:match("^(%x+) (%a) (.+)$")
           size = "0"
         end
-        if addr and kind:match("[TtWw]") then
+        if addr and kind:match("[TtWw]") and not internal_symbol(name) then
           syms[#syms + 1] = {
             name = name,
             addr = tonumber(addr, 16),
@@ -91,11 +109,17 @@ function M.symbols(artifact, cb)
         end
       end
 
+      -- Several symbols can share an address (a global and its local alias,
+      -- say). Address lookup takes the last match, so order the best one last.
       table.sort(syms, function(a, b)
         if a.addr ~= b.addr then
           return a.addr < b.addr
         end
-        return a.name < b.name
+        local ra, rb = rank(a), rank(b)
+        if ra ~= rb then
+          return ra < rb
+        end
+        return a.name > b.name
       end)
 
       M.symcache[key] = syms

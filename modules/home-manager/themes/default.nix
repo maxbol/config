@@ -226,7 +226,7 @@ in {
           Cursor = "#6e6a86";
           Folded = "#44415a";
         };
-        hlClear = ["CursorLine"];
+        # hlClear = ["CursorLine"];
       };
     };
 
@@ -247,7 +247,7 @@ in {
           Cursor = "#6e6a86";
           Folded = "#44415a";
         };
-        hlClear = ["CursorLine"];
+        # hlClear = ["CursorLine"];
       };
 
       wallpaper = ./rose-pine/wallpapers/eclipse/wallpaper.png;
@@ -271,7 +271,7 @@ in {
           Cursor = "#6e6a86";
           Folded = "#44415a";
         };
-        hlClear = ["CursorLine"];
+        # hlClear = ["CursorLine"];
       };
       noctaliaOverrides = _: {
         predefinedColorscheme = "Rosepine";

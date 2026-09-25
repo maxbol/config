@@ -595,6 +595,7 @@ M.makeLanguage({
   artifacts = function(cwd)
     return { vim.fs.basename(cwd) }
   end,
+  cwd_roots = { "main.odin" },
 })
 
 M.makeLanguage({

@@ -37,8 +37,15 @@ end)[1]
 -- === defaults ===
 view.open({ artifact = C, model = m, symbol = "sum_squares", root = H.fixtures .. "/src/c" })
 local st = view.state
-H.ok(not st.banding, "banding is off by default")
-H.ok(st.density, "density hints are on by default")
+-- Both defaults are user preferences, so assert the view honours whatever is
+-- configured rather than pinning a particular choice.
+H.eq(st.banding, view.banding_by_default, "banding follows the configured default")
+H.eq(st.density, view.density_by_default, "density follows the configured default")
+
+-- The rest exercises both decorations regardless of how they are configured.
+if not st.density then
+  view.toggle_density()
+end
 
 -- density: end-of-line counts on the source, none on the assembly
 local dm = marks(st.src_buf, decor)
