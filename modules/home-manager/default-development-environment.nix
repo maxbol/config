@@ -25,6 +25,8 @@
     '';
   };
 
+  raddbg = self.raddbg;
+
   # Wrap sqlcmd to make output legible in dadbod
   sqlcmd = pkgs.writeShellScriptBin "sqlcmd" ''
     ${pkgs.sqlcmd}/bin/sqlcmd -w 200 -Y 36 "$@"
@@ -179,6 +181,7 @@ in
         # Wrappers, custom and non-nixpkgs packages
         ccjson
         nancy
+        raddbg
         sqlcmd
         swag
         synp

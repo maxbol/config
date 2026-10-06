@@ -69,6 +69,8 @@ lib-mine.mkFeature "features.git-config" {
         conflictStyle = "diff3";
       };
 
+      url."ssh://git@github.com/wayke-se/".insteadOf = "https://github.com/wayke-se/";
+
       push = {
         autoSetupRemote = true;
       };

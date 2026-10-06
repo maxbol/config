@@ -65,11 +65,6 @@ require("neomax.mappings-fff")
 map({ "n", "x" }, "<M-a>", "<C-a>", { noremap = true, silent = true })
 map({ "n", "x" }, "<M-x>", "<C-x>", { noremap = true, silent = true })
 
--- Telescope Obsidian commands
-map("n", "<leader>fn", "<cmd>ObsidianQuickSwitch<CR>", { desc = "Find notes" })
-map("n", "<leader>fN", "<cmd>ObsidianSearch<CR>", { desc = "Find word in notes" })
-map("n", "<leader>fD", "<cmd>ObsidianDailies<CR>", { desc = "Find daily notes" })
-
 -- Telescope GIT commands
 map("n", "<leader>fc", "<cmd>Telescope git_commits theme=ivy<CR>", { desc = "Telescope Git commits" })
 map("n", "<leader>gu", "<cmd>Telescope git_bcommits theme=ivy<CR>", { desc = "Telescope Git buffer commits" })
@@ -89,13 +84,6 @@ map("n", "<leader>gS", "<cmd>G stash<CR>", { desc = "Git stash" })
 map("n", "<leader>gx", "<cmd>G stash pop<CR>", { desc = "Git stash pop" })
 map("n", "<leader>gd", "<cmd>DiffviewOpen<CR>", { desc = "Open diffview in new tab" })
 map("n", "<leader>gg", "<cmd>Neogit<CR>", { desc = "Open Neogit" })
-
-map("n", "<leader>ghc", "<cmd>Octo pr create<CR>", { desc = "Create PR" })
-map("n", "<leader>ghw", "<cmd>Octo pr checks<CR>", { desc = "Watch PR checks" })
-map("n", "<leader>ghl", "<cmd>Octo pr list<CR>", { desc = "List PRs" })
-map("n", "<leader>fO", "<cmd>Octo actions<CR>", { desc = "Find Octo actions" })
--- map("n", "<leader>fh", "<cmd>Octo search<CR>", { desc = "Search on Octo" })
-map("n", "<leader>ghW", '<cmd>!tmux display-popup -E "gh run watch"<CR>', { desc = "Watch workflow run" })
 
 -- terminal
 map("t", "<C-x>", "<C-\\><C-N>", { desc = "Terminal Escape terminal mode" })

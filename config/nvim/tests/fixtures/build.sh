@@ -29,6 +29,17 @@ else
   echo "skip: zig not found"
 fi
 
+if command -v dune >/dev/null; then
+  # A multi-directory dune project: this is what makes dune record
+  # /workspace_root paths, which path resolution has to see through.
+  (cd src/ocaml && dune build >/dev/null 2>&1) \
+    && cp src/ocaml/_build/default/bin/main.exe build/demo-ocaml.exe \
+    && echo "built build/demo-ocaml.exe (OCaml)" \
+    || echo "skip: dune build failed"
+else
+  echo "skip: dune not found"
+fi
+
 if command -v go >/dev/null; then
   (cd src/go && go build -gcflags='all=-N -l' -o ../../build/demo-go . >/dev/null 2>&1) \
     && echo "built build/demo-go (Go)" || echo "skip: go build failed"

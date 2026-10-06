@@ -148,14 +148,12 @@ end
 
 --- Analysis ------------------------------------------------------------------
 
----Runs llvm-mca over the rendered rows.
----@param model table
----@param rows integer[]
----@param opts? { cpu?: string, key?: string }
----@param cb fun(result: table|nil, err: string|nil)
-function M.analyze(model, rows, opts, cb)
-  opts = opts or {}
-
+---Runs llvm-mca and hands back its output alongside the mapping from output
+---position to model row.
+---
+---Instructions llvm-mca refuses are dropped from its input, which shifts
+---every later result; `kept` is the surviving rows in output order.
+local function invoke(model, rows, extra, opts, cb)
   if vim.fn.executable(M.tool) == 0 then
     return cb(nil, M.tool .. " not found on PATH")
   end
@@ -165,11 +163,6 @@ function M.analyze(model, rows, opts, cb)
     return cb(nil, "no scheduling model for " .. tostring(model.arch))
   end
   local cpu = opts.cpu or target.cpu
-
-  local key = table.concat({ model.artifact or "?", opts.key or "?", model.arch, cpu }, "\0")
-  if M.cache[key] then
-    return cb(M.cache[key], nil)
-  end
 
   local source, line_to_row = M.build_source(model, rows)
   if next(line_to_row) == nil then
@@ -182,53 +175,229 @@ function M.analyze(model, rows, opts, cb)
     "-mcpu=" .. cpu,
     "-skip-unsupported-instructions=parse-failure",
   }
+  vim.list_extend(cmd, extra or {})
 
   vim.system(cmd, { stdin = source, text = true }, function(res)
     vim.schedule(function()
-      local entries = parse_instruction_info(res.stdout or "")
-      if #entries == 0 then
-        local first = (res.stderr or ""):match("[^\n]+") or "no output"
-        return cb(nil, M.tool .. ": " .. first)
-      end
-
-      -- Input lines that survived, in order, paired with the output rows.
       local dropped = dropped_lines(res.stderr)
-      local kept = {}
-      for line = 1, select(2, source:gsub("\n", "\n")) do
+      local kept, total = {}, select(2, source:gsub("\n", "\n"))
+      for line = 1, total do
         if line_to_row[line] and not dropped[line] then
           kept[#kept + 1] = line_to_row[line]
         end
       end
+      cb({
+        stdout = res.stdout or "",
+        stderr = res.stderr or "",
+        kept = kept,
+        cpu = cpu,
+        skipped = vim.tbl_count(dropped),
+      }, nil)
+    end)
+  end)
+end
 
-      local per_row, mismatched = {}, 0
-      for i, entry in ipairs(entries) do
-        local idx = kept[i]
-        if idx then
-          -- Cheap guard against a silent misalignment: llvm-mca reprints
-          -- operands in its own style, but the mnemonic should still match.
-          if mnemonic_of(entry.text) == (model.rows[idx].mnemonic or ""):lower() then
-            per_row[idx] = entry
-          else
-            mismatched = mismatched + 1
-          end
+--- Timeline ------------------------------------------------------------------
+
+---Where each state begins within a timeline row.
+local function state_columns(states)
+  local dispatch = states:find("D")
+  local execute = states:find("[eE]")
+  local retire = states:find("R")
+  local first, last
+  for i = 1, #states do
+    if states:sub(i, i):match("[D=eE%-R]") then
+      first = first or i
+      last = i
+    end
+  end
+  return { dispatch = dispatch, execute = execute, retire = retire, first = first, last = last }
+end
+
+---Parses the timeline table.
+---
+---Rows are `[iteration, instruction]`. The states field is fixed width,
+---starting at column 11, and the width is whatever the ruler spans -- reading
+---it from the ruler avoids guessing where the instruction text begins, which
+---matters because the field is padded with dots and spaces.
+---@return table|nil parsed, string|nil err
+function M.parse_timeline(stdout, kept, want_iteration)
+  local lines = vim.split(stdout, "\n", { trimempty = false })
+
+  local start
+  for i, line in ipairs(lines) do
+    if line:find("^Timeline view:") then
+      start = i
+      break
+    end
+  end
+  if not start then
+    return nil, "llvm-mca produced no timeline"
+  end
+
+  local width = math.max(#(lines[start + 1] or ""), #(lines[start + 2] or "")) - 10
+  if width <= 0 then
+    return nil, "could not read the timeline ruler"
+  end
+
+  local by_iteration, seen = {}, {}
+  for i = start, #lines do
+    local iteration, index = lines[i]:match("^%[(%d+),(%d+)%]")
+    if iteration then
+      iteration, index = tonumber(iteration), tonumber(index)
+      by_iteration[iteration] = by_iteration[iteration] or {}
+      by_iteration[iteration][index] = lines[i]:sub(11, 10 + width)
+      seen[iteration] = true
+    end
+  end
+
+  local iterations = vim.tbl_keys(seen)
+  table.sort(iterations)
+  if #iterations == 0 then
+    return nil, "llvm-mca produced an empty timeline"
+  end
+
+  -- The first iteration runs on a cold pipeline and exaggerates stalls, so
+  -- steady state -- the last one simulated -- is the honest default.
+  local iteration = want_iteration or iterations[#iterations]
+  local states = by_iteration[iteration]
+  if not states then
+    return nil, "no timeline for iteration " .. tostring(iteration)
+  end
+
+  local by_row, ordered = {}, {}
+  for index, text in pairs(states) do
+    local row = kept[index + 1] -- llvm-mca indexes from zero
+    if row then
+      local entry = state_columns(text)
+      entry.states = text
+      entry.row = row
+      by_row[row] = entry
+      ordered[#ordered + 1] = row
+    end
+  end
+  table.sort(ordered)
+
+  return {
+    by_row = by_row,
+    ordered = ordered,
+    width = width,
+    iteration = iteration,
+    iterations = iterations,
+  }
+end
+
+---Timeline for the given rows, in full context.
+---
+---The analysis always covers every row passed in: narrowing what llvm-mca
+---sees would erase the dependencies entering the region, so any narrowing is
+---done when rendering, never here.
+---@param model table
+---@param rows integer[]
+---@param opts? { cpu?: string, iterations?: integer, iteration?: integer, key?: string }
+---@param cb fun(timeline: table|nil, err: string|nil)
+function M.timeline(model, rows, opts, cb)
+  opts = opts or {}
+  local iterations = opts.iterations or 3
+
+  local key = table.concat({
+    "timeline",
+    model.artifact or "?",
+    opts.key or "?",
+    model.arch,
+    opts.cpu or "",
+    iterations,
+  }, "\0")
+  if M.cache[key] then
+    return cb(M.cache[key], nil)
+  end
+
+  invoke(
+    model,
+    rows,
+    {
+      "--timeline",
+      "--timeline-max-cycles=0",
+      "--iterations=" .. iterations,
+    },
+    opts,
+    function(res, err)
+      if err then
+        return cb(nil, err)
+      end
+
+      local parsed, parse_err = M.parse_timeline(res.stdout, res.kept, opts.iteration)
+      if not parsed then
+        return cb(nil, parse_err)
+      end
+
+      parsed.cpu = res.cpu
+      parsed.skipped = res.skipped
+      M.cache[key] = parsed
+      cb(parsed, nil)
+    end
+  )
+end
+
+---Runs llvm-mca over the rendered rows.
+---@param model table
+---@param rows integer[]
+---@param opts? { cpu?: string, key?: string }
+---@param cb fun(result: table|nil, err: string|nil)
+function M.analyze(model, rows, opts, cb)
+  opts = opts or {}
+
+  local target = M.targets[model.arch]
+  local key = table.concat({
+    "analyze",
+    model.artifact or "?",
+    opts.key or "?",
+    model.arch,
+    opts.cpu or (target and target.cpu) or "",
+  }, "\0")
+  if M.cache[key] then
+    return cb(M.cache[key], nil)
+  end
+
+  invoke(model, rows, {}, opts, function(res, err)
+    if err then
+      return cb(nil, err)
+    end
+
+    local entries = parse_instruction_info(res.stdout)
+    if #entries == 0 then
+      local first = res.stderr:match("[^\n]+") or "no output"
+      return cb(nil, M.tool .. ": " .. first)
+    end
+
+    local per_row, mismatched = {}, 0
+    for i, entry in ipairs(entries) do
+      local idx = res.kept[i]
+      if idx then
+        -- Cheap guard against silent misalignment: llvm-mca reprints operands
+        -- in its own style, but the mnemonic should still match.
+        if mnemonic_of(entry.text) == (model.rows[idx].mnemonic or ""):lower() then
+          per_row[idx] = entry
+        else
+          mismatched = mismatched + 1
         end
       end
+    end
 
-      if mismatched > #entries / 2 then
-        return cb(nil, "could not line up llvm-mca output with the disassembly")
-      end
+    if mismatched > #entries / 2 then
+      return cb(nil, "could not line up llvm-mca output with the disassembly")
+    end
 
-      local result = {
-        per_row = per_row,
-        summary = parse_summary(res.stdout or ""),
-        cpu = cpu,
-        arch = model.arch,
-        mismatched = mismatched,
-        skipped = vim.tbl_count(dropped),
-      }
-      M.cache[key] = result
-      cb(result, nil)
-    end)
+    local result = {
+      per_row = per_row,
+      summary = parse_summary(res.stdout),
+      cpu = res.cpu,
+      arch = model.arch,
+      mismatched = mismatched,
+      skipped = res.skipped,
+    }
+    M.cache[key] = result
+    cb(result, nil)
   end)
 end
 

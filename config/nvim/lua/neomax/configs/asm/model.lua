@@ -377,6 +377,110 @@ function M.symbol_near(model, file, line, radius)
   return nil, nil
 end
 
+--- Path matching -------------------------------------------------------------
+--
+-- Compilers do not record paths you can open. dune maps the build directory to
+-- a fake `/workspace_root` prefix for reproducible builds, ocamlopt sometimes
+-- records paths relative to the build root, and any build run from another
+-- directory records a prefix that no longer exists. Matching on trailing path
+-- components handles all of these, where a plain string suffix handles none.
+
+local function components(path)
+  local out = {}
+  for part in path:gmatch("[^/]+") do
+    out[#out + 1] = part
+  end
+  return out
+end
+
+local function join(parts, from, to, absolute)
+  local out = {}
+  for i = from, to do
+    out[#out + 1] = parts[i]
+  end
+  local joined = table.concat(out, "/")
+  if absolute and joined ~= "" then
+    return "/" .. joined
+  end
+  return joined
+end
+
+---How many trailing path components two paths share.
+---@return integer
+function M.common_suffix(a, b)
+  local ca, cb = components(a), components(b)
+  local n = 0
+  while n < #ca and n < #cb and ca[#ca - n] == cb[#cb - n] do
+    n = n + 1
+  end
+  return n
+end
+
+---The key that best matches `path`, by trailing components.
+---
+---Keys are sorted first so a tie -- two files with the same name in different
+---directories -- resolves the same way every time rather than by table order.
+---@param keys string[]
+---@param path string
+---@return string|nil key, integer score
+function M.match_file(keys, path)
+  local sorted = {}
+  for _, key in ipairs(keys) do
+    sorted[#sorted + 1] = key
+  end
+  table.sort(sorted)
+
+  local best, best_score = nil, 0
+  for _, key in ipairs(sorted) do
+    if key == path then
+      return key, math.huge
+    end
+    local score = M.common_suffix(key, path)
+    if score > best_score then
+      best, best_score = key, score
+    end
+  end
+
+  return best, best_score
+end
+
+---Records how the compiler's paths relate to the real ones, so that the rest
+---of the file's paths can be translated without matching each one.
+---@param tbl table anything with a per-artifact lifetime
+---@param recorded string path as the compiler wrote it
+---@param actual string path on disk
+function M.learn_path_map(tbl, recorded, actual)
+  local shared = M.common_suffix(recorded, actual)
+  if shared == 0 then
+    return
+  end
+
+  local rc, ac = components(recorded), components(actual)
+  tbl._path_map = {
+    from = join(rc, 1, #rc - shared, recorded:sub(1, 1) == "/"),
+    to = join(ac, 1, #ac - shared, actual:sub(1, 1) == "/"),
+  }
+end
+
+---Translates a path the compiler recorded into one that can be opened.
+---@param tbl table
+---@param path string
+---@return string
+function M.translate_path(tbl, path)
+  local map = tbl and tbl._path_map
+  if not map then
+    return path
+  end
+  if map.from == "" then
+    return map.to == "" and path or (map.to .. "/" .. path)
+  end
+  if path:sub(1, #map.from) == map.from then
+    local rest = path:sub(#map.from + 1)
+    return (map.to == "" and rest:gsub("^/", "") or map.to .. rest)
+  end
+  return path
+end
+
 ---Every source file the dump attributes instructions to.
 ---@param model table
 ---@return string[]

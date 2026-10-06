@@ -17,8 +17,9 @@ in {
   misc-scripts-hyprdots = addPackage ./misc-scripts-hyprdots;
   nancy = addPackage ./nancy;
   openssl_1_0 = addPackage ./openssl_1_0;
+  raddbg = addPackage ./raddbg;
   runcached = addPackage ./runcached;
-  sddm-theme-corners = addPackage ./sddm-theme-cornersnix packageArgs;
+  sddm-theme-corners = addPackage ./sddm-theme-corners.nix packageArgs;
   synp = addPackage ./synp;
   systemctl-toggle = addPackage ./systemctl-toggle;
   waybar-confgen-hyprdots = addPackage ./waybar-confgen-hyprdots;

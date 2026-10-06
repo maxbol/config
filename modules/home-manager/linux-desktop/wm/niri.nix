@@ -112,14 +112,13 @@ in
 
         Service = {
           Type = "oneshot";
-          ExecStart = let
-            pathWrap = cmd:
-              pkgs.writeShellScript "xwayland-env-init.sh" ''
-                export PATH=${config.home.profileDirectory}/bin:/run/current-system/sw/bin:$PATH
-                ${cmd}
-              '';
-          in
-            pathWrap "systemctl --user import-environment DISPLAY PATH WAYLAND_DISPLAY";
+          # Deliberately does NOT import PATH. This used to wrap the command in a
+          # script that prepended /run/current-system/sw/bin so `systemctl` could
+          # be found, then imported that same prepended PATH into the systemd user
+          # manager -- which put sw/bin ahead of /run/wrappers/bin for every unit
+          # started afterwards, shadowing setuid wrappers like sudo. The prepend was
+          # redundant anyway: the inherited PATH already ends with sw/bin.
+          ExecStart = "${config.systemd.user.systemctlPath} --user import-environment DISPLAY WAYLAND_DISPLAY";
           Environment = [
             "DISPLAY=:0"
             "WAYLAND_DISPLAY=wayland-1"

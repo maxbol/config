@@ -7,6 +7,7 @@
 -- The full model is then only needed for the file and binary scopes.
 
 local disasm = require("neomax.configs.asm.disasm")
+local model = require("neomax.configs.asm.model")
 
 local M = {}
 
@@ -217,16 +218,14 @@ function M.resolve_file(index, bufpath)
   local found = index.by_src[real] and real or nil
 
   if not found then
-    for key in pairs(index.by_src) do
-      local kreal = vim.uv.fs_realpath(key) or key
-      if kreal == real then
-        found = key
-        break
-      end
-      if vim.endswith(real, "/" .. key) or vim.endswith(key, "/" .. real) then
-        found = found or key
-      end
+    local key, score = model.match_file(vim.tbl_keys(index.by_src), real)
+    if key and score > 0 then
+      found = key
     end
+  end
+
+  if found then
+    model.learn_path_map(index, found, real)
   end
 
   index._filekey[bufpath] = found or false

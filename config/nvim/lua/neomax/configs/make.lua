@@ -640,10 +640,10 @@ M.makeLanguage({
   -- -g alongside an optimisation level is the combination worth looking at: a
   -- plain debug build produces asm that mirrors the source and teaches little.
   asmcmd = {
-    'make CFLAGS="-O2 -g" CXXFLAGS="-O2 -g"',
-    'make CFLAGS="-O3 -g -march=native" CXXFLAGS="-O3 -g -march=native"',
-    'make CFLAGS="-Os -g" CXXFLAGS="-Os -g"',
-    'make CFLAGS="-O0 -g" CXXFLAGS="-O0 -g"',
+    'make -B CFLAGS="-O2 -g" CXXFLAGS="-O2 -g"',
+    'make -B CFLAGS="-O3 -g -march=native" CXXFLAGS="-O3 -g -march=native"',
+    'make -B CFLAGS="-Os -g" CXXFLAGS="-Os -g"',
+    'make -B CFLAGS="-O0 -g" CXXFLAGS="-O0 -g"',
   },
   artifacts = { "out", "build/*", "zig-out/bin/*" },
   cwd_roots = { "Makefile", "compile_commands.json", "build.zig" },
@@ -654,8 +654,28 @@ M.makeLanguage({
   grepcmd = "2>&1 | grep -E '^.+:[0-9]+:[0-9]+'",
   makecmd = "dune build",
   runcmd = "dune exec myapp",
-  asmcmd = { "dune build --profile release", "dune build" },
-  artifacts = { "_build/default/*.exe", "_build/default/bin/*.exe" },
+  -- OCAMLPARAM is how ocamlopt flags reach a dune build without editing the
+  -- dune file; the leading `_,` applies them to every unit.
+  --
+  -- -O2/-O3 need a flambda switch (check `ocamlopt -config | grep flambda`).
+  -- Without one they are accepted and ignored, so the release and dev profiles
+  -- emit identical code -- which is why the interesting entries here are
+  -- unsafe and inline instead. unsafe drops array bounds checks, the most
+  -- visible difference OCaml codegen has.
+  asmcmd = {
+    "dune build --profile release",
+    "dune build",
+    "OCAMLPARAM='_,unsafe=1' dune build --profile release",
+    "OCAMLPARAM='_,inline=100' dune build --profile release",
+    "OCAMLPARAM='_,O3=1,unsafe=1' dune build --profile release",
+  },
+  -- dune puts executables at _build/default/<dir>/<name>.exe; the recursive
+  -- glob covers src/ and test/ layouts as well as bin/ and the root.
+  artifacts = {
+    "_build/default/*.exe",
+    "_build/default/bin/*.exe",
+    "_build/default/**/*.exe",
+  },
   cwd_roots = { "dune-project" },
 })
 

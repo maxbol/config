@@ -14,6 +14,7 @@ local model_mod = require("neomax.configs.asm.model")
 local lines_mod = require("neomax.configs.asm.lines")
 local docs = require("neomax.configs.asm.docs")
 local mca = require("neomax.configs.asm.mca")
+local timeline = require("neomax.configs.asm.timeline")
 local render = require("neomax.configs.asm.render")
 
 local M = {}
@@ -116,16 +117,16 @@ function M.resolve_file(model, bufpath)
   local found = model.by_src[real] and real or nil
 
   if not found then
-    for key in pairs(model.by_src) do
-      local kreal = vim.uv.fs_realpath(key) or key
-      if kreal == real then
-        found = key
-        break
-      end
-      if vim.endswith(real, "/" .. key) or vim.endswith(key, "/" .. real) then
-        found = found or key
-      end
+    local key, score = model_mod.match_file(vim.tbl_keys(model.by_src), real)
+    if key and score > 0 then
+      found = key
     end
+  end
+
+  if found then
+    -- Learn the prefix once so every other file in the build can be located
+    -- without matching it separately.
+    model_mod.learn_path_map(model, found, real)
   end
 
   model._filekey[bufpath] = found or false
@@ -211,6 +212,14 @@ local function apply_bands(st)
     end
   end
 
+  local line_of = {}
+  for _, idx in pairs(st.line_to_row) do
+    local row = st.render_model.rows[idx]
+    if row.kind == "insn" and row.file == st.file and row.line then
+      line_of[idx] = row.line
+    end
+  end
+
   for asm_line, idx in pairs(st.line_to_row) do
     local row = st.render_model.rows[idx]
     if row.kind == "insn" and row.file == st.file and row.line and band_of[row.line] then
@@ -220,6 +229,8 @@ local function apply_bands(st)
   for src_line, hl in pairs(band_of) do
     paint(st.src_buf, src_line, hl)
   end
+
+  timeline.apply_bands(band_of, line_of)
 end
 
 ---Marks each source line with how many instructions it produced, scaled
@@ -399,6 +410,8 @@ local function sync_from_source(line)
 
   if first then
     ensure_visible(st.asm_win, first)
+    -- The timeline follows the first instruction this line produced.
+    timeline.focus_row(st.line_to_row[first])
   end
 end
 
@@ -409,6 +422,9 @@ local function sync_from_asm(line)
   clear_marks()
 
   local idx = st.line_to_row[line]
+  if idx then
+    timeline.focus_row(idx)
+  end
   local row = idx and st.render_model.rows[idx]
   if not row or not row.file or not row.line then
     return
@@ -441,6 +457,11 @@ local function render_scope(model, scope)
     return err
   end
 
+  -- Resolve first: matching the buffer against the recorded paths is what
+  -- teaches the model its prefix map, and rendering needs that map to show
+  -- openable paths rather than the compiler's internal ones.
+  st.file = M.resolve_file(model, vim.api.nvim_buf_get_name(st.src_buf))
+
   local lines, line_to_row, row_to_line = render.render(model, rows, { relative_to = st.root })
 
   vim.bo[st.asm_buf].modifiable = true
@@ -451,7 +472,6 @@ local function render_scope(model, scope)
   st.line_to_row = line_to_row
   st.row_to_line = row_to_line
   st.scope = scope
-  st.file = M.resolve_file(model, vim.api.nvim_buf_get_name(st.src_buf))
 
   local title = scope.kind == "symbol" and scope.name or "all"
   pcall(vim.api.nvim_buf_set_name, st.asm_buf, "asm://" .. vim.fs.basename(st.artifact) .. " " .. title)
@@ -666,6 +686,31 @@ function M.select_scope()
   end)
 end
 
+---Finds a file on disk for a path the compiler recorded.
+---
+---dune records `/workspace_root/...` for reproducible builds and other build
+---systems record prefixes that no longer exist, so the recorded path is often
+---not openable. Try the learned prefix map first, then the path as written,
+---then probe under the project root dropping leading components.
+---@return string|nil
+local function locate_source(st, recorded)
+  local candidates = { model_mod.translate_path(st.render_model, recorded), recorded }
+
+  local parts = {}
+  for part in recorded:gmatch("[^/]+") do
+    parts[#parts + 1] = part
+  end
+  for i = 1, #parts do
+    candidates[#candidates + 1] = st.root .. "/" .. table.concat(parts, "/", i)
+  end
+
+  for _, path in ipairs(candidates) do
+    if path ~= "" and vim.fn.filereadable(path) == 1 then
+      return path
+    end
+  end
+end
+
 ---Opens the source location an assembly line came from, following it into
 ---another file when the code was inlined from one.
 function M.goto_source()
@@ -680,16 +725,17 @@ function M.goto_source()
     return vim.notify("asm: this line has no source position", vim.log.levels.WARN)
   end
 
-  if vim.fn.filereadable(row.file) == 0 then
+  local path = locate_source(st, row.file)
+  if not path then
     return vim.notify("asm: source not available: " .. row.file, vim.log.levels.WARN)
   end
 
   vim.api.nvim_set_current_win(st.src_win)
-  if vim.api.nvim_buf_get_name(st.src_buf) ~= row.file then
-    vim.cmd("edit " .. vim.fn.fnameescape(row.file))
+  if vim.api.nvim_buf_get_name(st.src_buf) ~= path then
+    vim.cmd("edit " .. vim.fn.fnameescape(path))
     -- The view now belongs to a different source file.
     st.src_buf = vim.api.nvim_get_current_buf()
-    st.file = M.resolve_file(st.render_model, row.file)
+    st.file = M.resolve_file(st.render_model, path)
     attach(st)
   end
   vim.api.nvim_win_set_cursor(st.src_win, { row.line, 0 })
@@ -716,65 +762,103 @@ function M.toggle_cycles()
   vim.notify("asm: cycle costs " .. (M.state.cycles and "on" or "off"))
 end
 
----Opens llvm-mca's full timeline and bottleneck analysis in a scratch buffer.
+---Instruction rows currently rendered in the assembly pane, in order.
+local function rendered_rows(st)
+  local out = {}
+  for line = 1, vim.api.nvim_buf_line_count(st.asm_buf) do
+    local idx = st.line_to_row[line]
+    if idx and st.render_model.rows[idx].kind == "insn" then
+      out[#out + 1] = idx
+    end
+  end
+  return out
+end
+
+---The line range the cursor covers, honouring a visual selection.
+local function selected_range(win)
+  local mode = vim.fn.mode()
+  local visual = mode == "v" or mode == "V" or mode == "\22"
+  if not visual then
+    local line = vim.api.nvim_win_get_cursor(win)[1]
+    return line, line, false
+  end
+  local a, b = vim.fn.line("v"), vim.fn.line(".")
+  if a > b then
+    a, b = b, a
+  end
+  return a, b, true
+end
+
+---Opens the timeline pane.
 ---
----This is where the out-of-order behaviour actually becomes visible: which
----instructions issue together, what stalls, and which resource is the limit.
+---In visual mode it narrows to the selection -- but only what is *rendered*.
+---Narrowing what llvm-mca analyses would erase the dependencies entering the
+---region, turning real stalls into apparent zero-cost instructions, so the
+---analysis always spans the whole scope.
 function M.timeline()
   if not M.is_open() then
     return
   end
   local st = M.state
+  local current = vim.api.nvim_get_current_win()
+  local rows = rendered_rows(st)
 
-  local ordered = {}
-  for line = 1, vim.api.nvim_buf_line_count(st.asm_buf) do
-    local idx = st.line_to_row[line]
-    if idx then
-      ordered[#ordered + 1] = idx
+  local bounds, focus
+
+  if current == st.asm_win then
+    local lo, hi, visual = selected_range(st.asm_win)
+    if visual then
+      bounds = {}
+      for line = lo, hi do
+        local idx = st.line_to_row[line]
+        if idx and st.render_model.rows[idx].kind == "insn" then
+          bounds[#bounds + 1] = idx
+        end
+      end
     end
+    focus = st.line_to_row[vim.api.nvim_win_get_cursor(st.asm_win)[1]]
+  else
+    local lo, hi, visual = selected_range(st.src_win)
+    local projected = {}
+    local per_file = st.file and st.render_model.by_src[st.file]
+    for line = lo, hi do
+      for _, idx in ipairs((per_file and per_file[line]) or {}) do
+        projected[#projected + 1] = idx
+      end
+    end
+    table.sort(projected)
+
+    if #projected == 0 then
+      return vim.notify("asm: no instructions from that source range", vim.log.levels.WARN)
+    end
+
+    if visual then
+      -- The smallest contiguous span covering everything the selection
+      -- generated: inlining means those instructions need not be adjacent.
+      bounds = {}
+      local first, last = projected[1], projected[#projected]
+      for _, idx in ipairs(rows) do
+        if idx >= first and idx <= last then
+          bounds[#bounds + 1] = idx
+        end
+      end
+    end
+    focus = projected[1]
   end
 
-  mca.report(st.render_model, ordered, {
+  timeline.open({
+    model = st.render_model,
+    rows = rows,
+    scope = st.scope.kind == "symbol" and st.scope.name or st.scope.kind,
+    bounds = bounds,
     cpu = st.cpu,
-    extra = {
-      "--timeline",
-      "--bottleneck-analysis",
-      "--iterations=" .. M.timeline_iterations,
-      "--timeline-max-cycles=" .. M.timeline_cycles,
-    },
-  }, function(text, err)
-    if err then
-      return vim.notify("asm: " .. err, vim.log.levels.ERROR)
+    iterations = M.timeline_iterations,
+  }, function(ok, err)
+    if not ok then
+      return vim.notify("asm: " .. tostring(err), vim.log.levels.ERROR)
     end
-
-    local buf = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_buf_set_lines(buf, 0, -1, false, text)
-    vim.bo[buf].modifiable = false
-    vim.bo[buf].buftype = "nofile"
-    vim.bo[buf].bufhidden = "wipe"
-    pcall(vim.api.nvim_buf_set_name, buf, "asm-timeline://" .. (st.scope.name or st.scope.kind))
-
-    vim.cmd("botright split")
-    vim.api.nvim_win_set_buf(0, buf)
-    vim.wo.wrap = false
-    vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = buf, desc = "Close timeline" })
-
-    -- Say which knob to reach for, in whichever direction the output went.
-    local truncated, widest = false, 0
-    for _, line in ipairs(text) do
-      truncated = truncated or line:find("Truncated display", 1, true) ~= nil
-      widest = math.max(widest, #line)
-    end
-    if truncated then
-      vim.notify(
-        ("asm: timeline truncated at %d cycles -- raise view.timeline_cycles (0 = unlimited)"):format(M.timeline_cycles),
-        vim.log.levels.WARN
-      )
-    elseif widest > 1000 then
-      vim.notify(
-        ("asm: timeline is %d columns wide -- set view.timeline_cycles to cap it"):format(widest),
-        vim.log.levels.INFO
-      )
+    if focus then
+      timeline.focus_row(focus)
     end
   end)
 end
@@ -810,6 +894,7 @@ function M.close()
   end
 
   M.state = nil
+  timeline.close()
   pcall(vim.api.nvim_del_augroup_by_id, st.augroup)
   if st.follow_timer then
     st.follow_timer:stop()
@@ -886,6 +971,9 @@ function attach(st)
   map("<leader>yd", M.toggle_density, "Asm: toggle density hints")
   map("<leader>ym", M.toggle_cycles, "Asm: toggle cycle costs")
   map("<leader>yt", M.timeline, "Asm: llvm-mca timeline")
+  for _, buf in ipairs({ st.src_buf, st.asm_buf }) do
+    vim.keymap.set("x", "<leader>yt", M.timeline, { buffer = buf, desc = "Asm: timeline for selection" })
+  end
 
   vim.keymap.set("n", "q", M.close, { buffer = st.asm_buf, desc = "Asm: close view" })
   vim.keymap.set("n", "<CR>", M.goto_source, { buffer = st.asm_buf, desc = "Asm: jump to source" })

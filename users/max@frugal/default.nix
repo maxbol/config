@@ -66,6 +66,9 @@ in rec {
         "inode/directory" = ["org.gnome.Nautilus.desktop"];
         "inode/symlink" = ["org.gnome.Nautilus.desktop"];
         "text/csv" = ["onlyoffice-desktopeditors.desktop"];
+        # Claim these from file-roller, which would open ISOs as archives.
+        "application/x-cd-image" = ["gnome-disk-image-mounter.desktop"];
+        "application/x-raw-disk-image" = ["gnome-disk-image-mounter.desktop"];
       };
   in {
     associations.added = apps;
@@ -103,6 +106,7 @@ in rec {
     kooha
     krita
     kubectl
+    kubelogin
     kubeseal
     kustomize
     mpv
@@ -112,6 +116,7 @@ in rec {
     nixpkgs-unstable.opencode-desktop
     nixpkgs-unstable.pi-coding-agent
     postman
+    scummvm
     self.wayscriber
     slack
     slurp

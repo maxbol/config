@@ -5,8 +5,9 @@ local M = {}
 
 ---@param row table
 ---@param root string paths are shown relative to this
+---@param translate? fun(path: string): string maps recorded paths onto real ones
 ---@return string
-function M.format_row(row, root)
+function M.format_row(row, root, translate)
   if row.kind == "section" then
     return ("; ==== section %s ===="):format(row.text)
   elseif row.kind == "sym" then
@@ -14,7 +15,8 @@ function M.format_row(row, root)
   elseif row.kind == "func" then
     return ("; %s():"):format(row.text)
   elseif row.kind == "src" then
-    local path = vim.fs.relpath(root, row.file) or vim.fn.fnamemodify(row.file, ":~")
+    local file = translate and translate(row.file) or row.file
+    local path = vim.fs.relpath(root, file) or vim.fn.fnamemodify(file, ":~")
     return ("; %s:%d"):format(path, row.line)
   elseif row.kind == "label" then
     return ("<%s>:"):format(row.text)
@@ -33,9 +35,14 @@ function M.render(model, rows, opts)
   opts = opts or {}
   local root = opts.relative_to or vim.fn.getcwd()
 
+  local model_mod = require("neomax.configs.asm.model")
+  local translate = function(path)
+    return model_mod.translate_path(model, path)
+  end
+
   local lines, line_to_row, row_to_line = {}, {}, {}
   for i, idx in ipairs(rows) do
-    lines[i] = M.format_row(model.rows[idx], root)
+    lines[i] = M.format_row(model.rows[idx], root, translate)
     line_to_row[i] = idx
     row_to_line[idx] = i
   end

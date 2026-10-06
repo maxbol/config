@@ -1,3 +1,4 @@
 vim.cmd("highlight clear")
-vim.cmd("colorscheme neobones")
-vim.cmd("set background=dark")
+vim.cmd("colorscheme newpaper")
+vim.cmd("set background=light")
+vim.cmd("NewpaperLight")
